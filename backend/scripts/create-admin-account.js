@@ -69,7 +69,7 @@ const createAdminAccount = async () => {
                     process.env.MONGO_URI_COMMUNITY || 
                     process.env.MONGO_URI || 
                     process.env.MONGODB_URI ||
-                    'mongodb://localhost:27017/Almokhtabarz
+                    'mongodb://localhost:27017/Almokhtabar
         
         const dbType = process.env.DB_TYPE || 'atlas';
         console.log(`📊 Database Type: ${dbType.toUpperCase()}`);

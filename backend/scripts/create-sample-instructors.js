@@ -14,7 +14,7 @@ const connectDB = async () => {
         uri = process.env.MONGO_URI_ATLAS;
         break;
       case 'compass':
-        uri = process.env.MONGO_URI_COMPASS || 'mongodb://localhost:27017/Almokhtabarztabase';
+        uri = process.env.MONGO_URI_COMPASS || 'mongodb://localhost:27017/Almokhtabartabase';
         break;
       case 'community':
         uri = process.env.MONGO_URI_COMMUNITY;

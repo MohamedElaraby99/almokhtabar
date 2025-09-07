@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
                   مقدمة
                 </h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  منصة  Almokhtabarz يهم ملتزمة بحماية خصوصيتك. 
+                  منصة  Almokhtabar يهم ملتزمة بحماية خصوصيتك. 
                   تشرح سياسة الخصوصية هذه كيف نجمع ونستخدم ونكشف ونحمي معلوماتك 
                   عند استخدام منصة إدارة التعلم الخاصة بنا.
                 </p>

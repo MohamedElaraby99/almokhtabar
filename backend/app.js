@@ -57,9 +57,9 @@ const allowedOrigins = new Set([
   'http://127.0.0.1:5173',
   'http://localhost:5190',
   'http://127.0.0.1:5190',
-  'https://almongz.online',
-  'https://www.almongz.online',
-  'https://api.almongz.online'
+  'https://almoktabar.online',
+  'https://www.almoktabar.online',
+  'https://api.almoktabar.online'
 ]);
 
 // Add any additional origins from environment variables
