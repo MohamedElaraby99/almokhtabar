@@ -116,21 +116,29 @@ export default function Navbar() {
 
   return (
     <nav 
-      className="sticky top-0 z-50 bg-cover bg-center bg-no-repeat backdrop-blur-3xl border-b border-[#5b2233]/30 dark:border-[#5b2233]/40 shadow-xl"
+      className="sticky top-0 z-50 bg-cover bg-center bg-no-repeat backdrop-blur-3xl border-b border-[#5b2233]/50 dark:border-[#5b2233]/60 shadow-xl relative"
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0.5">
+      {/* Dark overlay for better text readability */}
+      <div className="absolute inset-0 bg-gradient-to-r from-[#5b2233]/60 via-[#5b2233]/50 to-[#5b2233]/70"></div>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0.5">
                  <div className="flex justify-between items-center h-20 md:h-24">
           {/* Modern Logo */}
                      <Link to="/" onClick={handleLogoClick} className="flex items-center space-x-2 md:space-x-4 group logo-hover">
         
-            <div className="relative">
+            <div className="relative flex flex-col items-center h-full">
+              {/* Blurred background for logo */}
+              {/* <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg"></div> */}
+              {/* <p className="text-white font-bold text-sm md:text-base mb-1">المختبر</p> */}
               {/* Logo Image */}
-                             <img 
-                 src={logo} 
-                 alt="منصة  Almokhtabarz" 
-                 className="w-16 h-16 md:w-20 md:h-20 object-contain group-hover:scale-110 transition-transform duration-300 dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] dark:group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
-               />
+              <img 
+                src={logo} 
+                alt="منصة  Almokhtabarz" 
+                className="w-16 h-16 md:w-20 md:h-20 object-contain group-hover:scale-110 transition-transform duration-300 dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] dark:group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+                />
+                <p className="text-white font-bold text-sm md:text-base mb-1">المختبر</p>
+            
+                
             </div>
           
           </Link>
@@ -198,7 +206,7 @@ export default function Navbar() {
               : "max-h-0 opacity-0 invisible"
           }`}
         >
-          <div className="py-8 space-y-6 border-t border-[#5b2233]/20 dark:border-[#5b2233]/30 bg-gradient-to-b from-[#5b2233]/5 to-white/95 dark:from-[#5b2233]/10 dark:to-gray-900/95 backdrop-blur-xl">
+          <div className="py-8 space-y-6 border-t border-[#5b2233]/30 dark:border-[#5b2233]/40 bg-gradient-to-b from-[#5b2233]/10 to-white/95 dark:from-[#5b2233]/15 dark:to-gray-900/95 backdrop-blur-xl">
             {/* Navigation Links */}
             <div className="space-y-3">
               <div className="px-6 py-3">
@@ -212,13 +220,13 @@ export default function Navbar() {
                   to={item.path}
                   className={`flex items-center space-x-4 px-6 py-4 mx-4 rounded-2xl font-medium transition-all duration-300 mobile-menu-item ${
                     location.pathname === item.path
-                      ? "text-[#5b2233] dark:text-[#5b2233] bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 dark:from-[#5b2233]/20 dark:to-[#5b2233]/20 shadow-lg"
-                      : "text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/10 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/20"
+                      ? "text-[#5b2233] dark:text-[#5b2233] bg-gradient-to-r from-[#5b2233]/15 to-[#5b2233]/15 dark:from-[#5b2233]/25 dark:to-[#5b2233]/25 shadow-lg"
+                      : "text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/15 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/25"
                   }`}
                 >
                   <div className={`p-3 rounded-xl shadow-lg ${
                     location.pathname === item.path
-                      ? "bg-gradient-to-r from-[#5b2233]/20 to-[#5b2233]/20 dark:from-[#5b2233]/30 dark:to-[#5b2233]/30"
+                      ? "bg-gradient-to-r from-[#5b2233]/25 to-[#5b2233]/25 dark:from-[#5b2233]/35 dark:to-[#5b2233]/35"
                       : "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800"
                   }`}>
                     <item.icon className="w-5 h-5" />
@@ -232,9 +240,9 @@ export default function Navbar() {
             {user && (
               <>
                 <div className="border-t border-gray-200/50 dark:border-gray-700/50 pt-6">
-                  <div className="px-6 py-4 mx-4 bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 dark:from-[#5b2233]/20 dark:to-[#5b2233]/20 rounded-2xl shadow-lg">
+                  <div className="px-6 py-4 mx-4 bg-gradient-to-r from-[#5b2233]/15 to-[#5b2233]/15 dark:from-[#5b2233]/25 dark:to-[#5b2233]/25 rounded-2xl shadow-lg">
                     <div className="flex items-center space-x-4">
-                      <div className="w-14 h-14 bg-gradient-to-r from-[#5b2233] to-[#7a2d43] rounded-2xl flex items-center justify-center shadow-xl">
+                      <div className="w-14 h-14 bg-gradient-to-r from-[#5b2233] to-[#5b2233] rounded-2xl flex items-center justify-center shadow-xl">
                         <span className="text-white font-bold text-lg">
                           {user.fullName?.charAt(0)?.toUpperCase() || "U"}
                         </span>
@@ -268,13 +276,13 @@ export default function Navbar() {
                         to={item.path}
                         className={`flex items-center space-x-4 px-6 py-4 mx-4 rounded-2xl font-medium transition-all duration-300 mobile-menu-item ${
                           location.pathname === item.path
-                            ? "text-[#5b2233] dark:text-[#5b2233] bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 dark:from-[#5b2233]/20 dark:to-[#5b2233]/20 shadow-lg"
-                            : "text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/10 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/20"
+                            ? "text-[#5b2233] dark:text-[#5b2233] bg-gradient-to-r from-[#5b2233]/15 to-[#5b2233]/15 dark:from-[#5b2233]/25 dark:to-[#5b2233]/25 shadow-lg"
+                            : "text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/15 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/25"
                         }`}
                       >
                         <div className={`p-3 rounded-xl shadow-lg ${
                           location.pathname === item.path
-                            ? "bg-gradient-to-r from-[#5b2233]/20 to-[#5b2233]/20 dark:from-[#5b2233]/30 dark:to-[#5b2233]/30"
+                            ? "bg-gradient-to-r from-[#5b2233]/25 to-[#5b2233]/25 dark:from-[#5b2233]/35 dark:to-[#5b2233]/35"
                             : "bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800"
                         }`}>
                           <item.icon className="w-5 h-5" />
@@ -294,7 +302,7 @@ export default function Navbar() {
                   </div>
                   <Link
                     to="/profile"
-                    className="flex items-center space-x-4 px-6 py-4 mx-4 rounded-2xl font-medium text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/10 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/20 transition-all duration-300 mobile-menu-item"
+                    className="flex items-center space-x-4 px-6 py-4 mx-4 rounded-2xl font-medium text-gray-700 dark:text-gray-300 hover:text-[#5b2233] dark:hover:text-[#5b2233] hover:bg-gradient-to-r hover:from-gray-50 hover:to-[#5b2233]/15 dark:hover:from-gray-800 dark:hover:to-[#5b2233]/25 transition-all duration-300 mobile-menu-item"
                   >
                     <div className="p-3 rounded-xl shadow-lg bg-gradient-to-r from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                       <FaUser className="w-5 h-5" />
@@ -328,14 +336,14 @@ export default function Navbar() {
                 
                 <Link
                   to="/login"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-center bg-gradient-to-r from-[#5b2233] via-[#7a2d43] to-[#5b2233] hover:from-[#7a2d43] hover:via-[#5b2233] hover:to-[#7a2d43] text-white rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 mobile-menu-item shadow-lg hover:shadow-xl border-2 border-[#5b2233]/50"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-center bg-gradient-to-r from-[#5b2233] via-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:via-[#5b2233] hover:to-[#5b2233] text-white rounded-xl font-semibold text-sm transition-all duration-300 transform hover:scale-105 mobile-menu-item shadow-lg hover:shadow-xl border-2 border-[#5b2233]/50"
                 >
                   <FaUser className="w-4 h-4" />
                   تسجيل الدخول
                 </Link>
                 <Link
                   to="/signup"
-                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-center border-2 border-[#5b2233] text-[#5b2233] dark:text-[#5b2233] hover:bg-gradient-to-r hover:from-[#5b2233] hover:via-[#7a2d43] hover:to-[#5b2233] hover:text-white rounded-xl font-semibold text-sm transition-all duration-300 mobile-menu-item shadow-lg hover:shadow-xl"
+                  className="flex items-center justify-center gap-2 w-full px-4 py-2 text-center border-2 border-[#5b2233] text-[#5b2233] dark:text-[#5b2233] hover:bg-gradient-to-r hover:from-[#5b2233] hover:via-[#5b2233] hover:to-[#5b2233] hover:text-white rounded-xl font-semibold text-sm transition-all duration-300 mobile-menu-item shadow-lg hover:shadow-xl"
                 >
                   <FaPlus className="w-4 h-4" />
                   إنشاء حساب جديد
