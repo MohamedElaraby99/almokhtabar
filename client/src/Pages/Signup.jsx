@@ -170,8 +170,8 @@ export default function Signup() {
       if (!signupData.phoneNumber || signupData.phoneNumber.trim() === "") {
         errors.push("📱 اكتب رقم التليفون بتاعك - ده هيبقى اسم المستخدم بتاعك");
         newFieldErrors.phoneNumber = "اكتب رقم التليفون";
-      } else if (!signupData.phoneNumber.match(/^(\+20|0)?1[0125][0-9]{8}$/)) {
-        errors.push("📱 رقم التليفون ده مش صح - اكتب رقم مصري صح (مثال: 01234567890)");
+      } else if (!signupData.phoneNumber.match(/^(\+\d{1,4})?[\d\s\-\(\)]{7,15}$/)) {
+        errors.push("📱 رقم التليفون ده مش صح - اكتب رقم صحيح (مثال: +1234567890 أو 01234567890)");
         newFieldErrors.phoneNumber = "رقم التليفون مش صح";
       }
       
@@ -203,8 +203,8 @@ export default function Signup() {
       }
       
       // father phone optional - validate only if provided
-      if (signupData.fatherPhoneNumber && signupData.fatherPhoneNumber.trim() !== "" && !signupData.fatherPhoneNumber.match(/^(\+20|0)?1[0125][0-9]{8}$/)) {
-        errors.push("📞 رقم تليفون ولي الأمر مش صح - اكتب رقم مصري صح (مثال: 01012345678)");
+      if (signupData.fatherPhoneNumber && signupData.fatherPhoneNumber.trim() !== "" && !signupData.fatherPhoneNumber.match(/^(\+\d{1,4})?[\d\s\-\(\)]{7,15}$/)) {
+        errors.push("📞 رقم تليفون ولي الأمر مش صح - اكتب رقم صحيح (مثال: +1234567890 أو 01012345678)");
         newFieldErrors.fatherPhoneNumber = "رقم ولي الأمر مش صح";
       }
     }

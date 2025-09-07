@@ -45,9 +45,9 @@ export default function Login() {
         toast.error("املا كل البيانات المطلوبة");
         return;
       }
-      // Validate Egyptian phone number format
-      if (!loginData.phoneNumber.match(/^(\+20|0)?1[0125][0-9]{8}$/)) {
-        toast.error("رقم التليفون ده مش صح - اكتب رقم مصري صح");
+      // Validate international phone number format
+      if (!loginData.phoneNumber.match(/^(\+\d{1,4})?[\d\s\-\(\)]{7,15}$/)) {
+        toast.error("رقم التليفون ده مش صح - اكتب رقم صحيح");
         return;
       }
     } else {
