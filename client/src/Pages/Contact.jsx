@@ -2,15 +2,11 @@ import React, { useState } from "react";
 import { toast } from "react-hot-toast";
 import { axiosInstance } from "../Helpers/axiosInstance";
 import { isEmail } from "../Helpers/regexMatcher";
-import InputBox from "../Components/InputBox/InputBox";
-import TextArea from "../Components/InputBox/TextArea";
 import Layout from "../Layout/Layout";
 import { 
   FaPhone, 
   FaFacebook, 
   FaInstagram, 
-  FaLinkedin, 
-  FaYoutube,
   FaWhatsapp,
   FaGlobe,
   FaUser,
@@ -63,9 +59,9 @@ export default function Contact() {
   }
 
   const contactInfo = {
-    phone: "01125800332",
-    whatsapp: "01125800332",
-    vodafoneCash: "01125800332",
+    phone: "01023530513",
+    whatsapp: "01023530513",
+    vodafoneCash: "01023530513",
     email: "softwarefikra@gmail.com",
     support: "softwarefikra@gmail.com",
     address: "Mansoura, 18 Street Torel, Egypt",
@@ -74,9 +70,9 @@ export default function Contact() {
   };
 
   const socialMedia = [
-    { name: "Facebook", icon: FaFacebook, url: "https://www.facebook.com/people/MrMahmoud-Abdel-Aziz/100070094625467/?mibextid=ZbWKwL", color: "hover:text-blue-600" },
-    { name: "YouTube", icon: FaYoutube, url: "https://www.youtube.com/@mahmoudAbdel_Aziz", color: "hover:text-blue-600" },
-    { name: "WhatsApp", icon: FaWhatsapp, url: `https://wa.me/${contactInfo.whatsapp.replace('+', '')}`, color: "hover:text-green-500" }
+    { name: "Facebook", icon: FaFacebook, url: "https://www.facebook.com/share/1BJhG243hw/?mibextid=wwXIfr", color: "hover:text-blue-600" },
+    { name: "WhatsApp", icon: FaWhatsapp, url: `https://wa.me/${contactInfo.whatsapp.replace('+', '')}`, color: "hover:text-green-500" },
+    { name: "Instagram", icon: FaInstagram, url: "https://www.instagram.com/elsaied_0?igsh=bnpjMWl5d3lmOXA3&utm_source=qr", color: "hover:text-purple-600" }
   ];
 
   return (

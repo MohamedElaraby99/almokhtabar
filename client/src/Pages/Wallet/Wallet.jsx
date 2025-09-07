@@ -262,11 +262,11 @@ export default function Wallet() {
                                     <ul className="space-y-2 text-blue-800 dark:text-blue-200">
                                         <li className="flex items-start">
                                             <span className="text-blue-600 dark:text-blue-400 ml-2">•</span>
-                                            تواصل معنا على واتساب: <strong> 01125800332</strong> للحصول على كود شحن
+                                            تواصل معنا على واتساب: <strong> 01023530513</strong> للحصول على كود شحن
                                         </li>
                                         <li className="flex items-start">
                                             <span className="text-blue-600 dark:text-blue-400 ml-2">•</span>
-                                            أو ادفع عبر فودافون كاش: <strong>01125800332</strong>
+                                            أو ادفع عبر فودافون كاش: <strong>01023530513</strong>
                                         </li>
                                         <li className="flex items-start">
                                             <span className="text-blue-600 dark:text-blue-400 ml-2">•</span>
@@ -300,7 +300,7 @@ export default function Wallet() {
                                                         رقم الواتساب
                                                     </div>
                                                     <div className="text-lg font-bold text-green-600 dark:text-green-400">
-                                                        01125800332
+                                                        01023530513
                                                     </div>
                                                     <div className="text-sm text-gray-600 dark:text-gray-400">
                                                         متاح على مدار 24/7
@@ -309,7 +309,7 @@ export default function Wallet() {
                                                 <button
                                                     onClick={() => {
                                                         const message = `مرحباً! أنا مهتم بشراء كود شحن للمحفظة. هل يمكنك تقديم المزيد من المعلومات؟`;
-                                                        window.open(`https://wa.me/201125800332?text=${encodeURIComponent(message)}`, '_blank');
+                                                        window.open(`https://wa.me/201023530513?text=${encodeURIComponent(message)}`, '_blank');
                                                     }}
                                                     className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
                                                 >
@@ -331,7 +331,7 @@ export default function Wallet() {
                                                         رقم فودافون كاش
                                                     </div>
                                                     <div className="text-lg font-bold text-blue-600 dark:text-blue-400">
-                                                        01125800332
+                                                        01023530513
                                                     </div>
                                                     <div className="text-sm text-gray-600 dark:text-gray-400">
                                                         ادفع المبلغ وسيصلك الكود فوراً

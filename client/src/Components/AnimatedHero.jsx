@@ -32,10 +32,10 @@ const AnimatedHero = ({ onGetStarted }) => {
       dir="rtl"
     >   
       {/* Enhanced Background Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/50 to-black/70"></div>
+      <div className="absolute inset-0  from-black/60 via-black/50 to-black/70"></div>
       
       {/* Decorative Elements */}
-      <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-[#5b2233]/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
+      <div className="absolute top-20 left-10 w-32 h-32  from-[#5b2233]/30 to-transparent rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-tl from-[#5b2233]/20 to-transparent rounded-full blur-3xl animate-pulse delay-1000"></div>
 
       <div className="relative z-10 min-h-screen flex items-center">
@@ -49,15 +49,14 @@ const AnimatedHero = ({ onGetStarted }) => {
                   {/* Photo with Creative Frame */}
                   <div className="relative">
                     {/* Image Container */}
-                    <div className="relative rounded-full p-3 lg:p-4 border-2 border-white/30 shadow-2xl">
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"></div>
+                   
+                      {/* <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent"></div> */}
                       <img
                         src={mr}
                         alt="مستر أحمد السيد - مدرس في الكيمياء"
-                        className="w-full h-full rounded-full object-cover shadow-2xl transform hover:scale-105 transition-all duration-700 relative z-10"
+                        className="w-full h-full object-cover transform hover:scale-105 transition-all duration-700 relative z-10"
                       />
                     </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -73,13 +72,14 @@ const AnimatedHero = ({ onGetStarted }) => {
                 {/* Main Heading */}
                 <div className="space-y-2 lg:space-y-4">
                   <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl 2xl:text-7xl font-bold leading-tight text-right">
-                    <span className="block text-white drop-shadow-2xl">تعلم مع مستر</span>
+                    <span className="block text-white drop-shadow-2xl">تعلم مع دكتور</span>
                     <span className="block bg-gradient-to-r from-white via-white to-white bg-clip-text text-transparent drop-shadow-2xl">
                       أحمد السيد
                     </span>
                   </h1>
                   <p className="text-base sm:text-lg lg:text-xl xl:text-2xl text-white/95 font-medium drop-shadow-lg text-right">
-                    مدرس الكيمياء والعلوم المتكاملة
+                    أستاذ الكيمياء 
+                    
                   </p>
                 </div>
                 {/* Enhanced CTA Buttons */}

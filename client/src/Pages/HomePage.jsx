@@ -42,12 +42,10 @@ import {
   FaArrowUp,
   FaMobile,
   FaDownload,
-  FaGooglePlay,
-  FaAndroid,
   FaPhone,
   FaWhatsapp,
   FaFacebook,
-  FaYoutube,
+  FaInstagram,
   FaComments
 } from "react-icons/fa";
 import { placeholderImages } from "../utils/placeholderImages";
@@ -416,6 +414,103 @@ export default function HomePage() {
               </Link>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Mobile App Download Section */}
+      <section className="py-20 bg-gradient-to-br from-[#5b2233]/5 via-[#5b2233]/5 to-[#5b2233]/5 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
+      
+          <div className="items-center">
+          
+            {/* Phone Mockup Side */}
+            <div className="relative flex justify-center">
+              <div className="relative">
+                {/* Phone Frame */}
+                <div className="relative w-80 h-[600px] bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
+                  <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
+                    {/* Status Bar */}
+                    <div className="bg-gray-50 h-12 flex items-center justify-between px-6 text-sm">
+                      <span className="font-medium">9:41</span>
+                      <div className="flex space-x-1">
+                        <div className="w-4 h-2 bg-gray-900 rounded-sm"></div>
+                        <div className="w-1 h-2 bg-gray-900 rounded-sm"></div>
+                        <div className="w-6 h-2 bg-[#5b2233] rounded-sm"></div>
+                      </div>
+                    </div>
+                    
+                    {/* App Content Preview */}
+                    <div className="p-6 space-y-6">
+                      {/* App Header */}
+                      <div className="flex items-center space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-xl flex items-center justify-center">
+                          <img src={logo} alt="logo" className="w-12 h-12" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg text-gray-900">منصة المختبر</h3>
+                          <p className="text-sm text-gray-600">منصة التعلم الذكية</p>
+                        </div>
+                      </div>
+
+                      {/* Course Cards Preview */}
+                      <div className="space-y-4">
+                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-gray-900">الكيمياء</h4>
+                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">جديد</span>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3"> الكيمياء </p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#5b2233] font-medium">30% مكتمل</span>
+                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-gray-900">الكيمياء </h4>
+                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">شائع</span>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3">  الكيمياء </p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#5b2233] font-medium">75% مكتمل</span>
+                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Features Preview */}
+                      <div className="bg-gray-50 rounded-xl p-4">
+                        <h4 className="font-semibold text-gray-900 mb-3">مميزات  المنصة</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">دروس تفاعلية</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">اختبارات ذكية</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">شهادات معتمدة</span>
+                          </div>
+                        </div>
+                   
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Elements */}
+                <div className="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                  <FaDownload className="text-white text-2xl" />
+                </div>
+                
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                  <FaMobile className="text-white text-xl" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -803,202 +898,6 @@ export default function HomePage() {
         </div>
       </section>
 
-
-      {/* Mobile App Download Section */}
-      <section className="py-20 bg-gradient-to-br from-[#5b2233]/5 via-[#5b2233]/5 to-[#5b2233]/5 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            
-            {/* Content Side */}
-            <div className="space-y-8">
-              <div className="space-y-6">
-                <div className="inline-flex items-center space-x-2 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 text-[#5b2233] dark:text-[#5b2233] px-4 py-2 rounded-full text-sm font-medium">
-                  <FaMobile className="w-4 h-4 ml-2" />
-                  <span>تطبيق الجوال متاح الآن</span>
-                </div>
-                
-                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
-                  حمّل التطبيق
-                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#5b2233] to-[#5b2233]">
-                    وتعلم في أي مكان
-                  </span>
-                </h2>
-                
-                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
-                  احصل على أفضل تجربة تعليمية مع تطبيقنا المتطور. تعلم في أي وقت ومن أي مكان مع واجهة سهلة الاستخدام ومحتوى تفاعلي.
-                </p>
-              </div>
-
-              {/* Features List */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center">
-                    <FaDownload className="w-4 h-4 text-[#5b2233] dark:text-[#5b2233]" />
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-300 mr-3">اتصال بالانترنت  </span>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center">
-                    <FaPlay className="w-4 h-4 text-[#5b2233] dark:text-[#5b2233]" />
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-300 mr-3">فيديوهات عالية الجودة</span>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center">
-                    <FaBookOpen className="w-4 h-4 text-[#5b2233] dark:text-[#5b2233]" />
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-300 mr-3">مكتبة شاملة</span>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="flex-shrink-0 w-8 h-8 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center">
-                    <FaCheckCircle className="w-4 h-4 text-[#5b2233] dark:text-[#5b2233]" />
-                  </div>
-                  <span className="text-gray-700 dark:text-gray-300 mr-3">تتبع التقدم</span>
-                </div>
-              </div>
-
-              {/* Download Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                {/* Direct APK Download Button */}
-                <button
-                  onClick={handleAPKDownload}
-                  className="group relative overflow-hidden bg-gradient-to-r from-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:to-[#5b2233] text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#5b2233] to-[#5b2233] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <FaAndroid className="w-6 h-6 relative z-10 ml-3" />
-                  <div className="text-right relative z-10">
-                    <div className="text-sm opacity-90">حمّل مباشرة</div>
-                    <div className="font-bold">APK ملف</div>
-                  </div>
-                  <FaDownload className="w-5 h-5 relative z-10 mr-3" />
-                </button>
-
-                {/* Google Play Store Button (Future) */}
-                <button
-                  onClick={handlePlayStoreRedirect}
-                  className="group relative overflow-hidden bg-gradient-to-r from-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:to-[#5b2233] text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#5b2233] to-[#5b2233] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <FaGooglePlay className="w-6 h-6 relative z-10 ml-3" />
-                  <div className="text-right relative z-10">
-                    <div className="text-sm opacity-90">قريباً على</div>
-                    <div className="font-bold">Google Play</div>
-                  </div>
-                </button>
-              </div>
-
-              {/* Download Stats */}
-              <div className="flex items-center space-x-8 pt-6 text-sm text-gray-600 dark:text-gray-400">
-                <div className="flex items-center space-x-2">
-                  <FaStar className="w-4 h-4 text-[#5b2233] ml-1" />
-                  <span>4.8 تقييم</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <FaDownload className="w-4 h-4 text-[#5b2233] ml-1" />
-                  <span>+10k تحميل</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <FaUsers className="w-4 h-4 text-[#5b2233] ml-1" />
-                  <span>مجاني 100%</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Phone Mockup Side */}
-            <div className="relative flex justify-center lg:justify-end">
-              <div className="relative">
-                {/* Phone Frame */}
-                <div className="relative w-80 h-[600px] bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
-                  <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
-                    {/* Status Bar */}
-                    <div className="bg-gray-50 h-12 flex items-center justify-between px-6 text-sm">
-                      <span className="font-medium">9:41</span>
-                      <div className="flex space-x-1">
-                        <div className="w-4 h-2 bg-gray-900 rounded-sm"></div>
-                        <div className="w-1 h-2 bg-gray-900 rounded-sm"></div>
-                        <div className="w-6 h-2 bg-[#5b2233] rounded-sm"></div>
-                      </div>
-                    </div>
-                    
-                    {/* App Content Preview */}
-                    <div className="p-6 space-y-6">
-                      {/* App Header */}
-                      <div className="flex items-center space-x-4" dir="rtl">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-xl flex items-center justify-center">
-                          <img src={logo} alt="logo" className="w-12 h-12" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-lg text-gray-900">تطبيق المختبر</h3>
-                          <p className="text-sm text-gray-600">منصة التعلم الذكية</p>
-                        </div>
-                      </div>
-
-                      {/* Course Cards Preview */}
-                      <div className="space-y-4">
-                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-gray-900">الكيمياء</h4>
-                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">جديد</span>
-                          </div>
-                          <p className="text-sm text-gray-600 mb-3"> الكيمياء </p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-[#5b2233] font-medium">30% مكتمل</span>
-                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
-                          </div>
-                        </div>
-
-                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-gray-900">علوم متكاملة </h4>
-                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">شائع</span>
-                          </div>
-                          <p className="text-sm text-gray-600 mb-3">  علوم متكاملة </p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-[#5b2233] font-medium">75% مكتمل</span>
-                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Features Preview */}
-                      <div className="bg-gray-50 rounded-xl p-4">
-                        <h4 className="font-semibold text-gray-900 mb-3">مميزات التطبيق</h4>
-                        <div className="space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">دروس تفاعلية</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">اختبارات ذكية</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">شهادات معتمدة</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating Elements */}
-                <div className="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                  <FaDownload className="text-white text-2xl" />
-                </div>
-                
-                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                  <FaMobile className="text-white text-xl" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Static FAQ Section */}
       <section className="py-16 px-4 lg:px-20 bg-gradient-to-br from-gray-50 to-[#5b2233]/5 dark:from-gray-900 dark:to-gray-800" dir="rtl">
         <div className="max-w-4xl mx-auto">
@@ -1048,8 +947,8 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">الهاتف</h3>
-                  <a href="tel:01125800332" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
-                    01125800332
+                  <a href="tel:01023530513" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
+                    01023530513
                   </a>
                 </div>
               </div>
@@ -1061,8 +960,8 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">واتساب</h3>
-                  <a href="https://wa.me/+201125800332" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
-                  +201125800332
+                  <a href="https://wa.me/+201023530513" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
+                  +201023530513
                   </a>
                 </div>
               </div>
@@ -1075,7 +974,7 @@ export default function HomePage() {
               </h3>
               <div className="flex flex-wrap justify-center gap-6 max-w-md mx-auto">
                 <a
-                  href="https://www.facebook.com/people/MrMahmoud-Abdel-Aziz/100070094625467/?mibextid=ZbWKwL"
+                  href="https://www.facebook.com/share/1BJhG243hw/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#5b2233] hover:scale-105"
@@ -1089,21 +988,21 @@ export default function HomePage() {
                   </span>
                 </a>
                 <a
-                  href="https://www.youtube.com/@mahmoudAbdel_Aziz"
+                  href="https://www.instagram.com/elsaied_0?igsh=bnpjMWl5d3lmOXA3&utm_source=qr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#5b2233] hover:scale-105"
-                  title="YouTube"
+                  title="Instagram"
                 >
                   <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2 group-hover:bg-opacity-80 transition-colors">
-                    <FaYoutube className="text-2xl" />
+                    <FaInstagram className="text-2xl" />
                   </div>
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                    YouTube
+                    Instagram
                   </span>
                 </a>
                 <a
-                  href="https://wa.me/01125800332"
+                  href="https://wa.me/01023530513"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-green-500 hover:scale-105"
@@ -1203,7 +1102,7 @@ export default function HomePage() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/+201125800332"
+        href="https://wa.me/+201023530513"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed left-8 bottom-8 z-50 p-4 bg-[#5b2233] hover:bg-[#5b2233] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group animate-bounce"

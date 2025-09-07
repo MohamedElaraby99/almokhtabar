@@ -118,23 +118,18 @@ export default function Navbar() {
     <nav 
       className="sticky top-0 z-50 bg-cover bg-center bg-no-repeat backdrop-blur-3xl border-b border-[#5b2233]/50 dark:border-[#5b2233]/60 shadow-xl relative"
       style={{ backgroundImage: `url(${backgroundImg})` }}
+      
     >
-      {/* Dark overlay for better text readability */}
-      <div className="absolute inset-0 bg-gradient-to-r from-[#5b2233]/60 via-[#5b2233]/50 to-[#5b2233]/70"></div>
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-0.5">
                  <div className="flex justify-between items-center h-20 md:h-24">
           {/* Modern Logo */}
                      <Link to="/" onClick={handleLogoClick} className="flex items-center space-x-2 md:space-x-4 group logo-hover">
         
-            <div className="relative flex flex-col items-center h-full">
-              {/* Blurred background for logo */}
-              {/* <div className="absolute inset-0 bg-white/20 backdrop-blur-md rounded-2xl border border-white/30 shadow-lg"></div> */}
-              {/* <p className="text-white font-bold text-sm md:text-base mb-1">المختبر</p> */}
-              {/* Logo Image */}
+            <div className="relative flex flex-col items-center justify-center h-full">
               <img 
                 src={logo} 
                 alt="منصة  Almokhtabarz" 
-                className="w-16 h-16 md:w-20 md:h-20 object-contain group-hover:scale-110 transition-transform duration-300 dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] dark:group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
+                className="w-12 h-12 md:w-16 md:h-16 object-contain group-hover:scale-110 transition-transform duration-300 dark:drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] dark:group-hover:drop-shadow-[0_0_20px_rgba(255,255,255,0.5)]"
                 />
                 <p className="text-white font-bold text-sm md:text-base mb-1">المختبر</p>
             
