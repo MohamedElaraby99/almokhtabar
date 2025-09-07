@@ -34,7 +34,7 @@ export default function TermsOfService() {
                   مقدمة
                 </h2>
                 <p className="text-gray-700 dark:text-gray-300 mb-4">
-                  مرحباً بك في نظام إدارة التعلم من منصة  Almokhtabar. من خلال الوصول إلى منصتنا واستخدامها، 
+                  مرحباً بك في نظام إدارة التعلم من منصة  Almoktabar. من خلال الوصول إلى منصتنا واستخدامها، 
                   فإنك توافق على الالتزام بشروط الخدمة هذه. إذا كنت لا توافق على هذه الشروط، 
                   يرجى عدم استخدام خدماتنا.
                 </p>
@@ -174,7 +174,7 @@ export default function TermsOfService() {
                 <div className="space-y-4">
                   <p className="text-gray-700 dark:text-gray-300">
                     جميع المحتوى على هذه المنصة، بما في ذلك الكورسات والمواد والبرامج، 
-                    مملوك لشركة منصة  Almokhtabar أو المرخصين لها ومحمي بقوانين حقوق النشر.
+                    مملوك لشركة منصة  Almoktabar أو المرخصين لها ومحمي بقوانين حقوق النشر.
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
                     لا يجوز لك إعادة إنتاج أو توزيع أو إنشاء أعمال مشتقة دون إذن صريح.
@@ -251,7 +251,7 @@ export default function TermsOfService() {
                 </h2>
                 <div className="space-y-4">
                   <p className="text-gray-700 dark:text-gray-300">
-                    تقدم شركة منصة  Almokhtabar المحتوى التعليمي والخدمات "كما هي" دون ضمانات.
+                    تقدم شركة منصة  Almoktabar المحتوى التعليمي والخدمات "كما هي" دون ضمانات.
                   </p>
                   <p className="text-gray-700 dark:text-gray-300">
                     نحن لسنا مسؤولين عن أي أضرار غير مباشرة أو عرضية أو تبعية.
@@ -298,7 +298,7 @@ export default function TermsOfService() {
               {/* Footer */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-6 mt-8">
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center">
-                  من خلال استخدام منصة شركة منصة  Almokhtabar، فإنك تقر بأنك قد قرأت وفهمت 
+                  من خلال استخدام منصة شركة منصة  Almoktabar، فإنك تقر بأنك قد قرأت وفهمت 
                   وتوافق على الالتزام بشروط الخدمة هذه.
                 </p>
               </div>

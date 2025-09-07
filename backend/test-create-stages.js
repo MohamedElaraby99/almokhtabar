@@ -3,7 +3,7 @@ import Stage from './models/stage.model.js';
 import User from './models/user.model.js';
 
 // Connect to MongoDB (you'll need to set your connection string)
-const MONGODB_URI = 'mongodb://localhost:27017/Almokhtabar'; // Update this with your actual connection string
+const MONGODB_URI = 'mongodb://localhost:27017/Almoktabar'; // Update this with your actual connection string
 
 const connectDB = async () => {
   try {

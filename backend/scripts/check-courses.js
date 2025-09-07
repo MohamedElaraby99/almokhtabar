@@ -6,7 +6,7 @@ dotenv.config();
 
 const connectToDb = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/Almokhtabar', {
+    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/Almoktabar', {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });

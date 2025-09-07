@@ -124,14 +124,14 @@ export default function HomePage() {
   const handleAPKDownload = () => {
     // Create a download link for the APK file
     const link = document.createElement('a');
-    link.href = '/downloads/Almokhtabar.apk'; // Update this path to your APK file location
-    link.download = 'Almokhtabar.apk';
+    link.href = '/downloads/Almoktabar.apk'; // Update this path to your APK file location
+    link.download = 'Almoktabar.apk';
     link.target = '_blank';
     
     // Fallback for mobile browsers
     if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
       // For Android devices, open the download directly
-      window.open('/downloads/Almokhtabar.apk', '_blank');
+      window.open('/downloads/Almoktabar.apk', '_blank');
     } else {
       // For other devices, trigger download
       document.body.appendChild(link);
@@ -1069,7 +1069,8 @@ export default function HomePage() {
             <p className="text-lg text-gray-600 dark:text-gray-300">
               شريكنا التقني: 
               <a
-                href=""
+                href="https://fikra.solutions/"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="font-semibold text-[#5b2233] hover:text-[#5b2233] dark:text-[#5b2233] dark:hover:text-[#5b2233]"
               >
@@ -1078,7 +1079,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="flex items-center justify-center">
-            <a href="https://fikra.solutions/" rel="noopener noreferrer" className="flex items-center justify-center">
+            <a href="https://fikra.solutions/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
               <img
                 src={fikraLogo}
                 alt="Fikra Software Logo"
