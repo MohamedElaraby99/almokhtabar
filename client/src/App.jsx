@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import useScrollToTop from "./Helpers/useScrollToTop";
 import DeviceProtection from "./Components/DeviceProtection";
+import LoadingScreen from "./Components/LoadingScreen";
 import HomePage from "./Pages/HomePage";
 import AboutUs from "./Pages/About";
 import NotFound from "./Pages/NotFound";
@@ -70,6 +71,23 @@ import Achievements from "./Pages/Dashboard/Achievements";
 function App() {
   // Auto scroll to top on route change
   useScrollToTop();
+  
+  // Loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate app initialization time
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // 3 seconds loading time
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Show loading screen while app is initializing
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <DeviceProtection>
