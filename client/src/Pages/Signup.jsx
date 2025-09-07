@@ -917,7 +917,7 @@ export default function Signup() {
                   <FaInfoCircle className="text-gray-600 dark:text-gray-400 text-xl" />
                   <div className="text-right">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">شروط وأحكام الاستخدام</h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm">يرجى قراءة هذه الشروط بعناية قبل إنشاء حسابك</p>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm">اقرأ الشروط هذه بعناية قبل ما تسوي حسابك</p>
                   </div>
                 </div>
                 <button
@@ -925,7 +925,7 @@ export default function Signup() {
                     if (termsAccepted) {
                       setShowTermsModal(false);
                     } else {
-                      toast.error("يجب الموافقة على الشروط والأحكام للمتابعة");
+                      toast.error("لازم توافق على الشروط والأحكام عشان تكمل");
                     }
                   }}
                   className="p-2 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors duration-200"
@@ -939,11 +939,11 @@ export default function Signup() {
             <div className="px-6 py-4 overflow-y-auto max-h-[60vh]">
               <div className="space-y-4">
                 {/* Important Notice */}
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+                <div className="bg-[#5b2233]/10 dark:bg-[#5b2233]/20 border border-[#5b2233]/20 dark:border-[#5b2233]/40 rounded-lg p-4">
                   <div className="flex items-start gap-3">
-                    <FaExclamationTriangle className="text-blue-600 text-lg flex-shrink-0 mt-0.5" />
-                    <p className="text-blue-800 dark:text-blue-300 text-sm leading-relaxed text-right">
-                      <strong>ملاحظة هامة:</strong> يرجى قراءة هذه الشروط بعناية. الموافقة عليها تعني التزامك الكامل بها.
+                    <FaExclamationTriangle className="text-[#5b2233] text-lg flex-shrink-0 mt-0.5" />
+                    <p className="text-[#5b2233] dark:text-[#5b2233]/80 text-sm leading-relaxed text-right">
+                      <strong>ملاحظة مهمة:</strong> اقرأ الشروط هذه بعناية. الموافقة عليها تعني التزامك الكامل بها.
                     </p>
                   </div>
                 </div>
@@ -953,49 +953,49 @@ export default function Signup() {
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">1</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>دقة البيانات:</strong> وأنت بتعمل حساب لازم تكون بياناتك صحيحة (اسمك رباعي - رقم الواتساب بتاعك - رقم ولي أمرك).
+                      <strong>دقة البيانات:</strong> وأنت تسوي حساب لازم تكون بياناتك صحيحة (اسمك رباعي - رقم الجوال - رقم ولي أمرك).
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">2</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>حد الجهاز:</strong> <span className="text-red-600 dark:text-red-400 font-bold">مش هتقدر تفتح الحساب إلا على  اول جهازين بس.</span> اختار الجهاز اللي هتستخدمه بعناية عشان لو غيرت الجهاز مش هتعرف تخش أو تفتح الحساب إلا منه.
+                      <strong>حد الجهاز:</strong> <span className="text-red-600 dark:text-red-400 font-bold">ما راح تقدر تفتح الحساب إلا على أول جهازين بس.</span> اختار الجهاز اللي راح تستعمله بعناية عشان لو غيرت الجهاز ما راح تعرف تدخل أو تفتح الحساب إلا منه.
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">3</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>حفظ كلمة المرور:</strong> لازم تحفظ الباسورد بتاعك وتحافظ عليه في مكان آمن.
+                      <strong>حفظ كلمة المرور:</strong> لازم تحفظ الباسورد وتحافظ عليه في مكان آمن.
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">4</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>الالتزام:</strong> يجب الالتزام بمشاهدة الفيديوهات وحل الواجب والامتحانات في المواعيد المحددة.
+                      <strong>الالتزام:</strong> لازم تلتزم بمشاهدة الفيديوهات وحل الواجب والامتحانات في المواعيد المحددة.
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">5</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>تقارير ولي الأمر:</strong> يتم إرسال تقرير دوري بالمستوى لولي الأمر لمتابعة مستواك الدراسي.
+                      <strong>تقارير ولي الأمر:</strong> راح نرسل تقرير دوري بالمستوى لولي الأمر عشان يتابع مستواك الدراسي.
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">6</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>عدم الالتزام:</strong> أي طالب غير ملتزم مش هيكمل معانا وسيتم إنهاء اشتراكه فوراً.
+                      <strong>عدم الالتزام:</strong> أي طالب غير ملتزم ما راح يكمل معانا وراح ننهي اشتراكه فوراً.
                     </p>
                   </div>
 
                   <div className="flex items-start gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                     <span className="bg-gray-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium flex-shrink-0">7</span>
                     <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed text-right">
-                      <strong>فترة الاشتراك:</strong> الاشتراك لحد امتحانات الدور الأول وليس هناك استرجاع لسعر الكورس .
+                      <strong>فترة الاشتراك:</strong> الاشتراك لحد امتحانات الدور الأول وما في استرجاع لسعر الكورس.
                     </p>
                   </div>
                 </div>
@@ -1015,7 +1015,7 @@ export default function Signup() {
                     className="mt-1 w-4 h-4 text-[#5b2233] bg-gray-100 border-gray-300 rounded focus:ring-[#5b2233] dark:focus:ring-[#5b2233] dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                   />
                   <label htmlFor="acceptTerms" className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed cursor-pointer text-right">
-                    أوافق على جميع الشروط والأحكام المذكورة أعلاه وأتعهد بالالتزام بها كاملة.
+                    أوافق على كل الشروط والأحكام المذكورة فوق وأتعهد بالالتزام بها كاملة.
                   </label>
                 </div>
 
@@ -1027,7 +1027,7 @@ export default function Signup() {
                         setShowTermsModal(false);
                         toast.success("تم قبول الشروط والأحكام بنجاح");
                       } else {
-                        toast.error("يجب الموافقة على الشروط والأحكام أولاً");
+                        toast.error("لازم توافق على الشروط والأحكام أولاً");
                       }
                     }}
                     disabled={!termsAccepted}
@@ -1038,7 +1038,7 @@ export default function Signup() {
                     }`}
                   >
                     <FaCheckCircle className="text-base" />
-                    موافق والمتابعة
+                    موافق وأكمل
                   </button>
                   
                   <button
