@@ -78,7 +78,7 @@ export default function Sidebar({ hideBar = false }) {
         <div className="min-h-full w-64 bg-white dark:bg-gray-900 text-base-content p-3 relative z-60" dir="rtl">
           {/* Header */}
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-blue-600 dark:text-blue-400">
+            <h2 className="text-lg font-bold text-[#5b2233] dark:text-white">
               منصة المختبر
             </h2>
             <button onClick={closeSidebar} className="text-red-500 hover:text-red-700">
@@ -88,7 +88,7 @@ export default function Sidebar({ hideBar = false }) {
 
           {/* Super Admin Status Banner */}
           {role === "SUPER_ADMIN" && (
-            <div className="mb-4 bg-gradient-to-r from-red-600 to-pink-600 rounded-lg p-3 text-white shadow-lg">
+            <div className="mb-4 bg-gradient-to-r from-[#5b2233] to-[#5b2233] rounded-lg p-3 text-white shadow-lg">
               <div className="flex items-center gap-2">
                 <FaUserSecret size={18} className="text-white" />
                 <div>
