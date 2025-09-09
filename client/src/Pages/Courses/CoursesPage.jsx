@@ -105,7 +105,7 @@ export default function CoursesPage() {
     <Layout>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900" dir="rtl">
         {/* Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-600 text-white py-16">
+        <div className="bg-gradient-to-r from-[#361927] to-[#9e4f23] text-white py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-4">

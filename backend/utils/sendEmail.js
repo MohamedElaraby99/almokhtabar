@@ -1,26 +1,30 @@
 import nodemailer from "nodemailer";
 
-
-const sendEmail = async function (email, subject, message) {
-  // create reusable transporter object using the default SMTP transport 
-  let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    host: process.env.SMTP_HOST,
-    port: process.env.SMTP_PORT,
-    secure: false,
+const sendEmail = async function (email, subject, message, html = null) {
+  // Gmail SMTP (recommended with App Password)
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: Number(process.env.SMTP_PORT) || 465,
+    secure: true, // 465 is secure
     auth: {
-      user: process.env.SMTP_USERNAME,
-      pass: process.env.SMTP_PASSWORD,
+      user: process.env.SMTP_USERNAME, // your Gmail address
+      pass: process.env.SMTP_PASSWORD, // Gmail App Password
     },
   });
 
-  // send mail with defined transport object
-  await transporter.sendMail({
-    from: `api Skills <${process.env.SMTP_FROM_EMAIL}>`, // sender address
-    to: email, // user email
-    subject: subject, // Subject line
-    text: message, // html body
-  });
+  const mailOptions = {
+    from: `${process.env.SMTP_FROM_NAME || 'Almoktabar'} <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USERNAME}>`,
+    to: email,
+    subject,
+    text: message,
+  };
+
+  // Add HTML if provided
+  if (html) {
+    mailOptions.html = html;
+  }
+
+  await transporter.sendMail(mailOptions);
 };
 
 export default sendEmail;

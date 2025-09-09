@@ -134,6 +134,9 @@ const LiveMeetingDashboard = () => {
   const [attendeeStageFilter, setAttendeeStageFilter] = useState('');
   const [showStudentsOnly, setShowStudentsOnly] = useState(true);
 
+  // Email reminder states
+  const [sendingReminders, setSendingReminders] = useState(false);
+
   useEffect(() => {
     console.log('🔍 useEffect triggered - fetching data...');
     dispatch(getAllLiveMeetings({ page: currentPage, limit: 10, status: statusFilter, stage: stageFilter, subject: subjectFilter }));
@@ -240,6 +243,66 @@ const LiveMeetingDashboard = () => {
     } catch (e) {
       console.error('خطأ في تعديل الجدول:', e);
       toast.error('تعذر تعديل الجدول');
+    }
+  };
+
+  const sendEmailReminders = async (dayIndex) => {
+    if (sendingReminders) return;
+    
+    try {
+      setSendingReminders(true);
+      
+      // Get all scheduled meetings for this day
+      const todayMeetings = (liveMeetings || []).filter(m => {
+        if (m.status !== 'scheduled') return false;
+        const d = new Date(m.scheduledDate);
+        return d.getDay() === dayIndex;
+      });
+
+      console.log('🔍 Debug - Day index:', dayIndex);
+      console.log('🔍 Debug - All meetings:', liveMeetings);
+      console.log('🔍 Debug - Filtered meetings for day:', todayMeetings);
+
+      if (todayMeetings.length === 0) {
+        toast.info('لا توجد جلسات مجدولة لهذا اليوم');
+        return;
+      }
+
+      console.log('📧 Sending reminders for meetings:', todayMeetings.map(m => ({ id: m._id, title: m.title, attendees: m.attendees?.length })));
+
+      // Send reminders for each meeting
+      const results = await Promise.allSettled(
+        todayMeetings.map(meeting => {
+          console.log('📧 Sending reminder for meeting:', meeting._id);
+          return axiosInstance.post('/live-meetings/send-reminders', { 
+            meetingId: meeting._id 
+          }, { withCredentials: true });
+        })
+      );
+
+      console.log('📧 Reminder results:', results);
+
+      const successful = results.filter(r => r.status === 'fulfilled').length;
+      const failed = results.filter(r => r.status === 'rejected').length;
+
+      if (successful > 0) {
+        toast.success(`تم إرسال ${successful} تذكير بالبريد الإلكتروني`);
+      }
+      if (failed > 0) {
+        toast.error(`فشل في إرسال ${failed} تذكير`);
+        // Log failed results for debugging
+        results.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            console.error(`Failed reminder ${index}:`, result.reason);
+          }
+        });
+      }
+
+    } catch (error) {
+      console.error('خطأ في إرسال التذكيرات:', error);
+      toast.error('تعذر إرسال التذكيرات');
+    } finally {
+      setSendingReminders(false);
     }
   };
 
@@ -819,8 +882,27 @@ const LiveMeetingDashboard = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {byDay.map((entries, dayIdx) => (
                       <div key={dayIdx} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <div className={`${dayIdx === todayDow ? 'bg-blue-50 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200' : 'bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-gray-200'} px-4 py-2 font-semibold`}>
-                          {dayNames[dayIdx]}
+                        <div className={`${dayIdx === todayDow ? 'bg-blue-50 text-blue-800 dark:bg-blue-900/40 dark:text-blue-200' : 'bg-gray-50 text-gray-800 dark:bg-gray-700 dark:text-gray-200'} px-4 py-2 font-semibold flex items-center justify-between`}>
+                          <span>{dayNames[dayIdx]}</span>
+                          {meetingsByDay[dayIdx].length > 0 && (
+                            <button
+                              onClick={() => sendEmailReminders(dayIdx)}
+                              disabled={sendingReminders}
+                              className="inline-flex items-center gap-1 px-3 py-1 text-xs bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white rounded-full transition-colors"
+                            >
+                              {sendingReminders ? (
+                                <>
+                                  <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                  إرسال...
+                                </>
+                              ) : (
+                                <>
+                                  <FaExternalLinkAlt />
+                                  إرسال تذكيرات
+                                </>
+                              )}
+                            </button>
+                          )}
                         </div>
                         <div className="p-4 space-y-4">
                           <div>

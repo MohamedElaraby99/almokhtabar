@@ -10,7 +10,8 @@ import {
   joinLiveMeeting,
   addAttendees,
   removeAttendee,
-  getLiveMeetingStats
+  getLiveMeetingStats,
+  sendMeetingReminders
 } from '../controllers/liveMeeting.controller.js';
 import { isLoggedIn, requireAdmin } from '../middleware/auth.middleware.js';
 
@@ -35,5 +36,6 @@ router.delete('/:id', deleteLiveMeeting);
 router.post('/:id/attendees', addAttendees);
 router.delete('/:id/attendees/:attendeeId', removeAttendee);
 router.get('/admin/stats', getLiveMeetingStats);
+router.post('/send-reminders', sendMeetingReminders);
 
 export default router;
