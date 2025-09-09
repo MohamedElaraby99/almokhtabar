@@ -787,7 +787,7 @@ export default function AdminUserDashboard() {
                                                         <p className="text-xs text-gray-400 dark:text-gray-500">
                                                             {user.role !== 'SUPER_ADMIN' && (
                                                                 <>
-                                                                    المحفظة: {user.walletBalance} جنيه مصري • المعاملات: {user.totalTransactions}
+                                                                    المحفظة: {user.walletBalance} نقاط • المعاملات: {user.totalTransactions}
                                                                     {user.stage && user.stage.name && (
                                                                         <span className="ml-2">• المرحلة: {user.stage.name}</span>
                                                                     )}
@@ -975,7 +975,7 @@ export default function AdminUserDashboard() {
                                                         <p className="text-xs text-gray-400 dark:text-gray-500">
                                                             {user.role !== 'SUPER_ADMIN' && (
                                                                 <>
-                                                                    المحفظة: {user.walletBalance} جنيه مصري • المعاملات: {user.totalTransactions}
+                                                                    المحفظة: {user.walletBalance} نقاط • المعاملات: {user.totalTransactions}
                                                                     {user.stage && user.stage.name && (
                                                                         <span className="ml-2">• المرحلة: {user.stage.name}</span>
                                                                     )}
@@ -1169,7 +1169,7 @@ export default function AdminUserDashboard() {
                                                         <p className="text-xs text-gray-400 dark:text-gray-500">
                                                             {user.role !== 'SUPER_ADMIN' && (
                                                                 <>
-                                                                    المحفظة: {user.walletBalance} جنيه مصري • المعاملات: {user.totalTransactions}
+                                                                    المحفظة: {user.walletBalance} نقاط • المعاملات: {user.totalTransactions}
                                                                     {user.stage && user.stage.name && (
                                                                         <span className="ml-2">• المرحلة: {user.stage.name}</span>
                                                                     )}
@@ -1614,7 +1614,7 @@ export default function AdminUserDashboard() {
                                                 <div>
                                                     <p className="text-sm text-blue-600 dark:text-blue-400">رصيد المحفظة</p>
                                                     <p className="text-lg font-bold text-blue-900 dark:text-blue-100">
-                                                        {userStats.walletBalance || 0} جنيه مصري
+                                                        {userStats.walletBalance || 0} نقاط
                                                     </p>
                                                 </div>
                                             </div>
@@ -1965,7 +1965,7 @@ export default function AdminUserDashboard() {
                                                         <span className={`text-sm font-medium ${
                                                             activity.type === 'recharge' ? 'text-green-600' : 'text-red-600'
                                                         }`}>
-                                                            {activity.type === 'recharge' ? '+' : '-'}{activity.amount} جنيه مصري
+                                                            {activity.type === 'recharge' ? '+' : '-'}{activity.amount} نقاط
                                                         </span>
                                                     )}
                                                 </div>

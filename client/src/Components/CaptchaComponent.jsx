@@ -216,7 +216,7 @@ const CaptchaComponent = ({ onVerified, onError, reset }) => {
               type="button"
               onClick={verifyCaptcha}
               disabled={!userAnswer.trim() || isVerifying || isLoading}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-4 py-2 bg-[#5b2233] hover:bg-[#5b2233] disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isVerifying ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>

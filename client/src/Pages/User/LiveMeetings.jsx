@@ -256,7 +256,7 @@ const LiveMeetings = () => {
                 onClick={() => setActiveTab('upcoming')}
                 className={`px-6 py-2 rounded-md transition-colors duration-200 ${
                   activeTab === 'upcoming'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#5b2233] text-white'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >
@@ -266,7 +266,7 @@ const LiveMeetings = () => {
                 onClick={() => setActiveTab('my-meetings')}
                 className={`px-6 py-2 rounded-md transition-colors duration-200 ${
                   activeTab === 'my-meetings'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-[#5b2233] text-white'
                     : 'text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
                 }`}
               >

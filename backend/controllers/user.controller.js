@@ -47,8 +47,12 @@ const register = async (req, res, next) => {
         }
 
         // Role-specific field validation
+        // Global: email required for all
+        if (!email) {
+            return next(new AppError("Email is required", 400));
+        }
         if (userRole === 'USER') {
-            // For USER role: phone number is required, email is optional
+            // For USER role: phone number is required
             if (!phoneNumber) {
                 return next(new AppError("Phone number is required for regular users", 400));
             }
@@ -58,11 +62,6 @@ const register = async (req, res, next) => {
             // Optional path validation when provided
             if (learningPath && !['basic','premium'].includes(learningPath)) {
                 return next(new AppError("Invalid learning path. Must be 'basic' or 'premium'", 400));
-            }
-        } else if (userRole === 'ADMIN') {
-            // For ADMIN role: email is required
-            if (!email) {
-                return next(new AppError("Email is required for admin users", 400));
             }
         }
 
@@ -96,7 +95,7 @@ const register = async (req, res, next) => {
         // Add role-specific fields
         if (userRole === 'USER') {
             userData.phoneNumber = phoneNumber;
-            if (email) userData.email = email; // Optional email for USER
+            userData.email = email; // now required globally
             if (fatherPhoneNumber) userData.fatherPhoneNumber = fatherPhoneNumber;
             userData.governorate = governorate;
             userData.stage = stage;

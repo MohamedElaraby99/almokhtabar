@@ -48,6 +48,7 @@ export default function Signup() {
   const [showTermsModal, setShowTermsModal] = useState(true);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
+  const [detectedCountry, setDetectedCountry] = useState("");
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
@@ -93,6 +94,12 @@ export default function Signup() {
       ...signupData,
       [name]: cleanValue,
     });
+
+    // Auto-detect country flag from phone number
+    if (name === 'phoneNumber') {
+      const code = detectCountryByPhone(cleanValue);
+      setDetectedCountry(code);
+    }
     
     // Clear field error when user starts typing
     if (fieldErrors[name]) {
@@ -102,6 +109,44 @@ export default function Signup() {
       });
     }
   }
+
+  // Convert ISO country code to emoji flag
+  const countryCodeToFlag = (cc) => {
+    if (!cc || cc.length !== 2) return '';
+    const codePoints = cc
+      .toUpperCase()
+      .split('')
+      .map(c => 127397 + c.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+  };
+
+  // Detect country by international dialing code
+  const detectCountryByPhone = (phone) => {
+    if (!phone) return '';
+    const p = phone.replace(/[^\d+]/g, '');
+    const map = [
+      ['+201', 'EG'], ['+20', 'EG'],
+      ['+966', 'SA'],
+      ['+971', 'AE'],
+      ['+965', 'KW'],
+      ['+974', 'QA'],
+      ['+973', 'BH'],
+      ['+968', 'OM'],
+      ['+967', 'YE'],
+      ['+962', 'JO'],
+      ['+961', 'LB'],
+      ['+964', 'IQ'],
+      ['+970', 'PS'],
+      ['+963', 'SY'],
+      ['+249', 'SD'],
+      ['+218', 'LY'],
+      ['+216', 'TN'],
+      ['+213', 'DZ'],
+      ['+212', 'MA']
+    ];
+    const match = map.find(([prefix]) => p.startsWith(prefix));
+    return match ? match[1] : '';
+  };
 
   function getImage(event) {
     event.preventDefault();
@@ -168,6 +213,14 @@ export default function Signup() {
       newFieldErrors.fullName = "الاسم قصير";
     }
     
+    if (!signupData.email || signupData.email.trim() === "") {
+      errors.push("📧 اكتب الإيميل - هذا مطلوب للتسجيل");
+      newFieldErrors.email = "اكتب الإيميل";
+    } else if (!signupData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
+      errors.push("📧 الإيميل هذا مو صحيح - اكتبه صح (مثال: ahmed@gmail.com)");
+      newFieldErrors.email = "الإيميل مو صحيح";
+    }
+    
     if (!signupData.password || signupData.password.trim() === "") {
       errors.push("🔑 اختار كلمة سر قوية عشان تحمي حسابك");
       newFieldErrors.password = "اختار كلمة سر";
@@ -177,16 +230,7 @@ export default function Signup() {
     }
     
     // Role-specific validation
-    if (isAdminRegistration) {
-      // For admin users: email is required
-      if (!signupData.email || signupData.email.trim() === "") {
-        errors.push("📧 اكتب الإيميل - هذا مطلوب للمشرفين");
-        newFieldErrors.email = "اكتب الإيميل";
-      } else if (!signupData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
-        errors.push("📧 الإيميل هذا مو صحيح - اكتبه صح (مثال: ahmed@gmail.com)");
-        newFieldErrors.email = "الإيميل مو صحيح";
-      }
-    } else {
+    if (!isAdminRegistration) {
       // For regular users: phone number is required, email is optional
       if (!signupData.phoneNumber || signupData.phoneNumber.trim() === "") {
         errors.push("📱 اكتب رقم الجوال - هذا راح يكون اسم المستخدم");
@@ -224,11 +268,7 @@ export default function Signup() {
         }
       }
       
-      // Validate email if provided (optional for regular users)
-      if (signupData.email && signupData.email.trim() !== "" && !signupData.email.match(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g)) {
-        errors.push("📧 الإيميل هذا مو صحيح - اكتبه صح (مثال: ahmed@gmail.com)");
-        newFieldErrors.email = "الإيميل مو صحيح";
-      }
+      // Email is already validated globally above
       
       // father phone optional - validate only if provided
       if (signupData.fatherPhoneNumber && signupData.fatherPhoneNumber.trim() !== "" && !signupData.fatherPhoneNumber.match(/^(\+\d{1,4})?[\d\s\-\(\)]{7,15}$/)) {
@@ -551,7 +591,8 @@ export default function Signup() {
                     رقم الجوال *
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none gap-2">
+                      <span className="text-xl select-none">{countryCodeToFlag(detectedCountry)}</span>
                       <FaPhone className="h-5 w-5 text-[#5b2233] group-focus-within:text-[#5b2233]/80 transition-colors duration-200" />
                     </div>
                     <input
@@ -559,7 +600,7 @@ export default function Signup() {
                       name="phoneNumber"
                       type="tel"
                       required
-                      className={`block w-full pr-12 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
+                      className={`block w-full pr-16 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
                         fieldErrors.phoneNumber 
                           ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' 
                           : 'border-gray-200 dark:border-gray-600 focus:ring-[#5b2233]/20 focus:border-[#5b2233]'
@@ -575,9 +616,6 @@ export default function Signup() {
                       </p>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-right">
-                    الرقم هذا راح يكون اسم المستخدم عشان تدخل بيه
-                  </p>
                 </div>
               )}
 
@@ -585,7 +623,7 @@ export default function Signup() {
               {/* Email Field */}
               <div className="group">
                 <label htmlFor="email" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-right">
-                  البريد الإلكتروني {!isAdminRegistration && "(اختياري)"}
+                  البريد الإلكتروني
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -595,13 +633,13 @@ export default function Signup() {
                     id="email"
                     name="email"
                     type="email"
-                    required={isAdminRegistration}
+                    required
                     className={`block w-full pr-12 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
                       fieldErrors.email 
                         ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' 
                         : 'border-gray-200 dark:border-gray-600 focus:ring-[#5b2233]/20 focus:border-[#5b2233]'
                     }`}
-                    placeholder={isAdminRegistration ? "أدخل بريدك الإلكتروني" : "أدخل بريدك الإلكتروني (اختياري)"}
+                    placeholder={"أدخل بريدك الإلكتروني"}
                     value={signupData.email}
                     onChange={handleUserInput}
                   />
@@ -612,11 +650,7 @@ export default function Signup() {
                     </p>
                   )}
                 </div>
-                {!isAdminRegistration && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-right">
-                    ممكن تسيب الخانة هذه فاضية لو ما تبي تستعمل إيميل
-                  </p>
-                )}
+              
               </div>
 
               {/* Password Field */}
@@ -943,7 +977,7 @@ export default function Signup() {
             <div className="mt-6 text-center">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-2 font-semibold text-[#5b2233] dark:text-[#5b2233]/80 hover:text-[#5b2233]/80 dark:hover:text-[#5b2233]/60 transition-all duration-200 hover:scale-105"
+                className="inline-flex items-center gap-2 font-semibold text-[#5b2233] dark:text-white/80 hover:text-[#5b2233]/80 dark:hover:text-white/60 transition-all duration-200 hover:scale-105"
               >
                 <span>ادخل على حسابك</span>
                 <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -959,12 +993,12 @@ export default function Signup() {
               <div className="w-2 h-2 bg-[#5b2233] rounded-full animate-pulse"></div>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                 بإنشاء حساب، فإنك توافق على{" "}
-                <Link to="/terms" className="text-[#5b2233] dark:text-[#5b2233]/80 hover:underline font-semibold">
+                <Link to="/terms" className="text-[#5b2233] dark:text-white/80 hover:underline font-semibold">
                   شروط الخدمة
                 </Link>{" "}
                 و{" "}
-                <Link to="/privacy" className="text-[#5b2233] dark:text-[#5b2233]/80 hover:underline font-semibold">
-                  سياسة الخصوصية
+                  <Link to="/privacy" className="text-[#5b2233] dark:text-white/80 hover:underline font-semibold">
+                    سياسة الخصوصية
                 </Link>
               </p>
               <div className="w-2 h-2 bg-[#5b2233] rounded-full animate-pulse animation-delay-1000"></div>
@@ -1009,7 +1043,7 @@ export default function Signup() {
                 <div className="bg-[#5b2233]/10 dark:bg-[#5b2233]/20 border border-[#5b2233]/20 dark:border-[#5b2233]/40 rounded-lg p-4">
                   <div className="flex items-start gap-3">
                     <FaExclamationTriangle className="text-[#5b2233] text-lg flex-shrink-0 mt-0.5" />
-                    <p className="text-[#5b2233] dark:text-[#5b2233]/80 text-sm leading-relaxed text-right">
+                    <p className="text-[#5b2233] dark:text-white/80 text-sm leading-relaxed text-right">
                       <strong>ملاحظة مهمة:</strong> اقرأ الشروط هذه بعناية. الموافقة عليها تعني التزامك الكامل بها.
                     </p>
                   </div>

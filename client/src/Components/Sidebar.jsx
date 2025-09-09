@@ -113,7 +113,7 @@ export default function Sidebar({ hideBar = false }) {
                 <div className="text-base font-bold mb-1">
                   {balance ? `${balance.toFixed(2)}` : "0.00"}
                 </div>
-                <div className="text-xs opacity-90">جنيه مصري</div>
+                <div className="text-xs opacity-90">نقطه</div>
                 <Link 
                   to="/wallet" 
                   className="mt-2 block w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-md px-2 py-1.5 text-xs font-medium transition-all duration-200 text-center"
@@ -164,7 +164,7 @@ export default function Sidebar({ hideBar = false }) {
               </li>
             )}
 
-            {isLoggedIn && (
+            {isLoggedIn && data?.learningPath === 'premium' && (
               <li>
                 <Link to="/live-meetings" className="flex gap-3 items-center text-gray-700 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors text-right py-2" onClick={closeSidebar}>
                 <FaVideo size={16} className="text-gray-500 dark:text-slate-100" />

@@ -329,7 +329,7 @@ export default function AdminRechargeCodeDashboard() {
                                     {/* Amount Input */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            المبلغ (جنيه مصري)
+                                            المبلغ (نقاط)
                                         </label>
                                         <input
                                             type="number"

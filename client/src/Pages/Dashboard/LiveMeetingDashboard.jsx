@@ -358,8 +358,8 @@ const LiveMeetingDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center">
-                <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
-                  <FaVideo className="text-2xl text-blue-600 dark:text-blue-400" />
+                <div className="p-3 rounded-full bg-blue-100 dark:bg-[#5b2233] -900">
+                  <FaVideo className="text-2xl text-blue-600 dark:text-[#5b2233] -400" />
                 </div>
                 <div className="mr-4">
                   <p className="text-sm text-gray-600 dark:text-gray-400">إجمالي الجلسات</p>
@@ -370,8 +370,8 @@ const LiveMeetingDashboard = () => {
             
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <div className="flex items-center">
-                <div className="p-3 rounded-full bg-blue-100 dark:bg-blue-900">
-                  <FaClock className="text-2xl text-blue-600 dark:text-blue-400" />
+                <div className="p-3 rounded-full bg-blue-100 dark:bg-[#5b2233] -900">
+                  <FaClock className="text-2xl text-blue-600 dark:text-[#5b2233] -400" />
                 </div>
                 <div className="mr-4">
                   <p className="text-sm text-gray-600 dark:text-gray-400">القادمة</p>

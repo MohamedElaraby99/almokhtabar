@@ -149,7 +149,7 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => setLoginType('phone')}
-                      className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm sm:text-base transition-all duration-200 ${loginType === 'phone' ? 'bg-white dark:bg-gray-800 text-[#5b2233] dark:text-[#5b2233]/80 shadow' : 'text-gray-600 dark:text-gray-300'}`}
+                      className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm sm:text-base transition-all duration-200 ${loginType === 'phone' ? 'bg-white dark:bg-gray-800 text-[#5b2233] dark:text-white/80 shadow' : 'text-gray-600 dark:text-gray-300'}`}
                       aria-pressed={loginType === 'phone'}
                     >
                       <FaPhone className="h-5 w-5" />
@@ -158,7 +158,7 @@ export default function Login() {
                     <button
                       type="button"
                       onClick={() => setLoginType('email')}
-                      className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm sm:text-base transition-all duration-200 ${loginType === 'email' ? 'bg-white dark:bg-gray-800 text-[#5b2233] dark:text-[#5b2233]/80 shadow' : 'text-gray-600 dark:text-gray-300'}`}
+                      className={`flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm sm:text-base transition-all duration-200 ${loginType === 'email' ? 'bg-white dark:bg-gray-800 text-[#5b2233] dark:text-white/80 shadow' : 'text-gray-600 dark:text-gray-300'}`}
                       aria-pressed={loginType === 'email'}
                     >
                       <FaEnvelope className="h-5 w-5" />
@@ -272,7 +272,7 @@ export default function Login() {
             <div className="mt-6 text-center">
               <Link
                 to="/signup"
-                className="inline-flex items-center gap-2 font-semibold text-[#5b2233] dark:text-[#5b2233]/80 hover:text-[#5b2233]/80 dark:hover:text-[#5b2233]/60 transition-all duration-200 hover:scale-105"
+                className="inline-flex items-center gap-2 font-semibold text-[#5b2233] dark:text-white/80 hover:text-[#5b2233]/80 dark:hover:text-white/60 transition-all duration-200 hover:scale-105"
               >
                 <span>انشئ حساب</span>
                 <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -288,11 +288,11 @@ export default function Login() {
               <div className="w-2 h-2 bg-[#5b2233] rounded-full animate-pulse"></div>
               <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                 لما تدخل، إنت بتوافق على{" "}
-                <Link to="/terms" className="text-[#5b2233] dark:text-[#5b2233]/80 hover:underline font-semibold">
+                  <Link to="/terms" className="text-[#5b2233] dark:text-white/80 hover:underline font-semibold">
                   شروط الخدمة
                 </Link>{" "}
                 و{" "}
-                <Link to="/privacy" className="text-[#5b2233] dark:text-[#5b2233]/80 hover:underline font-semibold">
+                <Link to="/privacy" className="text-[#5b2233] dark:text-white/80 hover:underline font-semibold">
                   سياسة الخصوصية
                 </Link>
               </p>
