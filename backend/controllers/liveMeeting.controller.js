@@ -5,6 +5,7 @@ import Stage from '../models/stage.model.js';
 import Subject from '../models/subject.model.js';
 import AppError from '../utils/error.utils.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
+import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Create a new live meeting
 // @route   POST /api/v1/live-meetings
@@ -108,6 +109,34 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     message: 'تم إنشاء الاجتماع المباشر بنجاح',
     liveMeeting
   });
+
+  // Schedule reminder emails at T-30, T-20, T-10, and T0 minutes
+  try {
+    const sendReminder = async (minutesBefore) => {
+      const when = new Date(scheduledDateTime.getTime() - minutesBefore * 60000);
+      const delay = when.getTime() - Date.now();
+      if (delay < 0) return; // too late to schedule
+      setTimeout(async () => {
+        try {
+          const meeting = await LiveMeeting.findById(liveMeeting._id).populate('attendees.user', 'email fullName');
+          if (!meeting) return;
+          const subject = `تذكير بالجلسة المباشرة: ${meeting.title}`;
+          const body = `لديك جلسة مباشرة بعد ${minutesBefore === 0 ? 'الآن' : minutesBefore + ' دقيقة'}\nرابط الجلسة: ${meeting.googleMeetLink}`;
+          const emails = (meeting.attendees || [])
+            .map(a => a.user?.email)
+            .filter(Boolean);
+          for (const email of emails) {
+            await sendEmail(email, subject, body);
+          }
+        } catch (e) {
+          console.error('Failed to send reminder:', e.message);
+        }
+      }, delay);
+    };
+    [30, 20, 10, 0].forEach(sendReminder);
+  } catch (e) {
+    console.error('Reminder scheduling error:', e.message);
+  }
 });
 
 // @desc    Get all live meetings (Admin)
