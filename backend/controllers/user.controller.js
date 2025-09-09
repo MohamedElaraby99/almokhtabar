@@ -33,7 +33,7 @@ const register = async (req, res, next) => {
             }
         }
 
-        const { fullName, email, password, phoneNumber, fatherPhoneNumber, governorate, stage, age, adminCode, deviceInfo } = requestBody;
+        const { fullName, email, password, phoneNumber, fatherPhoneNumber, governorate, stage, age, learningPath, adminCode, deviceInfo } = requestBody;
 
         // Determine user role based on admin code
         let userRole = 'USER';
@@ -54,6 +54,10 @@ const register = async (req, res, next) => {
             }
             if (!governorate || !stage || !age) {
                 return next(new AppError("Governorate, stage, and age are required for regular users", 400));
+            }
+            // Optional path validation when provided
+            if (learningPath && !['basic','premium'].includes(learningPath)) {
+                return next(new AppError("Invalid learning path. Must be 'basic' or 'premium'", 400));
             }
         } else if (userRole === 'ADMIN') {
             // For ADMIN role: email is required
@@ -97,6 +101,7 @@ const register = async (req, res, next) => {
             userData.governorate = governorate;
             userData.stage = stage;
             userData.age = parseInt(age);
+            if (learningPath) userData.learningPath = learningPath;
         } else if (userRole === 'ADMIN') {
             userData.email = email;
         }
@@ -526,7 +531,7 @@ const changePassword = async (req, res, next) => {
 // update profile
 const updateUser = async (req, res, next) => {
     try {
-        const { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age } = req.body;
+        const { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age, learningPath } = req.body;
         const { id } = req.user;
 
         console.log('Update user data:', { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age });
@@ -555,6 +560,12 @@ const updateUser = async (req, res, next) => {
         }
         if (age) {
             user.age = parseInt(age);
+        }
+        if (learningPath) {
+            if (!['basic','premium'].includes(learningPath)) {
+                return next(new AppError("Invalid learning path. Must be 'basic' or 'premium'", 400));
+            }
+            user.learningPath = learningPath;
         }
 
         if (req.file) {

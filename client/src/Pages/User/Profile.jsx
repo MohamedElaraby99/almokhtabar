@@ -8,7 +8,27 @@ import { FiMoreVertical } from "react-icons/fi";
 import Layout from "../../Layout/Layout";
 import { useNavigate } from "react-router-dom";
 
-import { egyptianCities, getArabicCity } from "../../utils/governorateMapping";
+// Country list (Arabic labels)
+const countries = [
+  { value: "EG", label: "مصر" },
+  { value: "SA", label: "السعودية" },
+  { value: "AE", label: "الإمارات" },
+  { value: "KW", label: "الكويت" },
+  { value: "QA", label: "قطر" },
+  { value: "BH", label: "البحرين" },
+  { value: "OM", label: "عُمان" },
+  { value: "YE", label: "اليمن" },
+  { value: "JO", label: "الأردن" },
+  { value: "LB", label: "لبنان" },
+  { value: "IQ", label: "العراق" },
+  { value: "PS", label: "فلسطين" },
+  { value: "SY", label: "سوريا" },
+  { value: "SD", label: "السودان" },
+  { value: "LY", label: "ليبيا" },
+  { value: "TN", label: "تونس" },
+  { value: "DZ", label: "الجزائر" },
+  { value: "MA", label: "المغرب" }
+];
 import UserQRCode from "../../Components/UserQRCode";
 
 
@@ -395,11 +415,11 @@ export default function Profile() {
                     </div>
                   </div>
 
-                  {/* Governorate */}
+                  {/* Country (stored in governorate field for backend compat) */}
                   <div className="space-y-2">
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                       <FaMapMarkerAlt className="text-red-500" />
-                      المدينة
+                      الدولة
                     </label>
                     <select
                       value={isEditing ? userInput.governorate : (userData?.governorate || "")}
@@ -412,13 +432,12 @@ export default function Profile() {
                       }`}
                       dir="rtl"
                     >
-                      <option value="">اختر المدينة</option>
-                      {egyptianCities.map((gov) => (
-                        <option key={gov.value} value={gov.value}>
-                          {gov.label}
+                      <option value="">اختر الدولة</option>
+                      {countries.map((country) => (
+                        <option key={country.value} value={country.value}>
+                          {country.label}
                         </option>
                       ))}
-                      <option value="Other">أخرى</option>
                     </select>
                   </div>
                 </>

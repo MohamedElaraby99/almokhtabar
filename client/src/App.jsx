@@ -41,6 +41,8 @@ import InstructorDetail from "./Pages/InstructorDetail";
 import CourseContentManager from './Pages/Dashboard/CourseContentManager';
 import CoursesPage from './Pages/Courses/CoursesPage';
 import CourseDetail from './Pages/Courses/CourseDetail';
+import PremiumPlan from "./Pages/Plans/PremiumPlan";
+import BasicPlan from "./Pages/Plans/BasicPlan";
 
 import RequireAuth from "./Components/auth/RequireAuth";
 import RedirectIfAuthenticated from "./Components/auth/RedirectIfAuthenticated";
@@ -124,6 +126,8 @@ function App() {
         <Route path="/subjects" element={<SubjectList />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/courses/:id" element={<CourseDetail />} />
+        <Route path="/plans/basic" element={<BasicPlan />} />
+        <Route path="/plans/premium" element={<PremiumPlan />} />
 
                   <Route element={<RequireAuth allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}>
                     <Route path="/exam-history" element={<ExamHistory />} />

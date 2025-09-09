@@ -68,6 +68,15 @@ const userSchema = new Schema({
         min: [5, 'Age must be at least 5'],
         max: [100, 'Age cannot exceed 100']
     },
+    // Selected learning path at signup (basic or premium)
+    learningPath: {
+        type: String,
+        enum: ['basic', 'premium'],
+        default: 'basic',
+        required: function() {
+            return !['ADMIN', 'SUPER_ADMIN'].includes(this.role);
+        }
+    },
     avatar: {
         public_id: {
             type: String

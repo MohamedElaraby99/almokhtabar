@@ -274,7 +274,7 @@ export default function Login() {
                 to="/signup"
                 className="inline-flex items-center gap-2 font-semibold text-[#5b2233] dark:text-[#5b2233]/80 hover:text-[#5b2233]/80 dark:hover:text-[#5b2233]/60 transition-all duration-200 hover:scale-105"
               >
-                <span>اعمل حساب</span>
+                <span>انشئ حساب</span>
                 <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>

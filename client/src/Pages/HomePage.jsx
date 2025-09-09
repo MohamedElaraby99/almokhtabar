@@ -51,6 +51,10 @@ import {
 import { placeholderImages } from "../utils/placeholderImages";
 // Using a public URL for now - replace with your actual image URL
 const fikraCharacter = "/fikra_character-removebg-preview.png";
+import basicPlan from "../assets/basicPlan.png";
+import premiumPlan from "../assets/premiumPlan.png";
+
+
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -219,6 +223,141 @@ export default function HomePage() {
       }`}>
         <AnimatedHero onGetStarted={onGetStarted} />
       </div>
+
+
+       {/* Paths Section: Choose Your Plan */}
+       <section className={`py-20 bg-gray-50 dark:bg-gray-900 transition-all duration-700 ease-out ${
+        heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+      }`} dir="rtl" style={{ transitionDelay: '500ms' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-14 transition-all duration-700 ease-out ${
+            heroLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+          }`} style={{ transitionDelay: '650ms' }}>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
+              اختَر مسارك
+            </h2>
+            <p className="mt-3 text-gray-600 dark:text-gray-300">
+              مسار تعليمي يناسب احتياجاتك، مع إمكانية الترقية في أي وقت
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Path 1: Standard Access */}
+            <div className={`relative rounded-2xl p-8 bg-white dark:bg-gray-800 border border-gray-200/70 dark:border-gray-700/60 shadow-lg transition-all duration-500 overflow-hidden group ${
+              heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            } hover:shadow-2xl hover:-translate-y-1 hover:rotate-[0.25deg]`} style={{ transitionDelay: '800ms' }}>
+              {/* Decorative glow blobs */}
+              <div className="pointer-events-none absolute -top-16 -left-16 w-40 h-40 rounded-full bg-[#5b2233]/10 blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
+              <div className="pointer-events-none absolute -bottom-24 -right-20 w-56 h-56 rounded-full bg-[#361927]/10 blur-3xl group-hover:scale-110 transition-transform duration-700 delay-150"></div>
+
+              {/* Shine on hover */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="absolute -inset-x-10 -top-24 h-40 rotate-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+              </div>
+
+              <div className="absolute -top-0 -right-1 px-2 py-1 rounded-full text-xs font-semibold bg-[#5b2233] text-white">
+                المسار الأساسي
+              </div>
+              <img
+                src={basicPlan}
+                alt="المختبر"
+                className="absolute -left-0 bottom-2 h-36 md:h-44 pointer-events-none select-none"
+                loading="lazy"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-right">
+                محتوى كامل للتعلّم الذاتي
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 text-right">
+                احصل على وصول إلى جميع الفيديوهات، نماذج الامتحانات، ملفات الـPDF، والتدريبات التفاعلية.
+              </p>
+              <ul className="space-y-2 mb-8 text-right">
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>فيديوهات دراسية مرتبة بحسب المنهج</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>امتحانات تفاعلية مع تصحيح فوري</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>ملفات PDF وملخصات</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>تدريبات وأسئلة متدرجة المستوى</span>
+                </li>
+              </ul>
+              {/* subtle gradient separator */}
+              <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/30 to-transparent mb-6"></div>
+              <div className="flex justify-start">
+                <a href="/plans/basic" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
+                  ابدأ هذا المسار
+                </a>
+              </div>
+            </div>
+
+            {/* Path 2: Premium with Private Sessions */}
+            <div className={`relative rounded-2xl p-8 bg-white dark:bg-gray-800 border border-[#5b2233]/40 shadow-xl transition-all duration-500 overflow-hidden group ${
+              heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
+            } hover:shadow-2xl hover:-translate-y-1 hover:-rotate-[0.25deg]`} style={{ transitionDelay: '900ms' }}>
+              {/* Decorative glow blobs */}
+              <div className="pointer-events-none absolute -top-16 -right-12 w-48 h-48 rounded-full bg-yellow-400/10 blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
+              <div className="pointer-events-none absolute -bottom-24 -left-16 w-56 h-56 rounded-full bg-[#5b2233]/10 blur-3xl group-hover:scale-110 transition-transform duration-700 delay-150"></div>
+
+              {/* #361927  bg on hover */}
+              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
+                <div className="absolute -inset-x-10 -top-24 h-40 -rotate-12 bg-gradient-to-r from-transparent via-[#361927]/20 to-transparent"></div>
+              </div>
+
+              <div className="absolute -top-0 -right-1 px-2 py-1 rounded-full text-xs font-semibold bg-yellow-500 text-white shadow-md flex items-center gap-1">
+                <FaStar className="w-3 h-3" />
+                <span>المُوصى به</span>
+              </div>
+              <img
+                src={premiumPlan}
+                alt="المختبر"
+                className="absolute -left-1 bottom-2 h-36 md:h-44 pointer-events-none select-none"
+                loading="lazy"
+              />
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-right">
+                كل شيء + جلسات خاصة مع الدكتور
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 mb-6 text-right">
+                استمتع بجميع مزايا المحتوى، بالإضافة إلى جلسات أونلاين خاصة ومتابعة مباشرة مع الدكتور.
+              </p>
+              <ul className="space-y-2 mb-20 text-right">
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>كل ما في المسار الأساسي</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>جلسات خاصة فردية أونلاين</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>متابعة أسبوعية وتقييم للأداء</span>
+                </li>
+                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
+                  <FaCheckCircle className="text-[#5b2233]" />
+                  <span>دعم سريع وإجابات مباشرة على أسئلتك</span>
+                </li>
+              </ul>
+              {/* subtle gradient separator */}
+              <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/40 to-transparent mb-6"></div>
+              <div className="flex justify-start gap-3">
+                <a href="/plans/premium" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
+                  اختر المسار المميز
+                </a>
+                <a href="/contact" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold border border-white/40 dark:border-gray-600 text-[#5b2233] dark:text-white hover:bg-white/10 transition-all">
+                اسأل عن الجلسات 
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Featured Courses Section */}
       <section className={`py-20 bg-white dark:bg-gray-800 transition-all duration-700 ease-out ${
@@ -852,49 +991,6 @@ export default function HomePage() {
               </p>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className={`py-20 bg-gradient-to-r from-[#5b2233] via-[#5b2233] to-[#5b2233] transition-all duration-700 ease-out ${
-        heroLoaded 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 translate-y-8'
-      }`}
-      style={{ transitionDelay: '3600ms' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className={`transition-all duration-700 ease-out ${
-            heroLoaded 
-              ? 'opacity-100 scale-100' 
-              : 'opacity-0 scale-95'
-          }`}
-          style={{ transitionDelay: '3800ms' }}>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                          هل أنت مستعد لبدء رحلة التعلم؟
-            </h2>
-            <p className="text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-              انضم إلى آلاف المتعلمين الذين نجحوا بالفعل في تغيير حياتهم المهنية من خلال موادنا التدريبية التي يقدمها خبراؤنا.
-            </p>
-          </div>
-          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-700 ease-out ${
-            heroLoaded 
-              ? 'opacity-100 translate-y-0 scale-100' 
-              : 'opacity-0 translate-y-8 scale-95'
-          }`}
-          style={{ transitionDelay: '4000ms' }}>
-            <Link to="/signup">
-              <button className="px-8 py-4 bg-gradient-to-r from-[#5b2233] via-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:via-[#5b2233] hover:to-[#5b2233] text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-                ابدأ مجاناً
-              </button>
-            </Link>
-            
-            <Link to="/qa">
-              <button className="px-8 py-4 bg-[#5b2233] hover:bg-[#5b2233] text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
-                <FaQuestionCircle className="w-5 h-5" />
-                اطرح سؤالاً
-              </button>
-            </Link>
-          </div>
         </div>
       </section>
 

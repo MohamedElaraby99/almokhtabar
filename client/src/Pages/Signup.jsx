@@ -10,7 +10,27 @@ import CaptchaComponent from "../Components/CaptchaComponent";
 import { FaUser, FaEnvelope, FaLock, FaEye, FaEyeSlash, FaUserPlus, FaGraduationCap, FaCamera, FaUpload, FaPhone, FaMapMarkerAlt, FaBook, FaExclamationTriangle, FaTimes, FaCheckCircle, FaInfoCircle } from "react-icons/fa";
 import { axiosInstance } from "../Helpers/axiosInstance";
 import { useEffect } from "react";
-import { egyptianCities } from "../utils/governorateMapping";
+// Country list (Arabic labels)
+const countries = [
+  { value: "EG", label: "مصر" },
+  { value: "SA", label: "السعودية" },
+  { value: "AE", label: "الإمارات" },
+  { value: "KW", label: "الكويت" },
+  { value: "QA", label: "قطر" },
+  { value: "BH", label: "البحرين" },
+  { value: "OM", label: "عُمان" },
+  { value: "YE", label: "اليمن" },
+  { value: "JO", label: "الأردن" },
+  { value: "LB", label: "لبنان" },
+  { value: "IQ", label: "العراق" },
+  { value: "PS", label: "فلسطين" },
+  { value: "SY", label: "سوريا" },
+  { value: "SD", label: "السودان" },
+  { value: "LY", label: "ليبيا" },
+  { value: "TN", label: "تونس" },
+  { value: "DZ", label: "الجزائر" },
+  { value: "MA", label: "المغرب" }
+];
 import { generateDeviceFingerprint, getDeviceType, getBrowserInfo, getOperatingSystem } from "../utils/deviceFingerprint";
 import logo from "../assets/logo.png";
 
@@ -37,6 +57,7 @@ export default function Signup() {
     governorate: "",
     stage: "",
     age: "",
+    learningPath: "",
     avatar: "",
     adminCode: "",
   });
@@ -176,13 +197,20 @@ export default function Signup() {
       }
       
       if (!signupData.governorate || signupData.governorate.trim() === "") {
-        errors.push("🏙️ اختار المدينة اللي تسكن فيها");
-        newFieldErrors.governorate = "اختار مدينتك";
+        errors.push("🌍 اختار الدولة التي تقيم فيها");
+        newFieldErrors.governorate = "اختار دولتك";
       }
       
       if (!signupData.stage || signupData.stage.trim() === "") {
         errors.push("🎓 اختار المرحلة الدراسية");
         newFieldErrors.stage = "اختار المرحلة الدراسية";
+      }
+      if (!signupData.learningPath || signupData.learningPath.trim() === "") {
+        errors.push("🧭 اختار مسار التعلم (أساسي أو مميز)");
+        newFieldErrors.learningPath = "اختار المسار";
+      } else if (!['basic','premium'].includes(signupData.learningPath)) {
+        errors.push("🧭 المسار غير صحيح - اختر أساسي أو مميز");
+        newFieldErrors.learningPath = "مسار غير صحيح";
       }
       
       if (!signupData.age || signupData.age.trim() === "") {
@@ -319,6 +347,7 @@ export default function Signup() {
       requestData.governorate = signupData.governorate;
       requestData.stage = signupData.stage;
       requestData.age = signupData.age;
+      requestData.learningPath = signupData.learningPath;
     }
 
     // Handle avatar file separately if present
@@ -365,6 +394,7 @@ export default function Signup() {
             governorate: "",
             stage: "",
             age: "",
+            learningPath: "",
             avatar: "",
             adminCode: "",
           });
@@ -412,6 +442,7 @@ export default function Signup() {
             governorate: "",
             stage: "",
             age: "",
+            learningPath: "",
             avatar: "",
             adminCode: "",
           });
@@ -665,11 +696,11 @@ export default function Signup() {
                 </div>
               )}
 
-              {/* Governorate Field - Only for regular users */}
+              {/* Country Field - Only for regular users (keeps field name for backend compat) */}
               {!isAdminRegistration && (
                 <div className="group">
                   <label htmlFor="governorate" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-right">
-                    المدينة
+                    الدولة
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
@@ -687,10 +718,10 @@ export default function Signup() {
                       value={signupData.governorate}
                       onChange={handleUserInput}
                     >
-                      <option value="">اختر المدينة</option>
-                      {egyptianCities.map((gov) => (
-                        <option key={gov.value} value={gov.value}>
-                          {gov.label}
+                      <option value="">اختر الدولة</option>
+                      {countries.map((country) => (
+                        <option key={country.value} value={country.value}>
+                          {country.label}
                         </option>
                       ))}
                     </select>
@@ -737,6 +768,42 @@ export default function Signup() {
                       <p className="text-red-500 text-xs mt-1 text-right flex items-center gap-1">
                         <FaExclamationTriangle className="text-xs" />
                         {fieldErrors.stage}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Learning Path - Only for regular users */}
+              {!isAdminRegistration && (
+                <div className="group">
+                  <label htmlFor="learningPath" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-right">
+                    اختر المسار
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                      <FaGraduationCap className="h-5 w-5 text-[#5b2233] group-focus-within:text-[#5b2233]/80 transition-colors duration-200" />
+                    </div>
+                    <select
+                      id="learningPath"
+                      name="learningPath"
+                      required
+                      className={`block w-full pr-12 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
+                        fieldErrors.learningPath 
+                          ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' 
+                          : 'border-gray-200 dark:border-gray-600 focus:ring-[#5b2233]/20 focus:border-[#5b2233]'
+                      }`}
+                      value={signupData.learningPath}
+                      onChange={handleUserInput}
+                    >
+                      <option value="">اختر المسار</option>
+                      <option value="basic">المسار الأساسي</option>
+                      <option value="premium">المسار المميز</option>
+                    </select>
+                    {fieldErrors.learningPath && (
+                      <p className="text-red-500 text-xs mt-1 text-right flex items-center gap-1">
+                        <FaExclamationTriangle className="text-xs" />
+                        {fieldErrors.learningPath}
                       </p>
                     )}
                   </div>
@@ -806,7 +873,7 @@ export default function Signup() {
                   <div className="flex-1">
                     <label htmlFor="image_uploads" className="cursor-pointer">
                       <div className="flex items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-400 dark:hover:border-blue-400 transition-all duration-300 hover:shadow-md bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <FaUpload className="w-5 h-5 text-blue-500 ml-2" />
+                        <FaUpload className="w-5 h-5 text-[#5b2233] ml-2" />
                         <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
                           {previewImage ? "تغيير الصورة" : "رفع صورة"}
                         </span>
@@ -866,7 +933,7 @@ export default function Signup() {
                 </div>
                 <div className="relative flex justify-center text-sm">
                   <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">
-                    عندك حساب خلاص؟
+                    عندك حساب بالفعل؟
                   </span>
                 </div>
               </div>

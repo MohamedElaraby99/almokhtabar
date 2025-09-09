@@ -79,7 +79,7 @@ const LoadingScreen = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
         <div className="flex items-center space-x-2 text-white/60 text-sm">
           <div className="w-2 h-2 bg-white/40 rounded-full animate-pulse"></div>
-          <span>© 2024 منصة المختبر</span>
+          <span>© 2025 منصة المختبر</span>
           <div className="w-2 h-2 bg-white/40 rounded-full animate-pulse"></div>
         </div>
       </div>
