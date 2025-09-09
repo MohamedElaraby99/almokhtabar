@@ -401,7 +401,7 @@ export default function AdminDashboard() {
                 ? 'opacity-100 translate-y-0' 
                 : 'opacity-0 translate-y-8'
             }`}>
-              <h1 className={`text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-600 dark:from-blue-400 dark:via-blue-400 dark:to-indigo-400 mb-4 transition-all duration-700 delay-200 ${
+              <h1 className={`text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#5b2233] via-[#5b2233] to-[#7a2d43] dark:from-[#5b2233] dark:via-[#5b2233] dark:to-[#7a2d43] mb-4 transition-all duration-700 delay-200 ${
                 heroLoaded 
                   ? 'opacity-100 scale-100' 
                   : 'opacity-0 scale-95'

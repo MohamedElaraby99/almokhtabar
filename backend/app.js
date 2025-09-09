@@ -29,6 +29,7 @@ import groupRoutes from './routes/group.routes.js';
 import financialRoutes from './routes/financial.routes.js';
 import courseNotificationRoutes from './routes/courseNotification.routes.js';
 import achievementsRoutes from './routes/achievements.routes.js';
+import liveScheduleRoutes from './routes/liveSchedule.routes.js';
 
 import gradeRoutes from './routes/grade.routes.js';
 import offlineGradeRoutes from './routes/offlineGrade.routes.js';
@@ -306,6 +307,7 @@ app.use('/api/v1/groups', groupRoutes);
 app.use('/api/v1/financial', financialRoutes);
 app.use('/api/v1/notifications', courseNotificationRoutes);
 app.use('/api/v1/achievements', achievementsRoutes);
+app.use('/api/v1/live-schedules', liveScheduleRoutes);
 
 // Apply device authorization middleware to protected routes
 app.use('/api/v1/courses', checkDeviceAuthorization, logDeviceAccess);

@@ -22,16 +22,27 @@ import {
   FaSearch
 } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
+import { axiosInstance } from '../../Helpers/axiosInstance';
+import PremiumWeeklyScheduler from '../../Components/PremiumWeeklyScheduler';
 
 const LiveMeetings = () => {
   const dispatch = useDispatch();
   const { upcomingMeetings, myMeetings, loading } = useSelector(state => state.liveMeeting);
+  const { isLoggedIn, data } = useSelector(state => state.auth);
   
   const [activeTab, setActiveTab] = useState('upcoming');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [showMeetingModal, setShowMeetingModal] = useState(false);
+  // Weekly schedule builder (client-side placeholder until backend wiring)
+  const [slots, setSlots] = useState(() => {
+    try {
+      const saved = localStorage.getItem('premiumWeeklySchedule');
+      return saved ? JSON.parse(saved) : [];
+    } catch { return []; }
+  });
+  const [newSlot, setNewSlot] = useState({ dayOfWeek: '', startTime: '', duration: 60, startDate: '' });
 
   useEffect(() => {
     if (activeTab === 'upcoming') {
@@ -40,6 +51,53 @@ const LiveMeetings = () => {
       dispatch(getUserLiveMeetings({ status: statusFilter === 'all' ? '' : statusFilter }));
     }
   }, [dispatch, activeTab, statusFilter]);
+
+  const saveSchedule = async () => {
+    if (slots.length < 2 || slots.length > 3) {
+      toast.error('يجب اختيار يومين أو ثلاثة أيام');
+      return;
+    }
+    try {
+      const payload = { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone, slots };
+      const res = await axiosInstance.put('/live-schedules/me', payload, { withCredentials: true });
+      if (res.data?.success) {
+        toast.success('تم إرسال الجدول للمراجعة (قيد الانتظار)');
+      } else {
+        toast.error('تعذر حفظ الجدول');
+      }
+    } catch (e) {
+      toast.error(e?.response?.data?.message || 'خطأ أثناء حفظ الجدول');
+    }
+  };
+
+  const addSlot = () => {
+    if (newSlot.dayOfWeek === '' || !newSlot.startTime || !newSlot.duration || !newSlot.startDate) return;
+    // Enforce time between 10:00 and 22:00
+    const t = newSlot.startTime;
+    if (t < '10:00' || t > '22:00') {
+      toast.error('الوقت يجب أن يكون بين 10:00 صباحاً و 10:00 مساءً');
+      return;
+    }
+    // Enforce 2-3 days per week and unique day/time
+    const uniqueByDay = new Set(slots.map(s => String(s.dayOfWeek)));
+    const newDay = String(newSlot.dayOfWeek);
+    const willHaveDays = uniqueByDay.has(newDay) ? uniqueByDay.size : uniqueByDay.size + 1;
+    if (willHaveDays > 3) {
+      toast.error('اختار يومين أو ثلاثة فقط في الأسبوع');
+      return;
+    }
+    const duplicate = slots.some(s => String(s.dayOfWeek) === newDay && s.startTime === newSlot.startTime);
+    if (duplicate) {
+      toast.error('هذا الموعد موجود بالفعل لهذا اليوم');
+      return;
+    }
+    setSlots(prev => [...prev, { ...newSlot, duration: parseInt(newSlot.duration) }]);
+    setNewSlot({ dayOfWeek: '', startTime: '', duration: 60, startDate: '' });
+  };
+
+  const removeSlot = (idx) => {
+    setSlots(prev => prev.filter((_, i) => i !== idx));
+  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -235,10 +293,16 @@ const LiveMeetings = () => {
     </div>
   );
 
+  // Premium users must set schedule first (placeholder client gating)
+  const isPremium = data?.learningPath === 'premium';
+
   return (
     <Layout>
       <section className="min-h-screen py-8 px-4 lg:px-20" dir="rtl">
         <div className="max-w-7xl mx-auto">
+          {isLoggedIn && isPremium && (
+            <PremiumWeeklyScheduler />
+          )}
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-800 dark:text-white mb-4">

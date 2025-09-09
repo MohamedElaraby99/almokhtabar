@@ -16,7 +16,7 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     googleMeetLink,
     scheduledDate,
     duration,
-    instructor,
+    instructor, // optional now
     stage,
     subject,
     attendees,
@@ -25,8 +25,8 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     tags
   } = req.body;
 
-  // Validate required fields
-  if (!title || !description || !googleMeetLink || !scheduledDate || !duration || !instructor || !stage || !subject) {
+  // Validate required fields (stage/subject optional now)
+  if (!title || !description || !googleMeetLink || !scheduledDate || !duration) {
     return next(new AppError('جميع الحقول المطلوبة يجب ملؤها', 400));
   }
 
@@ -36,22 +36,34 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     return next(new AppError('تاريخ الاجتماع يجب أن يكون في المستقبل', 400));
   }
 
-  // Validate instructor exists
-  const instructorExists = await Instructor.findById(instructor);
-  if (!instructorExists) {
-    return next(new AppError('المحاضر غير موجود', 404));
+  // Validate instructor exists (optional)
+  let instructorId = undefined;
+  if (instructor) {
+    const instructorExists = await Instructor.findById(instructor);
+    if (!instructorExists) {
+      return next(new AppError('المحاضر غير موجود', 404));
+    }
+    instructorId = instructor;
   }
 
-  // Validate stage exists
-  const stageExists = await Stage.findById(stage);
-  if (!stageExists) {
-    return next(new AppError('المرحلة غير موجودة', 404));
+  // Validate stage exists (optional)
+  let stageId = undefined;
+  if (stage) {
+    const stageExists = await Stage.findById(stage);
+    if (!stageExists) {
+      return next(new AppError('المرحلة غير موجودة', 404));
+    }
+    stageId = stage;
   }
 
-  // Validate subject exists
-  const subjectExists = await Subject.findById(subject);
-  if (!subjectExists) {
-    return next(new AppError('المادة غير موجودة', 404));
+  // Validate subject exists (optional)
+  let subjectId = undefined;
+  if (subject) {
+    const subjectExists = await Subject.findById(subject);
+    if (!subjectExists) {
+      return next(new AppError('المادة غير موجودة', 404));
+    }
+    subjectId = subject;
   }
 
   // Validate attendees if provided
@@ -72,11 +84,11 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     googleMeetLink,
     scheduledDate: scheduledDateTime,
     duration,
-    instructor,
-    stage,
-    subject,
+    ...(instructorId ? { instructor: instructorId } : {}),
+    ...(stageId ? { stage: stageId } : {}),
+    ...(subjectId ? { subject: subjectId } : {}),
     attendees: validatedAttendees,
-    maxAttendees: maxAttendees || 100,
+    ...(maxAttendees ? { maxAttendees } : {}),
     isRecorded: isRecorded || false,
     tags: tags || [],
     createdBy: req.user._id || req.user.id
@@ -549,9 +561,7 @@ export const addAttendees = asyncHandler(async (req, res, next) => {
   });
 
   // Check if adding attendees would exceed max limit
-  if (liveMeeting.attendees.length + validAttendees.length > liveMeeting.maxAttendees) {
-    return next(new AppError('عدد الحضور يتجاوز الحد الأقصى المسموح', 400));
-  }
+  // Capacity is unlimited now; no maxAttendees enforcement
 
   // Add attendees
   liveMeeting.attendees.push(...validAttendees);
