@@ -82,9 +82,7 @@ export default function Profile() {
       formData.append("fatherPhoneNumber", userInput.fatherPhoneNumber);
       formData.append("governorate", userInput.governorate);
       formData.append("age", userInput.age);
-      if (userInput.learningPath) {
-        formData.append("learningPath", userInput.learningPath);
-      }
+      // learningPath is managed by subscription/upgrade flow, not editable here
     }
     
     if (userInput.avatar) {
@@ -159,8 +157,7 @@ export default function Profile() {
         hasChanges = hasChanges ||
           userInput.fatherPhoneNumber !== userData?.fatherPhoneNumber ||
           userInput.governorate !== userData?.governorate ||
-          userInput.age !== userData?.age ||
-          userInput.learningPath !== (userData?.learningPath || "");
+          userInput.age !== userData?.age;
       }
       
       console.log('Change detection:', {
@@ -364,28 +361,16 @@ export default function Profile() {
               {/* User-specific fields - only show for regular users */}
               {userData?.role !== 'ADMIN' && userData?.role !== 'SUPER_ADMIN' && (
                 <>
-                  {/* Learning Path */}
-                  <div className="space-y-2">
+                  {/* Learning Path (read-only) */}
+                  <div className="space-y-1">
                     <label className="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300">
                       <FaGraduationCap className="text-blue-500" />
                       المسار التعليمي
                     </label>
-                    {isEditing ? (
-                      <select
-                        value={userInput.learningPath}
-                        onChange={(e) => setUserInput({ ...userInput, learningPath: e.target.value })}
-                        className={`w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right bg-white dark:bg-gray-700 text-gray-900 dark:text-white`}
-                        dir="rtl"
-                      >
-                        <option value="">اختر المسار</option>
-                        <option value="basic">المسار الأساسي</option>
-                        <option value="premium">المسار المميز</option>
-                      </select>
-                    ) : (
-                      <div className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-right" dir="rtl">
-                        {userData?.learningPath === 'premium' ? 'المسار المميز' : userData?.learningPath === 'basic' ? 'المسار الأساسي' : 'غير محدد'}
-                      </div>
-                    )}
+                    <div className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-right" dir="rtl">
+                      {userData?.learningPath === 'premium' ? 'المسار المميز' : userData?.learningPath === 'basic' ? 'المسار الأساسي' : 'غير محدد'}
+                    </div>
+                    <div className="text-xs text-gray-500 dark:text-gray-400">لا يمكن تعديل المسار من الملف الشخصي.</div>
                   </div>
 
                   {/* Father's Phone Number */}

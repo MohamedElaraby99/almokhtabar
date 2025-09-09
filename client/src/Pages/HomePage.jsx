@@ -62,7 +62,8 @@ export default function HomePage() {
   const { featuredSubjects } = useSelector((state) => state.subject);
   const { courses, featuredCourses, featuredLoading } = useSelector((state) => state.course);
 
-  const { role } = useSelector((state) => state.auth);
+  const { role, isLoggedIn, data } = useSelector((state) => state.auth);
+  const userLearningPath = data?.learningPath;
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
@@ -291,9 +292,19 @@ export default function HomePage() {
               {/* subtle gradient separator */}
               <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/30 to-transparent mb-6"></div>
               <div className="flex justify-start">
-                <a href="/plans/basic" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
-                  ابدأ هذا المسار
-                </a>
+                {isLoggedIn && userLearningPath === 'basic' ? (
+                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-700">
+                    أنت مشترك في هذا المسار
+                  </span>
+                ) : isLoggedIn && userLearningPath === 'premium' ? (
+                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
+                    لديك المسار المميز (يشمل هذا)
+                  </span>
+                ) : (
+                  <a href="/plans/basic" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
+                    ابدأ هذا المسار
+                  </a>
+                )}
               </div>
             </div>
 
@@ -347,12 +358,20 @@ export default function HomePage() {
               {/* subtle gradient separator */}
               <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/40 to-transparent mb-6"></div>
               <div className="flex justify-start gap-3">
-                <a href="/plans/premium" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
-                  اختر المسار المميز
+                {isLoggedIn && userLearningPath === 'premium' ? (
+                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-700">
+                    أنت مشترك في المسار المميز
+                  </span>
+                ) : (
+                  <>
+                   <a href="/plans/premium" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
+                    {isLoggedIn && userLearningPath === 'basic' ? 'ترقية إلى المميز' : 'اختر المسار المميز'}
+                  </a>
+                  <a href="/contact" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold border border-white/40 dark:border-gray-600 text-[#5b2233] dark:text-white hover:bg-white/10 transition-all">
+                  اسأل عن الجلسات 
                 </a>
-                <a href="/contact" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold border border-white/40 dark:border-gray-600 text-[#5b2233] dark:text-white hover:bg-white/10 transition-all">
-                اسأل عن الجلسات 
-                </a>
+                  </> 
+                )}
               </div>
             </div>
           </div>

@@ -49,6 +49,7 @@ export default function Signup() {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [fieldErrors, setFieldErrors] = useState({});
   const [detectedCountry, setDetectedCountry] = useState("");
+  const [detectedFatherCountry, setDetectedFatherCountry] = useState("");
   const [signupData, setSignupData] = useState({
     fullName: "",
     email: "",
@@ -97,8 +98,22 @@ export default function Signup() {
 
     // Auto-detect country flag from phone number
     if (name === 'phoneNumber') {
-      const code = detectCountryByPhone(cleanValue);
+      let code = detectCountryByPhone(cleanValue);
+      if (!code && signupData.governorate) {
+        code = signupData.governorate;
+      }
       setDetectedCountry(code);
+    }
+    if (name === 'fatherPhoneNumber') {
+      let code = detectCountryByPhone(cleanValue);
+      if (!code && signupData.governorate) {
+        code = signupData.governorate;
+      }
+      setDetectedFatherCountry(code);
+    }
+    if (name === 'governorate') {
+      setDetectedCountry(cleanValue || '');
+      setDetectedFatherCountry(cleanValue || '');
     }
     
     // Clear field error when user starts typing
@@ -144,8 +159,16 @@ export default function Signup() {
       ['+213', 'DZ'],
       ['+212', 'MA']
     ];
+    // Try international format with +
     const match = map.find(([prefix]) => p.startsWith(prefix));
-    return match ? match[1] : '';
+    if (match) return match[1];
+    // Heuristics for local formats (common MENA)
+    if (/^01\d{8,}/.test(p)) return 'EG'; // Egypt mobiles start with 01
+    if (/^05\d{7,}/.test(p)) return 'SA'; // Saudi often 05 local
+    if (/^05\d{7,}/.test(p)) return 'KW';
+    if (/^07\d{7,}/.test(p)) return 'JO';
+    if (/^03\d{6,}/.test(p)) return 'LB';
+    return '';
   };
 
   function getImage(event) {
@@ -703,7 +726,8 @@ export default function Signup() {
                     رقم جوال ولي الأمر
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
+                    <div className="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none gap-2">
+                      <span className="text-xl select-none">{countryCodeToFlag(detectedFatherCountry)}</span>
                       <FaPhone className="h-5 w-5 text-[#5b2233] group-focus-within:text-[#5b2233]/80 transition-colors duration-200" />
                     </div>
                     <input
@@ -711,7 +735,7 @@ export default function Signup() {
                       name="fatherPhoneNumber"
                       type="tel"
                       required={false}
-                      className={`block w-full pr-12 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
+                      className={`block w-full pr-16 pl-4 py-4 border-2 rounded-xl bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-300 text-right shadow-sm hover:shadow-md ${
                         fieldErrors.fatherPhoneNumber 
                           ? 'border-red-500 focus:ring-red-500/20 focus:border-red-500' 
                           : 'border-gray-200 dark:border-gray-600 focus:ring-[#5b2233]/20 focus:border-[#5b2233]'

@@ -560,12 +560,7 @@ const updateUser = async (req, res, next) => {
         if (age) {
             user.age = parseInt(age);
         }
-        if (learningPath) {
-            if (!['basic','premium'].includes(learningPath)) {
-                return next(new AppError("Invalid learning path. Must be 'basic' or 'premium'", 400));
-            }
-            user.learningPath = learningPath;
-        }
+        // Learning path can be changed via dedicated upgrade flow; ignore direct updates here
 
         if (req.file) {
             try {
