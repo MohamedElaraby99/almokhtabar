@@ -904,50 +904,6 @@ export default function Signup() {
                 </div>
               )}
 
-              {/* Enhanced Avatar Upload */}
-              <div className="group">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 text-right">
-                  الصورة الشخصية (اختياري)
-                </label>
-                <div className="flex items-center space-x-reverse space-x-4">
-                  <div className="relative">
-                    <div className="w-20 h-20 rounded-full bg-gradient-to-r from-blue-100 to-blue-100 dark:from-blue-900/20 dark:to-blue-900/20 flex items-center justify-center border-2 border-gray-200 dark:border-gray-600 overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300">
-                      {previewImage ? (
-                        <img 
-                          src={previewImage} 
-                          alt="Profile preview" 
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <BsPersonCircle className="w-10 h-10 text-gray-400" />
-                      )}
-                    </div>
-                    {previewImage && (
-                      <div className="absolute -top-1 -left-1 w-7 h-7 bg-green-500 rounded-full flex items-center justify-center shadow-lg">
-                        <FaCamera className="w-4 h-4 text-white" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-1">
-                    <label htmlFor="image_uploads" className="cursor-pointer">
-                      <div className="flex items-center justify-center px-6 py-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-blue-400 dark:hover:border-blue-400 transition-all duration-300 hover:shadow-md bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600">
-                        <FaUpload className="w-5 h-5 text-[#5b2233] ml-2" />
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
-                          {previewImage ? "تغيير الصورة" : "رفع صورة"}
-                        </span>
-                      </div>
-                    </label>
-                    <input
-                      id="image_uploads"
-                      onChange={getImage}
-                      type="file"
-                      accept=".jpg, .jpeg, .png, image/*"
-                      className="hidden"
-                    />
-                  </div>
-                </div>
-              </div>
-
               {/* CAPTCHA Component */}
               <CaptchaComponent
                 onVerified={handleCaptchaVerified}
