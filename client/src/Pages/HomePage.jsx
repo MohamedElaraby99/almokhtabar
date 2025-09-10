@@ -1272,68 +1272,73 @@ export default function HomePage() {
 
       {/* Offer Modal - Mobile Responsive */}
       {showOfferModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
-          <div className="relative bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-300">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-1 sm:p-2 md:p-4 bg-black/50 backdrop-blur-sm">
+          <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[98vh] sm:max-h-[95vh] md:max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-300 border-2 border-[#8B1538]">
             {/* Close Button */}
             <button
               onClick={() => setShowOfferModal(false)}
-              className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 p-1.5 sm:p-2 bg-white/90 dark:bg-gray-700/90 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-600 transition-colors"
+              className="absolute top-1 left-1 sm:top-2 sm:left-2 md:top-4 md:left-4 z-10 p-1.5 sm:p-2 bg-white/90 dark:bg-gray-700/90 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-600 transition-colors"
               aria-label="إغلاق العرض"
             >
-              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
 
             <div className="flex flex-col lg:flex-row h-full">
               {/* Image Section - Mobile: Full image, Desktop: Half */}
-              <div className="lg:w-1/2">
+              <div className="lg:w-1/2 flex-shrink-0 p-3 sm:p-4 md:p-6 lg:p-0">
                 <img
                   src={offerImage}
                   alt="عرض خاص - منصة المختبر"
-                  className="w-full h-auto lg:h-full object-contain lg:object-cover"
+                  className="w-full h-72 sm:h-80 md:h-96 lg:h-full object-cover rounded-lg sm:rounded-xl lg:rounded-none"
                 />
               </div>
 
               {/* Content Section */}
-              <div className="lg:w-1/2 p-4 sm:p-6 lg:p-8 flex flex-col justify-center overflow-y-auto" dir="rtl">
-                <div className="text-center mb-4 sm:mb-6">
-                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#5b2233] mb-2 sm:mb-4">
-                    عرض خاص محدود! 🎉
-                  </h2>
-                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
+              <div className="lg:w-1/2 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-center overflow-y-auto min-h-0" dir="rtl">
+                <div className="text-center mb-3 sm:mb-4 md:mb-6">
+                  <div className="inline-flex items-center gap-2 mb-2 sm:mb-3 md:mb-4">
+                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#8B1538] rounded-full flex items-center justify-center">
+                      <span className="text-white text-lg sm:text-xl">🇶🇦</span>
+                    </div>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#8B1538] to-[#5b2233] bg-clip-text text-transparent">
+                      عرض خاص محدود! 🎉
+                    </h2>
+                  </div>
+                  <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 px-2">
                     احصل على خصم مجاني عند إحضار أصدقائك
                   </p>
                 </div>
 
                 {/* Offer Details */}
-                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg sm:rounded-xl border border-green-200 dark:border-green-700">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-green-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-base sm:text-lg">2</span>
+                <div className="space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6 md:mb-8">
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-gradient-to-r from-[#8B1538]/10 to-[#8B1538]/20 dark:from-[#8B1538]/20 dark:to-[#8B1538]/30 rounded-lg sm:rounded-xl border-2 border-[#8B1538]/30 dark:border-[#8B1538]/50">
+                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#8B1538] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-sm sm:text-base md:text-lg">2</span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">أحضر صديقين</h3>
-                      <p className="text-green-600 dark:text-green-400 font-semibold text-sm sm:text-base">احصل على 50% خصم</p>
+                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-900 dark:text-white">أحضر صديقين</h3>
+                      <p className="text-[#8B1538] dark:text-[#8B1538]/80 font-semibold text-xs sm:text-sm md:text-base">احصل على 50% خصم</p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-lg sm:rounded-xl border border-yellow-200 dark:border-yellow-700">
-                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-yellow-500 rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-base sm:text-lg">4</span>
+                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-gradient-to-r from-[#8B1538]/10 to-[#8B1538]/20 dark:from-[#8B1538]/20 dark:to-[#8B1538]/30 rounded-lg sm:rounded-xl border-2 border-[#8B1538]/30 dark:border-[#8B1538]/50">
+                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#8B1538] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg">
+                      <span className="text-white font-bold text-sm sm:text-base md:text-lg">4</span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">أحضر 4 أصدقاء</h3>
-                      <p className="text-yellow-600 dark:text-yellow-400 font-semibold text-sm sm:text-base">احصل على 100% مجاناً!</p>
+                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-900 dark:text-white">أحضر 4 أصدقاء</h3>
+                      <p className="text-[#8B1538] dark:text-[#8B1538]/80 font-semibold text-xs sm:text-sm md:text-base">احصل على 100% مجاناً!</p>
                     </div>
                   </div>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex flex-col gap-3 sm:gap-4">
+                <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
                   <button
                     onClick={() => setShowOfferModal(false)}
-                    className="w-full bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                    className="w-full bg-gradient-to-r from-[#8B1538] to-[#5b2233] hover:from-[#5b2233] hover:to-[#8B1538] text-white font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base md:text-base min-h-[44px] border-2 border-[#8B1538]/20"
                   >
                     ابدأ الآن
                   </button>
@@ -1356,9 +1361,9 @@ export default function HomePage() {
                         }
                       }
                     }}
-                    className="w-full bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-[#5b2233] dark:text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 border-2 border-[#5b2233] flex items-center justify-center gap-2 text-sm sm:text-base"
+                    className="w-full bg-white dark:bg-gray-700 hover:bg-[#8B1538]/5 dark:hover:bg-[#8B1538]/10 text-[#8B1538] dark:text-[#8B1538]/90 font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 border-2 border-[#8B1538] flex items-center justify-center gap-2 text-sm sm:text-base md:text-base min-h-[44px]"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
                     </svg>
                     <span>شارك مع الأصدقاء</span>
@@ -1366,14 +1371,14 @@ export default function HomePage() {
                   
                   <button
                     onClick={() => setShowOfferModal(false)}
-                    className="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base"
+                    className="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base md:text-base min-h-[44px]"
                   >
                     لاحقاً
                   </button>
                 </div>
 
                 {/* Terms */}
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center mt-3 sm:mt-4 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center mt-2 sm:mt-3 md:mt-4 leading-relaxed px-2">
                   العرض صالح لفترة محدودة. شروط وأحكام تنطبق.
                 </p>
               </div>
