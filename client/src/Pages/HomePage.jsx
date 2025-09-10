@@ -52,6 +52,7 @@ import { placeholderImages } from "../utils/placeholderImages";
 const fikraCharacter = "/fikra_character-removebg-preview.png";
 import basicPlan from "../assets/basicPlan.png";
 import premiumPlan from "../assets/premiumPlan.png";
+import offerImage from "../assets/offer 1.jpg";
 
 
 
@@ -65,6 +66,7 @@ export default function HomePage() {
   const userLearningPath = data?.learningPath;
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showOfferModal, setShowOfferModal] = useState(false);
 
   // Hero entrance animation state
   const [heroVisible, setHeroVisible] = useState(false);
@@ -98,6 +100,11 @@ export default function HomePage() {
       }, 300);
     }, 100);
 
+    // Show offer modal after a delay
+    const offerTimer = setTimeout(() => {
+      setShowOfferModal(true);
+    }, 2000);
+
     // Add scroll event listener
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -108,6 +115,7 @@ export default function HomePage() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timer);
+      clearTimeout(offerTimer);
     };
   }, [dispatch]);
 
@@ -1261,6 +1269,118 @@ export default function HomePage() {
       >
         <FaWhatsapp className="w-6 h-6" />
       </a>
+
+      {/* Offer Modal - Mobile Responsive */}
+      {showOfferModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm">
+          <div className="relative bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-300">
+            {/* Close Button */}
+            <button
+              onClick={() => setShowOfferModal(false)}
+              className="absolute top-2 left-2 sm:top-4 sm:left-4 z-10 p-1.5 sm:p-2 bg-white/90 dark:bg-gray-700/90 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-600 transition-colors"
+              aria-label="إغلاق العرض"
+            >
+              <svg className="w-5 h-5 sm:w-6 sm:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <div className="flex flex-col lg:flex-row h-full">
+              {/* Image Section - Mobile: Full image, Desktop: Half */}
+              <div className="lg:w-1/2">
+                <img
+                  src={offerImage}
+                  alt="عرض خاص - منصة المختبر"
+                  className="w-full h-auto lg:h-full object-contain lg:object-cover"
+                />
+              </div>
+
+              {/* Content Section */}
+              <div className="lg:w-1/2 p-4 sm:p-6 lg:p-8 flex flex-col justify-center overflow-y-auto" dir="rtl">
+                <div className="text-center mb-4 sm:mb-6">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#5b2233] mb-2 sm:mb-4">
+                    عرض خاص محدود! 🎉
+                  </h2>
+                  <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300">
+                    احصل على خصم مجاني عند إحضار أصدقائك
+                  </p>
+                </div>
+
+                {/* Offer Details */}
+                <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20 rounded-lg sm:rounded-xl border border-green-200 dark:border-green-700">
+                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-green-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-base sm:text-lg">2</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">أحضر صديقين</h3>
+                      <p className="text-green-600 dark:text-green-400 font-semibold text-sm sm:text-base">احصل على 50% خصم</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 dark:from-yellow-900/20 dark:to-yellow-800/20 rounded-lg sm:rounded-xl border border-yellow-200 dark:border-yellow-700">
+                    <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 bg-yellow-500 rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-base sm:text-lg">4</span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="font-bold text-sm sm:text-base text-gray-900 dark:text-white">أحضر 4 أصدقاء</h3>
+                      <p className="text-yellow-600 dark:text-yellow-400 font-semibold text-sm sm:text-base">احصل على 100% مجاناً!</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex flex-col gap-3 sm:gap-4">
+                  <button
+                    onClick={() => setShowOfferModal(false)}
+                    className="w-full bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                  >
+                    ابدأ الآن
+                  </button>
+                  
+                  {/* Share Button */}
+                  <button
+                    onClick={() => {
+                      if (navigator.share) {
+                        navigator.share({
+                          title: 'منصة المختبر التعليمية',
+                          text: 'اكتشف منصة المختبر التعليمية المميزة!',
+                          url: 'https://almoktabar.online/'
+                        });
+                      } else {
+                        navigator.clipboard.writeText('https://almoktabar.online/');
+                        if (window.toast) {
+                          window.toast.success('تم نسخ الرابط!');
+                        } else {
+                          alert('تم نسخ الرابط!');
+                        }
+                      }
+                    }}
+                    className="w-full bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 text-[#5b2233] dark:text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 border-2 border-[#5b2233] flex items-center justify-center gap-2 text-sm sm:text-base"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
+                    </svg>
+                    <span>شارك مع الأصدقاء</span>
+                  </button>
+                  
+                  <button
+                    onClick={() => setShowOfferModal(false)}
+                    className="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base"
+                  >
+                    لاحقاً
+                  </button>
+                </div>
+
+                {/* Terms */}
+                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center mt-3 sm:mt-4 leading-relaxed">
+                  العرض صالح لفترة محدودة. شروط وأحكام تنطبق.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </Layout>
   );
 }
