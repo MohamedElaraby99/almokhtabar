@@ -257,7 +257,7 @@ export default function HomePage() {
             {/* Video Container with responsive design */}
             <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
               <iframe 
-                src="https://player.vimeo.com/video/1117519691?badge=0&autopause=0&player_id=0&app_id=58479" 
+                src="https://player.vimeo.com/video/1117519691?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
                 className="absolute top-0 left-0 w-full h-full rounded-2xl shadow-2xl"
                 frameBorder="0" 
                 allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
