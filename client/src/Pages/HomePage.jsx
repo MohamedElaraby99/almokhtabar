@@ -19,7 +19,6 @@ const NewsletterSection = lazy(() => import("../Components/NewsletterSection"));
 
 import { 
   FaEye, 
-  FaHeart, 
   FaCalendar, 
   FaUser, 
   FaArrowRight, 
@@ -224,6 +223,56 @@ export default function HomePage() {
       }`}>
         <AnimatedHero onGetStarted={onGetStarted} />
       </div>
+
+
+        {/* Video Section */}
+        <section className={`py-20 bg-gradient-to-br from-[#5b2233]/5 via-[#5b2233]/5 to-[#5b2233]/5 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-700 ease-out ${
+        heroLoaded 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-8'
+      }`} 
+      dir="rtl"
+      style={{ transitionDelay: '1800ms' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className={`text-center mb-16 transition-all duration-700 ease-out ${
+            heroLoaded 
+              ? 'opacity-100 scale-100' 
+              : 'opacity-0 scale-95'
+          }`}
+          style={{ transitionDelay: '2000ms' }}>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              شاهد كيف تعمل المنصة
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              اكتشف منصة المختبر التعليمية من خلال هذا الفيديو التوضيحي
+            </p>
+          </div>
+
+          <div className={`relative max-w-4xl mx-auto transition-all duration-700 ease-out ${
+            heroLoaded 
+              ? 'opacity-100 translate-y-0 scale-100' 
+              : 'opacity-0 translate-y-8 scale-95'
+          }`}
+          style={{ transitionDelay: '2200ms' }}>
+            {/* Video Container with responsive design */}
+            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+              <iframe 
+                src="https://player.vimeo.com/video/1117519691?badge=0&autopause=0&player_id=0&app_id=58479" 
+                className="absolute top-0 left-0 w-full h-full rounded-2xl shadow-2xl"
+                frameBorder="0" 
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
+                referrerPolicy="strict-origin-when-cross-origin" 
+                title="WhatsApp Video 2025-09-10 at 13.05.34_bc1dc714"
+                loading="lazy"
+              />
+            </div>
+            
+            {/* Decorative elements */}
+            <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#5b2233] rounded-full opacity-20 animate-pulse"></div>
+            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#5b2233] rounded-full opacity-30 animate-bounce"></div>
+          </div>
+        </div>
+      </section>
 
 
        {/* Paths Section: Choose Your Plan */}
@@ -958,10 +1007,6 @@ export default function HomePage() {
                   <div className="p-6">
                     <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
                       <span className="flex items-center gap-1">
-                        <FaUser />
-                        {blog.author}
-                      </span>
-                      <span className="flex items-center gap-1">
                         <FaCalendar />
                         {formatDate(blog.createdAt)}
                       </span>
@@ -975,18 +1020,7 @@ export default function HomePage() {
                       {blog.excerpt || blog.content.substring(0, 150)}...
                     </p>
                     
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                        <span className="flex items-center gap-1">
-                          <FaEye />
-                          {blog.views || 0}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <FaHeart />
-                          {blog.likes || 0}
-                        </span>
-                      </div>
-                      
+                    <div className="flex items-center justify-end">
                       <Link
                         to={`/blog/${blog._id}`}
                         className="text-[#5b2233] hover:text-[#5b2233] dark:text-[#5b2233] dark:hover:text-[#5b2233] font-medium flex items-center gap-1 group"
