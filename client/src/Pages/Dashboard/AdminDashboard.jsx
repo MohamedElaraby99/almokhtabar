@@ -707,6 +707,13 @@ export default function AdminDashboard() {
                   <FaBook className="text-lg lg:text-2xl mx-auto mb-1 lg:mb-2 group-hover:scale-110 transition-transform duration-200" />
                   <span className="text-xs lg:text-sm font-medium">الامتحانات المقالية</span>
                 </button>
+                <button
+                  onClick={() => navigate("/admin/unit-access-codes")}
+                  className="group p-3 lg:p-4 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg lg:rounded-xl text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                >
+                  <FaTicketAlt className="text-lg lg:text-2xl mx-auto mb-1 lg:mb-2 group-hover:scale-110 transition-transform duration-200" />
+                  <span className="text-xs lg:text-sm font-medium">أكواد الوحدات</span>
+                </button>
               </div>
             </div>
 
@@ -813,17 +820,17 @@ export default function AdminDashboard() {
                   </div>
                 </div>
 
-                {/* أكواد فتح الكورس المؤقتة */}
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-4 lg:p-6 text-white hover:from-blue-600 hover:to-blue-700 transition-all duration-200 transform hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl" onClick={() => navigate("/admin/course-access-codes")}>
+                {/* أكواد فتح الوحدات المؤقتة */}
+                <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl p-4 lg:p-6 text-white hover:from-purple-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 cursor-pointer shadow-lg hover:shadow-xl" onClick={() => navigate("/admin/unit-access-codes")}>
                   <div className="flex items-center justify-between mb-3">
-                    <FaTicketAlt className="text-2xl lg:text-3xl text-blue-200" />
-                    <div className="w-3 h-3 bg-blue-200 rounded-full animate-pulse"></div>
+                    <FaTicketAlt className="text-2xl lg:text-3xl text-purple-200" />
+                    <div className="w-3 h-3 bg-purple-200 rounded-full animate-pulse"></div>
                   </div>
-                  <h4 className="text-lg lg:text-xl font-bold mb-2">أكواد فتح الكورس</h4>
-                  <p className="text-blue-100 text-sm lg:text-base opacity-90">توليد أكواد وصول مؤقتة لكورس محدد</p>
+                  <h4 className="text-lg lg:text-xl font-bold mb-2">أكواد فتح الشهور</h4>
+                  <p className="text-purple-100 text-sm lg:text-base opacity-90">توليد أكواد وصول مؤقتة لشهر محدد</p>
                   <div className="mt-4 flex items-center justify-between">
-                    <span className="text-xs text-blue-200">توليد وإدارة</span>
-                    <FaArrowUp className="text-blue-200 transform rotate-45" />
+                    <span className="text-xs text-purple-200">توليد وإدارة</span>
+                    <FaArrowUp className="text-purple-200 transform rotate-45" />
                   </div>
                 </div>
 

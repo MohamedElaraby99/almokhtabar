@@ -100,7 +100,7 @@ export default function Sidebar({ hideBar = false }) {
           )}
 
           {/* Wallet Balance */}
-          {isLoggedIn && !["ADMIN", "SUPER_ADMIN"].includes(role) && (
+          {/* {isLoggedIn && !["ADMIN", "SUPER_ADMIN"].includes(role) && (
             <div className="mb-4">
               <div className="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-600 rounded-lg p-3 text-white shadow-md">
                 <div className="flex items-center justify-between mb-2">
@@ -123,7 +123,7 @@ export default function Sidebar({ hideBar = false }) {
                 </Link>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Navigation Menu */}
           <ul className="menu space-y-1">

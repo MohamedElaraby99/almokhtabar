@@ -745,17 +745,7 @@ export default function CourseDetail() {
                 <div className="lg:col-span-1">
                   <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-6 lg:sticky lg:top-6">
                                                                {/* Wallet Balance */}
-                      {user && isLoggedIn && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' && (
-                        <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                          <div className="flex items-center justify-center gap-2 mb-2">
-                            <FaWallet className="text-green-600 text-sm sm:text-base" />
-                            <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">رصيد المحفظة</span>
-                          </div>
-                          <div className="text-xl sm:text-2xl font-bold text-green-600">
-                            {walletBalance} ريال قطري
-                          </div>
-                        </div>
-                      )}
+      
 
                                              {/* Remaining Days Label */}
                        {courseAccessState?.source === 'code' && courseAccessState?.accessEndAt && (
