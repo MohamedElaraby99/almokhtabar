@@ -218,7 +218,7 @@ const Financial = () => {
   const financialStats = [
     {
       title: selectedMonthData?.isCurrent ? 'إجمالي الإيرادات' : `إيرادات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.totalIncome.toLocaleString()} جنيه`,
+      value: `${stats.totalIncome.toLocaleString()} ريال قطري`,
       change: selectedMonthData?.isCurrent ? '+12.5%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'positive' : 'archived',
       icon: FaMoneyBillWave,
@@ -226,7 +226,7 @@ const Financial = () => {
     },
     {
       title: selectedMonthData?.isCurrent ? 'المصروفات الشهرية' : `مصروفات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.totalExpenses.toLocaleString()} جنيه`,
+      value: `${stats.totalExpenses.toLocaleString()} ريال قطري`,
       change: selectedMonthData?.isCurrent ? '+8.2%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'negative' : 'archived',
       icon: FaReceipt,
@@ -234,7 +234,7 @@ const Financial = () => {
     },
     {
       title: selectedMonthData?.isCurrent ? 'الربح الصافي' : `ربح ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.netProfit.toLocaleString()} جنيه`,
+      value: `${stats.netProfit.toLocaleString()} ريال قطري`,
       change: selectedMonthData?.isCurrent ? '+15.3%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'positive' : 'archived',
       icon: FaChartBar,
@@ -242,7 +242,7 @@ const Financial = () => {
     },
     {
       title: selectedMonthData?.isCurrent ? 'المدفوعات المعلقة' : `مدفوعات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${pendingPaymentsData.totalPending.toLocaleString()} جنيه`,
+      value: `${pendingPaymentsData.totalPending.toLocaleString()} ريال قطري`,
       change: selectedMonthData?.isCurrent ? (
         pendingPaymentsData.totalExpected > 0 ? 
         `${Math.round(((pendingPaymentsData.totalExpected - pendingPaymentsData.totalPending) / pendingPaymentsData.totalExpected) * 100)}% مدفوع` : 
@@ -259,14 +259,14 @@ const Financial = () => {
     // Refresh the financial data to show the new transaction and update pending payments
     fetchFinancialData();
     fetchPendingPayments();
-    showSuccessToast(`تم إضافة إيراد جديد: ${incomeData.amount} جنيه من ${incomeData.userName}`);
+    showSuccessToast(`تم إضافة إيراد جديد: ${incomeData.amount} ريال قطري من ${incomeData.userName}`);
   };
 
   const handleAddExpense = (expenseData) => {
     console.log('New expense added:', expenseData);
     // Refresh the financial data to show the new transaction
     fetchFinancialData();
-    showSuccessToast(`تم إضافة مصروف جديد: ${expenseData.amount} جنيه - ${expenseData.category}`);
+    showSuccessToast(`تم إضافة مصروف جديد: ${expenseData.amount} ريال قطري - ${expenseData.category}`);
   };
 
   // Search and filter handlers
@@ -600,7 +600,7 @@ const Financial = () => {
                          {transaction.description || 'لا يوجد وصف'}
                        </td>
                        <td className="py-3 px-4 text-gray-900 dark:text-white font-medium">
-                         {transaction.amount.toLocaleString()} جنيه
+                         {transaction.amount.toLocaleString()} ريال قطري
                        </td>
                        <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
                          {new Date(transaction.transactionDate).toLocaleDateString('en-GB')}

@@ -31,11 +31,13 @@ import {
   FaUnlock,
   FaWallet,
   FaTimes,
-  FaClipboardList
+  FaClipboardList,
+  FaExclamationTriangle
 } from 'react-icons/fa';
 import { generateImageUrl } from '../../utils/fileUtils';
 import { placeholderImages } from '../../utils/placeholderImages';
 import { checkCourseAccess, redeemCourseAccessCode } from '../../Redux/Slices/CourseAccessSlice';
+import { checkUnitAccess, redeemUnitAccessCode } from '../../Redux/Slices/UnitAccessSlice';
 import { axiosInstance } from '../../Helpers/axiosInstance';
 import RemainingDaysLabel from '../../Components/RemainingDaysLabel';
 
@@ -47,6 +49,7 @@ export default function CourseDetail() {
   const { walletBalance, purchaseStatus, loading: paymentLoading } = useSelector((state) => state.payment);
   const { data: user, isLoggedIn } = useSelector((state) => state.auth);
   const courseAccessState = useSelector((state) => state.courseAccess.byCourseId[id]);
+  const unitAccessState = useSelector((state) => state.unitAccess);
   const [accessAlertShown, setAccessAlertShown] = useState(false);
   const hidePrices = !!courseAccessState?.hasAccess && courseAccessState?.source === 'code';
   const hasAnyPurchase = (() => {
@@ -66,6 +69,8 @@ export default function CourseDetail() {
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [redeemCode, setRedeemCode] = useState('');
+  const [unitRedeemCode, setUnitRedeemCode] = useState('');
+  const [selectedUnitForCode, setSelectedUnitForCode] = useState('');
 
   useEffect(() => {
     if (id) {
@@ -79,6 +84,18 @@ export default function CourseDetail() {
       dispatch(checkCourseAccess(id));
     }
   }, [dispatch, id, user, isLoggedIn]);
+
+  // Check unit access for all units when course loads
+  useEffect(() => {
+    if (currentCourse && user && isLoggedIn && currentCourse.units) {
+      currentCourse.units.forEach(unit => {
+        dispatch(checkUnitAccess({
+          courseId: currentCourse._id,
+          unitId: unit._id
+        }));
+      });
+    }
+  }, [currentCourse, user, isLoggedIn, dispatch]);
 
   // Periodic check for access expiration (every minute)
   useEffect(() => {
@@ -202,7 +219,7 @@ export default function CourseDetail() {
 
 
 
-  const isItemPurchased = (purchaseType, itemId) => {
+  const isItemPurchased = (purchaseType, itemId, unitId = null) => {
     // Admin users have access to all content
     if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
       return true;
@@ -223,6 +240,32 @@ export default function CourseDetail() {
     // If user has active course access via code, allow viewing
     if (courseAccessState?.hasAccess) {
       return true;
+    }
+
+    // Check unit access for lessons within units
+    if (unitId && unitAccessState.byUnitId) {
+      const unitAccessKey = `${currentCourse._id}-${unitId}`;
+      const unitAccess = unitAccessState.byUnitId[unitAccessKey];
+      console.log('Debug - Unit Access Check:', {
+        unitId,
+        unitAccessKey,
+        unitAccess,
+        allUnitAccess: unitAccessState.byUnitId
+      });
+      if (unitAccess && unitAccess.hasAccess) {
+        // Check if unit access has expired
+        if (unitAccess.accessEndAt) {
+          const now = new Date();
+          const endDate = new Date(unitAccess.accessEndAt);
+          if (endDate > now) {
+            console.log('Unit access granted - not expired');
+            return true;
+          }
+        } else {
+          console.log('Unit access granted - no expiration');
+          return true;
+        }
+      }
     }
     
     const key = `${currentCourse._id}-${purchaseType}-${itemId}`;
@@ -255,7 +298,7 @@ export default function CourseDetail() {
     }
   }, [user, currentCourse, courseAccessState, hasAnyPurchase, accessAlertShown, dispatch]);
 
-  const handlePurchaseClick = (item, purchaseType) => {
+  const handlePurchaseClick = (item, purchaseType, unitId = null) => {
     if (!user || !isLoggedIn) {
       setAlertMessage('يرجى تسجيل الدخول أولاً للوصول إلى هذا المحتوى');
       setShowErrorAlert(true);
@@ -289,6 +332,13 @@ export default function CourseDetail() {
         setShowErrorAlert(true);
         return;
       }
+    }
+
+    // If this is a lesson within a unit, show message to enter unit code
+    if (unitId && purchaseType === 'lesson') {
+      setAlertMessage('يرجى إدخال كود الوصول للوحدة أولاً في القسم المخصص لذلك');
+      setShowErrorAlert(true);
+      return;
     }
 
     setSelectedItem({ ...item, purchaseType });
@@ -341,6 +391,74 @@ export default function CourseDetail() {
           errorMessage = '⏰ انتهت صلاحية هذا الكود. يرجى الحصول على كود جديد من المدرس';
         } else if (message.includes('course not found')) {
           errorMessage = '📚 الكورس المرتبط بهذا الكود غير موجود. يرجى التواصل مع الدعم الفني';
+        } else if (message.includes('code is required')) {
+          errorMessage = '📝 يرجى إدخال الكود';
+        } else if (message.includes('already used')) {
+          errorMessage = '🔒 تم استخدام هذا الكود من قبل. كل كود يمكن استخدامه مرة واحدة فقط';
+        } else {
+          errorMessage = `❌ ${err.message}`;
+        }
+      }
+      
+      setAlertMessage(errorMessage);
+      setShowErrorAlert(true);
+    }
+  };
+
+  const handleRedeemUnitCode = async (e) => {
+    e.preventDefault();
+    if (!unitRedeemCode.trim()) {
+      setAlertMessage('يرجى إدخال الكود أولاً');
+      setShowErrorAlert(true);
+      return;
+    }
+
+    if (!selectedUnitForCode) {
+      setAlertMessage('يرجى اختيار الوحدة أولاً');
+      setShowErrorAlert(true);
+      return;
+    }
+
+    // Basic code format validation
+    const codeFormat = /^[A-Z0-9]{8,12}$/;
+    if (!codeFormat.test(unitRedeemCode.trim().toUpperCase())) {
+      setAlertMessage('تنسيق الكود غير صحيح. يجب أن يتكون الكود من 8-12 حرف وأرقام باللغة الإنجليزية فقط');
+      setShowErrorAlert(true);
+      return;
+    }
+
+    try {
+      await dispatch(redeemUnitAccessCode({ 
+        code: unitRedeemCode.trim().toUpperCase(),
+        courseId: currentCourse._id,
+        unitId: selectedUnitForCode
+      })).unwrap();
+      
+      setUnitRedeemCode('');
+      setSelectedUnitForCode('');
+      setAlertMessage('🎉 تم تفعيل الوصول للشهر بنجاح! يمكنك الآن الوصول لمحتويات هذه الوحدة');
+      setShowSuccessAlert(true);
+      
+      // Refresh unit access status
+      dispatch(checkUnitAccess({
+        courseId: currentCourse._id,
+        unitId: selectedUnitForCode
+      }));
+    } catch (err) {
+      // Enhanced error messages based on backend responses
+      let errorMessage = 'تعذر تفعيل الكود';
+      
+      if (err?.message) {
+        const message = err.message.toLowerCase();
+        
+        if (message.includes('invalid or expired code')) {
+          errorMessage = '❌ الكود غير صحيح أو منتهي الصلاحية. تأكد من كتابة الكود بشكل صحيح';
+        } else if (message.includes('not valid for this unit')) {
+          errorMessage = '🚫 هذا الكود غير صالح لهذه الوحدة. تأكد من أنك تستخدم الكود الصحيح للشهر المطلوبة';
+        } else if (message.includes('expired for its access window')) {
+          errorMessage = '⏰ انتهت صلاحية هذا الكود. يرجى الحصول على كود جديد من المدرس';
+        } else if (message.includes('unit not found')) {
+          errorMessage = '📚 الوحدة المرتبطة بهذا الكود غير موجودة. يرجى التواصل مع الدعم الفني';
         } else if (message.includes('code is required')) {
           errorMessage = '📝 يرجى إدخال الكود';
         } else if (message.includes('already used')) {
@@ -455,7 +573,7 @@ export default function CourseDetail() {
       );
     }
 
-    if (isItemPurchased(purchaseType, item._id)) {
+    if (isItemPurchased(purchaseType, item._id, unitId)) {
       return (
         <WatchButton
           item={item}
@@ -481,14 +599,7 @@ export default function CourseDetail() {
           <FaEye />
           <span>معاينة</span>
         </button>
-        <button 
-          onClick={() => handlePurchaseClick(item, purchaseType)}
-          className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
-          disabled={paymentLoading}
-        >
-          <FaLock />
-          <span>شراء</span>
-        </button>
+       
       </div>
     );
   };
@@ -641,7 +752,7 @@ export default function CourseDetail() {
                             <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">رصيد المحفظة</span>
                           </div>
                           <div className="text-xl sm:text-2xl font-bold text-green-600">
-                            {walletBalance} جنيه
+                            {walletBalance} ريال قطري
                           </div>
                         </div>
                       )}
@@ -683,104 +794,83 @@ export default function CourseDetail() {
                              </p>
                            </div>
                          )}
-                         
-                         <form onSubmit={handleRedeemCode} className="space-y-4">
-                           <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 text-right">
-                             {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess 
-                               ? 'اكتب الكود الجديد هنا' 
-                               : 'معاك كود للكورس؟'
-                             }
-                           </label>
+                       </div>
+                     )}
+
+                     {/* Unit Access Code Redemption */}
+                     {user && isLoggedIn && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' && currentCourse.units && currentCourse.units.length > 0 && (
+                       <div className="space-y-3 mt-6">
+                         <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
+                           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-3">
+                             أكواد الوصول للشهور
+                           </h4>
                            
-                           {/* Desktop Layout */}
-                           <div className="hidden sm:flex flex-col sm:flex-row gap-3">
-                             <input
-                               type="text"
-                               value={redeemCode}
-                               onChange={(e) => {
-                                 // Auto-format: uppercase and remove spaces/special chars
-                                 const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-                                 if (formatted.length <= 12) {
-                                   setRedeemCode(formatted);
-                                 }
-                               }}
-                               onKeyDown={(e) => {
-                                 // Prevent space key
-                                 if (e.key === ' ') {
-                                   e.preventDefault();
-                                 }
-                               }}
-                               placeholder="زي كده: ABC123XYZ9"
-                               className="flex-1 min-w-0 px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
-                               maxLength="12"
-                               style={{ letterSpacing: '0.1em' }}
-                               required
-                             />
+                           <form onSubmit={handleRedeemUnitCode} className="space-y-4">
+                             <div className="space-y-3">
+                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right">
+                                 اختر الوحدة
+                               </label>
+                               <select
+                                 value={selectedUnitForCode}
+                                 onChange={(e) => setSelectedUnitForCode(e.target.value)}
+                                 className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-right"
+                                 required
+                               >
+                                 <option value="">اختر الوحدة...</option>
+                                 {currentCourse.units.map((unit) => (
+                                   <option key={unit._id} value={unit._id}>
+                                     {unit.title}
+                                   </option>
+                                 ))}
+                               </select>
+                             </div>
+                             
+                             <div className="space-y-3">
+                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right">
+                                 كود الوصول للشهر
+                               </label>
+                               <input
+                                 type="text"
+                                 value={unitRedeemCode}
+                                 onChange={(e) => {
+                                   // Auto-format: uppercase and remove spaces/special chars
+                                   const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+                                   if (formatted.length <= 12) {
+                                     setUnitRedeemCode(formatted);
+                                   }
+                                 }}
+                                 onKeyDown={(e) => {
+                                   // Prevent space key
+                                   if (e.key === ' ') {
+                                     e.preventDefault();
+                                   }
+                                 }}
+                                 placeholder="زي كده: ABC123XYZ9"
+                                 className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
+                                 maxLength="12"
+                                 style={{ letterSpacing: '0.1em' }}
+                                 required
+                               />
+                             </div>
+                             
                              <button
                                type="submit"
-                               className={`px-4 sm:px-6 py-3 text-white rounded-lg font-medium transition-all duration-200 flex-shrink-0 min-w-max ${
-                                 courseAccessState?.source === 'code' && !courseAccessState?.hasAccess
-                                   ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
-                                   : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                               } focus:ring-2 focus:ring-opacity-50`}
+                               className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                              >
-                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess ? 'فعّل تاني' : 'فعّل'}
+                               تفعيل كود الوحدة
                              </button>
-                           </div>
-
-                           {/* Mobile Layout */}
-                           <div className="sm:hidden space-y-3">
-                             <input
-                               type="text"
-                               value={redeemCode}
-                               onChange={(e) => {
-                                 // Auto-format: uppercase and remove spaces/special chars
-                                 const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-                                 if (formatted.length <= 12) {
-                                   setRedeemCode(formatted);
-                                 }
-                               }}
-                               onKeyDown={(e) => {
-                                 // Prevent space key
-                                 if (e.key === ' ') {
-                                   e.preventDefault();
-                                 }
-                               }}
-                               placeholder="زي كده: ABC123XYZ9"
-                               className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
-                               maxLength="12"
-                               style={{ letterSpacing: '0.1em' }}
-                               required
-                             />
-                             <button
-                               type="submit"
-                               className={`w-full px-4 py-3 text-white rounded-lg font-medium transition-all duration-200 ${
-                                 courseAccessState?.source === 'code' && !courseAccessState?.hasAccess
-                                   ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
-                                   : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
-                               } focus:ring-2 focus:ring-opacity-50 text-base`}
-                             >
-                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess ? 'فعّل تاني' : 'فعّل'}
-                             </button>
-                           </div>
-
-                           <div className="space-y-2">
-                             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-right leading-relaxed">
-                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess && courseAccessState?.accessEndAt && (
-                                 <span className="text-red-500">خلاص الكود انتهى</span>
-                               )}
-                               </p>
-                                                            <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
-                                 <h4 className="text-xs font-medium text-blue-900 dark:text-blue-100 mb-1">حاجات مهمة:</h4>
-                                 <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
-                                   <li>• الكود ده للكورس ده بس</li>
-                                   <li>• كل كود يتستعمل مرة واحدة بس</li>
-                                   <li>• الكود من 8-12 حرف وأرقام إنجليزي</li>
-                                   <li>• اتأكد إنك كاتب الكود صح</li>
-                                 </ul>
-                               </div>
-                           </div>
-                         </form>
+                             
+                             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
+                               <h5 className="text-xs font-medium text-blue-900 dark:text-blue-100 mb-1">معلومات مهمة:</h5>
+                               <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
+                                 <li>• الكود ده للشهر المختارة بس</li>
+                                 <li>• كل كود يتستعمل مرة واحدة بس</li>
+                                 <li>• الكود من 8-12 حرف وأرقام إنجليزي</li>
+                                 <li>• اتأكد إنك كاتب الكود صح</li>
+                               </ul>
+                             </div>
+                           </form>
+                         </div>
                        </div>
                      )}
                   </div>
@@ -853,7 +943,7 @@ export default function CourseDetail() {
                         <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
                           {!hidePrices && lesson.price > 0 && (
                             <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                              {lesson.price} جنيه
+                              {lesson.price} ريال قطري
                             </span>
                           )}
                           <div className="flex-shrink-0">
@@ -870,7 +960,7 @@ export default function CourseDetail() {
               {currentCourse.units && currentCourse.units.length > 0 && (
                 <div>
                   <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                    الوحدات التعليمية
+                    الشهور التعليمية
                   </h3>
                   <div className="space-y-3 sm:space-y-4">
                     {currentCourse.units.map((unit, unitIndex) => (
@@ -899,7 +989,7 @@ export default function CourseDetail() {
                           <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
                             {unit.price > 0 && (
                               <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                                {unit.price} جنيه
+                                {unit.price} ريال قطري
                               </span>
                             )}
                             <div className="flex-shrink-0">
@@ -937,7 +1027,7 @@ export default function CourseDetail() {
                                   <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
                                     {!hidePrices && lesson.price > 0 && (
                                       <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                                        {lesson.price} جنيه
+                                        {lesson.price} ريال قطري
                                       </span>
                                     )}
                                     <div className="flex-shrink-0">
@@ -1001,13 +1091,9 @@ export default function CourseDetail() {
                 
                 <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <span className="text-gray-600 dark:text-gray-300">السعر:</span>
-                  <span className="font-semibold text-green-600">{selectedItem.price} جنيه</span>
+                  <span className="font-semibold text-green-600">{selectedItem.price} ريال قطري</span>
                 </div>
-                
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mt-2">
-                  <span className="text-gray-600 dark:text-gray-300">رصيد المحفظة:</span>
-                  <span className="font-semibold text-blue-600">{walletBalance} جنيه</span>
-                </div>
+              
               </div>
               
               <div className="flex gap-3">
@@ -1017,13 +1103,7 @@ export default function CourseDetail() {
                 >
                   إلغاء
                 </button>
-                <button
-                  onClick={handlePurchaseConfirm}
-                  disabled={paymentLoading || walletBalance < selectedItem.price}
-                  className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                >
-                  {paymentLoading ? 'جاري الشراء...' : 'تأكيد الشراء'}
-                </button>
+               
               </div>
               
               {walletBalance < selectedItem.price && (
@@ -1061,7 +1141,7 @@ export default function CourseDetail() {
                   
                   <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
                     <span className="text-gray-600 dark:text-gray-300">السعر:</span>
-                    <span className="font-semibold text-green-600">{previewItem.price} جنيه</span>
+                    <span className="font-semibold text-green-600">{previewItem.price} ريال قطري</span>
                   </div>
 
                                      {/* Show remaining days if user has code-based access */}

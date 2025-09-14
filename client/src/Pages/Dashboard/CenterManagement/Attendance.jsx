@@ -495,7 +495,7 @@ export default function Attendance() {
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-gray-600 dark:text-gray-400">السعر:</span>
                         <span className="font-medium text-gray-900 dark:text-white">
-                          {group.price} جنيه
+                          {group.price} ريال قطري
                         </span>
                       </div>
 
@@ -503,7 +503,7 @@ export default function Attendance() {
                         <div className="flex items-center justify-between text-sm">
                           <span className="text-gray-600 dark:text-gray-400">الدفع الشهري:</span>
                           <span className="font-medium text-gray-900 dark:text-white">
-                            {group.monthlyPayment.price} جنيه
+                            {group.monthlyPayment.price} ريال قطري
                           </span>
                         </div>
                       )}

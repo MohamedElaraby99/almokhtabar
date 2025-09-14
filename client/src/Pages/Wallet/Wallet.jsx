@@ -199,7 +199,7 @@ export default function Wallet() {
                                 </h2>
                                 <div className="flex items-center space-x-reverse space-x-2">
                                     <span className="text-4xl font-bold text-green-600 dark:text-green-400">
-                                        {showAmount ? `${balance.toFixed(2)} جنيه` : "**** جنيه"}
+                                        {showAmount ? `${balance.toFixed(2)} ريال قطري` : "**** ريال قطري"}
                                     </span>
                                     <button
                                         onClick={() => setShowAmount(!showAmount)}
@@ -449,7 +449,7 @@ export default function Wallet() {
                                     {/* Amount Input */}
                                     <div>
                                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                            المبلغ (جنيه)
+                                            المبلغ (ريال قطري)
                                         </label>
                                         <input
                                             type="number"
@@ -457,7 +457,7 @@ export default function Wallet() {
                                             value={rechargeForm.amount}
                                             onChange={handleRechargeFormChange}
                                             className="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                            placeholder="أدخل المبلغ بالجنيه"
+                                            placeholder="أدخل المبلغ بالريال قطري"
                                             min="1"
                                             step="0.01"
                                             required
@@ -534,7 +534,7 @@ export default function Wallet() {
                                                             : 'text-red-600 dark:text-red-400'
                                                     }`}>
                                                         {transaction.type === 'recharge' || transaction.type === 'refund' ? '+' : '-'}
-                                                        {Math.abs(transaction.amount).toFixed(2)} جنيه
+                                                        {Math.abs(transaction.amount).toFixed(2)} ريال قطري
                                                     </p>
                                                     <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                                                         transaction.status === 'completed'

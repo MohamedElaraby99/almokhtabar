@@ -1184,11 +1184,11 @@ export default function Students() {
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600 dark:text-gray-400">المبلغ المدفوع:</span>
-                                    <span className="font-medium text-green-600">{studentDetails.paymentStatus.totalPaid} جنيه</span>
+                                    <span className="font-medium text-green-600">{studentDetails.paymentStatus.totalPaid} ريال قطري</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600 dark:text-gray-400">المبلغ المتبقي:</span>
-                                    <span className="font-medium text-red-600">{studentDetails.paymentStatus.remainingAmount} جنيه</span>
+                                    <span className="font-medium text-red-600">{studentDetails.paymentStatus.remainingAmount} ريال قطري</span>
                                   </div>
                                   <div className="flex justify-between">
                                     <span className="text-gray-600 dark:text-gray-400">عدد الدفعات:</span>

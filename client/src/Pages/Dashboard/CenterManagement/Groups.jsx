@@ -898,7 +898,7 @@ export default function Groups() {
                   </div>
                   <div>
                     <span className="text-sm text-gray-500 dark:text-gray-400">السعر:</span>
-                    <p className="font-medium">{selectedGroup.price} جنيه</p>
+                    <p className="font-medium">{selectedGroup.price} ريال قطري</p>
                   </div>
                   <div>
                     <span className="text-sm text-gray-500 dark:text-gray-400">الحد الأقصى للطلاب:</span>

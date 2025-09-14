@@ -94,7 +94,7 @@ financialSchema.index({ createdBy: 1, transactionDate: -1 });
 
 // Virtual for formatted amount
 financialSchema.virtual('formattedAmount').get(function() {
-  return `${this.amount.toLocaleString()} جنيه`;
+  return `${this.amount.toLocaleString()} ريال قطري`;
 });
 
 // Virtual for user name (populated)

@@ -175,7 +175,7 @@ export default function Overview() {
         {
           id: 3,
           type: 'revenue_summary',
-          message: `إجمالي الإيرادات في ${monthData.label}: 125,000 جنيه`,
+          message: `إجمالي الإيرادات في ${monthData.label}: 125,000 ريال قطري`,
           time: 'بيانات مؤرشفة',
           icon: FaChartLine
         },

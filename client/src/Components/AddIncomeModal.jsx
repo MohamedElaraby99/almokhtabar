@@ -226,7 +226,7 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
         
         // Show success message
         // Show success toast
-        showSuccessToast(`تم إضافة الإيراد بنجاح: ${incomeInfo.amount} جنيه من ${incomeInfo.userName}`);
+        showSuccessToast(`تم إضافة الإيراد بنجاح: ${incomeInfo.amount} ريال قطري من ${incomeInfo.userName}`);
         
         onSubmit(incomeInfo);
         handleClose();
@@ -428,7 +428,7 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
                                        return (
                                          <div className="flex flex-col gap-1">
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                                             ✓ مدفوع هذا الشهر - {totalPaid} جنيه
+                                             ✓ مدفوع هذا الشهر - {totalPaid} ريال قطري
                                            </span>
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200">
                                              ⚠️ يمكن إضافة دفعة إضافية
@@ -439,10 +439,10 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
                                        return (
                                          <div className="flex flex-col gap-1">
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                             💰 مدفوع جزئياً هذا الشهر - {totalPaid} جنيه
+                                             💰 مدفوع جزئياً هذا الشهر - {totalPaid} ريال قطري
                                            </span>
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                             📝 المتبقي - {remainingAmount} جنيه
+                                             📝 المتبقي - {remainingAmount} ريال قطري
                                            </span>
                                          </div>
                                        );
@@ -450,10 +450,10 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
                                        return (
                                          <div className="flex flex-col gap-1">
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
-                                             💰 مدفوع جزئياً هذا الشهر - {totalPaid} جنيه
+                                             💰 مدفوع جزئياً هذا الشهر - {totalPaid} ريال قطري
                                            </span>
                                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
-                                             📝 المتبقي - {remainingAmount} جنيه
+                                             📝 المتبقي - {remainingAmount} ريال قطري
                                            </span>
                                          </div>
                                        );
@@ -462,7 +462,7 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
                                      // No payment info or totalPaid is 0
                                      return (
                                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                                         💰 لم يدفع هذا الشهر - {groupPrice} جنيه
+                                         💰 لم يدفع هذا الشهر - {groupPrice} ريال قطري
                                        </span>
                                      );
                                    }
@@ -508,7 +508,7 @@ const AddIncomeModal = ({ isOpen, onClose, onSubmit }) => {
               {/* Amount */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  المبلغ (جنيه) *
+                  المبلغ (ريال قطري) *
                   {selectedGroup && groupsData && (
                     <span className="text-xs text-blue-600 dark:text-blue-400 mr-2">
                       (تم ملؤه تلقائياً من سعر المجموعة)

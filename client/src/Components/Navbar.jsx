@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaSun, FaMoon, FaBars, FaHome, FaUser, FaGraduationCap, FaBlog, FaQuestionCircle, FaSignOutAlt, FaPlus, FaList, FaInfoCircle, FaPhone, FaHistory, FaLightbulb, FaRocket } from "react-icons/fa";
+import { FaSun, FaMoon, FaBars, FaHome, FaUser, FaGraduationCap, FaBlog, FaQuestionCircle, FaSignOutAlt, FaPlus, FaList, FaInfoCircle, FaPhone, FaHistory, FaLightbulb, FaRocket, FaKey } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../Redux/Slices/AuthSlice";
@@ -112,6 +112,8 @@ export default function Navbar() {
     { name: "إدارة المدونة", path: "/admin/blogs", icon: FaBlog },
     { name: "إدارة الأسئلة والأجوبة", path: "/admin/qa", icon: FaQuestionCircle },
     { name: "إدارة المواد", path: "/admin/subjects", icon: FaGraduationCap },
+    { name: "أكواد الوصول للكورسات", path: "/admin/course-access-codes", icon: FaKey },
+    { name: "أكواد الوصول للوحدات", path: "/admin/unit-access-codes", icon: FaKey },
   ];
 
   return (

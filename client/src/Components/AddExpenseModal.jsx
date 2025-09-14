@@ -82,7 +82,7 @@ const AddExpenseModal = ({ isOpen, onClose, onSubmit }) => {
         console.log('Expense Info:', expenseInfo);
         
         // Show success message
-        showSuccessToast(`تم إضافة المصروف بنجاح: ${expenseInfo.amount} جنيه - ${expenseInfo.category}`);
+        showSuccessToast(`تم إضافة المصروف بنجاح: ${expenseInfo.amount} ريال قطري - ${expenseInfo.category}`);
         
         onSubmit(expenseInfo);
         handleClose();
@@ -179,7 +179,7 @@ const AddExpenseModal = ({ isOpen, onClose, onSubmit }) => {
               {/* Amount */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  المبلغ (جنيه) *
+                  المبلغ (ريال قطري) *
                 </label>
                 <div className="relative">
                   <FaMoneyBillWave className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />

@@ -154,7 +154,9 @@ export const getAllCourses = async (req, res, next) => {
       id: c._id,
       title: c.title,
       stage: c.stage?.name,
-      stageId: c.stage?._id
+      stageId: c.stage?._id,
+      unitsCount: c.units?.length || 0,
+      units: c.units?.map(u => ({ id: u._id, title: u.title })) || []
     })));
     
     console.log('🎯 Final query used for filtering:', JSON.stringify(query, null, 2));
@@ -173,6 +175,11 @@ export const getAllCourses = async (req, res, next) => {
     // Further filter sensitive data from nested structures
     const secureCourses = courses.map(course => {
       const courseObj = course.toObject();
+      
+      console.log(`🔍 Processing course "${courseObj.title}":`, {
+        originalUnits: courseObj.units?.length || 0,
+        unitsData: courseObj.units?.map(u => ({ id: u._id, title: u.title })) || []
+      });
       
       // Clean up units and lessons
       if (courseObj.units) {
@@ -215,7 +222,9 @@ export const getAllCourses = async (req, res, next) => {
       coursesReturned: secureCourses.map(c => ({ 
         id: c._id, 
         title: c.title, 
-        stage: c.stage?.name 
+        stage: c.stage?.name,
+        unitsCount: c.units?.length || 0,
+        units: c.units?.map(u => ({ id: u._id, title: u.title })) || []
       }))
     });
 

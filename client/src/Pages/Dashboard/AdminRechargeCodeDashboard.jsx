@@ -337,7 +337,7 @@ export default function AdminRechargeCodeDashboard() {
                                             value={generateForm.amount}
                                             onChange={handleGenerateFormChange}
                                             className="block w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                                            placeholder="أدخل المبلغ بالجنيه المصري"
+                                            placeholder="أدخل المبلغ بالريال قطري المصري"
                                             min="1"
                                             step="0.01"
                                             required
