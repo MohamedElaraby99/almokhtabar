@@ -928,6 +928,11 @@ const CustomVideoPlayer = ({
               <div className="absolute inset-0">
                 {/* YouTube Player */}
                 <div id="youtube-player" className="w-full h-full"></div>
+                {/* Persistent transparent overlay to block interactions with YouTube iframe */}
+                <div
+                  className="absolute inset-0 z-20 pointer-events-auto"
+                  aria-hidden="true"
+                ></div>
                 
                 {/* Thumbnail Overlay */}
                 {showThumbnail && thumbnailUrl && (
