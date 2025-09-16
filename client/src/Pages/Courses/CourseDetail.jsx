@@ -72,6 +72,44 @@ export default function CourseDetail() {
   const [unitRedeemCode, setUnitRedeemCode] = useState('');
   const [selectedUnitForCode, setSelectedUnitForCode] = useState('');
 
+  // External payment/contact configuration
+  const basicSkrillLink = import.meta.env?.VITE_SKRILL_BASIC_LINK || 'https://skrill.me/rq/Ahmed/150/QAR?key=T2ptRPGDxrNtMSgLLQ3izHOXDm5';
+  const premiumSkrillLink = import.meta.env?.VITE_SKRILL_PREMIUM_LINK || 'https://skrill.me/rq/Ahmed/500/QAR?key=JxY1LTe2VuNFqUldcn6l8neFxXo';
+  const whatsappNumber = import.meta.env?.VITE_WHATSAPP_NUMBER || '+201023530513';
+
+  const getUserPathCategory = (u) => {
+    if (!u) return 'basic';
+    const candidates = [
+      u.learningPath,
+      u.educationPath,
+      u.educationalPath,
+      u.path,
+      u.category,
+      u.plan,
+      u.subscription?.plan,
+      u.subscriptionType,
+      u.track,
+      u.educationTrack,
+      u.pathName,
+    ].filter(Boolean);
+
+    const normalized = candidates
+      .map((v) => (typeof v === 'string' ? v : String(v)))
+      .map((v) => v.trim());
+
+    const isPremium = normalized.some(
+      (v) => v.includes('المسار المميز') || v.includes('مميز') || v.includes('premium')
+    );
+    const isBasic = normalized.some(
+      (v) => v.includes('المسار الأساسي') || v.includes('أساسي') || v.includes('basic')
+    );
+    if (isPremium) return 'premium';
+    if (isBasic) return 'basic';
+    return 'basic';
+  };
+
+  const selectedSkrillLink = getUserPathCategory(user) === 'premium' ? premiumSkrillLink : basicSkrillLink;
+
   useEffect(() => {
     if (id) {
       dispatch(getCourseById(id));
@@ -599,7 +637,6 @@ export default function CourseDetail() {
           <FaEye />
           <span>معاينة</span>
         </button>
-       
       </div>
     );
   };
@@ -1079,9 +1116,48 @@ export default function CourseDetail() {
                   {selectedItem.description}
                 </p>
                 
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
                   <span className="text-gray-600 dark:text-gray-300">السعر:</span>
                   <span className="font-semibold text-green-600">{selectedItem.price} ريال قطري</span>
+                </div>
+
+                <div className="space-y-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg text-right">
+                  <p className="text-sm text-blue-900 dark:text-blue-100 font-medium">خطوات الدفع والحصول على الكود:</p>
+                  <ol className="list-decimal pr-5 space-y-2 text-sm text-blue-800 dark:text-blue-200">
+                    <li>
+                      ادفع المبلغ عبر Skrill (داخل قطر) من خلال هذا الرابط:
+                      {selectedSkrillLink ? (
+                        <a
+                          href={selectedSkrillLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mx-1 text-blue-700 underline"
+                        >
+                          فتح رابط الدفع
+                        </a>
+                      ) : (
+                        <span className="mx-1">— يرجى طلب رابط الدفع من المدرس —</span>
+                      )}
+                    </li>
+                    <li>
+                      بعد إتمام الدفع تواصل معنا على واتساب لإرسال كود التفعيل.
+                      {whatsappNumber ? (
+                        <a
+                          href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(`مرحبا، دفعت عبر Skrill للكورس: ${currentCourse?.title || ''} - ${selectedItem.purchaseType === 'lesson' ? 'درس' : 'وحدة'}: ${selectedItem?.title || ''}. الرجاء إرسال كود التفعيل.`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mx-1 text-green-700 underline"
+                        >
+                          فتح واتساب
+                        </a>
+                      ) : (
+                        <span className="mx-1">— رقم واتساب غير مُحدد —</span>
+                      )}
+                    </li>
+                    <li>
+                      ادخل الكود في المكان المخصص داخل الصفحة لتفعيل الوصول فوراً.
+                    </li>
+                  </ol>
                 </div>
               
               </div>
@@ -1093,14 +1169,9 @@ export default function CourseDetail() {
                 >
                   إلغاء
                 </button>
-               
               </div>
               
-              {walletBalance < selectedItem.price && (
-                <p className="text-red-600 text-sm mt-2 text-center">
-                  رصيد المحفظة غير كافي
-                </p>
-              )}
+              {/* Wallet messaging not used for manual payments */}
             </div>
           </div>
                  )}
