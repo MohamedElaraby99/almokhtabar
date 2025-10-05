@@ -136,14 +136,14 @@ export default function Overview() {
         {
           id: 2,
           type: 'attendance',
-          message: 'تم تسجيل حضور 25 طالب في درس الفيزياء',
+          message: 'تم تسجيل حضور 25 طالب في درس الكيمياء',
           time: 'منذ 15 دقيقة',
           icon: FaQrcode
         },
         {
           id: 3,
           type: 'payment',
-          message: 'تم استلام رسوم مجموعة الفيزياء',
+          message: 'تم استلام رسوم مجموعة الكيمياء',
           time: 'منذ ساعة',
           icon: FaBook
         },

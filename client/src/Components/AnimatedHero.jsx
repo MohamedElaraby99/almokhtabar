@@ -14,9 +14,9 @@ const AnimatedHero = ({ onGetStarted }) => {
 
   const stats = [
     { icon: FaUsers, number: "5K+", label: "طلاب مسجلين", color: "text-[#9b172a]" },
-    { icon: FaFlask, number: "200+", label: "تجربة كيميائية", color: "text-[#9b172a]" },
+    { icon: FaFlask, number: "300+", label: "تجربة كيميائية", color: "text-[#9b172a]" },
     { icon: FaStar, number: "4.9", label: "متوسط التقييم", color: "text-[#9b172a]" },
-    { icon: FaAward, number: "15+", label: "سنوات خبرة", color: "text-[#9b172a]" }
+    { icon: FaAward, number: "20+", label: "سنوات خبرة", color: "text-[#9b172a]" }
   ];
 
   const handleExploreCourses = () => {
@@ -56,7 +56,7 @@ const AnimatedHero = ({ onGetStarted }) => {
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3 py-2 md:px-4 md:py-2 rounded-full text-xs md:text-sm font-medium font-sans" style={{backgroundColor: 'rgba(155, 23, 42, 0.1)', color: '#9b172a'}}>
                 🧪
-                <span>تعلم الفيزياء بطريقة علمية وممتعة!</span>
+                <span>تعلم الكيمياء بطريقة علمية وممتعة!</span>
               </div>
 
               {/* Main Heading */}
@@ -64,22 +64,22 @@ const AnimatedHero = ({ onGetStarted }) => {
                 <span style={{color: '#9b172a'}}>تعلم مع </span>
                 <br />
                 <span className="bg-clip-text text-transparent" style={{background: 'linear-gradient(to right, #9b172a, #dc2626, #b91c1c)', WebkitBackgroundClip: 'text'}}>
-                   دكتور أحمد علي
+                   دكتور احمد السعيد
                 </span>
                 <br />
                 <span className="text-2xl md:text-3xl lg:text-4xl xl:text-5xl text-gray-700 dark:text-gray-300">
-                  دكتور الفيزياء والعلوم المتكاملة!
+                  دكتور الكيمياء والعلوم المتكاملة!
                 </span>
               </h1>
               
               {/* Description */}
               <p className="text-base md:text-lg lg:text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-lg font-sans">
-                استكشف عالم الفيزياء بطريقة واضحة ومنظمة، حيث تتحول التفاعلات المعقدة إلى تجارب بسيطة ومفهومة!
+                استكشف عالم الكيمياء بطريقة واضحة ومنظمة، حيث تتحول التفاعلات المعقدة إلى تجارب بسيطة ومفهومة!
               </p>
 
               {/* Additional Description */}
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-lg font-sans">
-                سواء كنت تريد فهم أساسيات الفيزياء أو التخصص في العلوم المتكاملة، هنا ستتعلم بطريقة عملية وممتعة.
+                سواء كنت تريد فهم أساسيات الكيمياء أو التخصص في العلوم المتكاملة، هنا ستتعلم بطريقة عملية وممتعة.
               </p>
 
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-lg font-sans">
@@ -87,7 +87,7 @@ const AnimatedHero = ({ onGetStarted }) => {
               </p>
 
               <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-lg font-sans">
-                ابدأ الآن وتعلم بطريقة تجعلك تفهم وتحب الفيزياء أكثر من أي وقت مضى!
+                ابدأ الآن وتعلم بطريقة تجعلك تفهم وتحب الكيمياء أكثر من أي وقت مضى!
               </p>
 
               {/* CTA Buttons */}
@@ -124,7 +124,7 @@ const AnimatedHero = ({ onGetStarted }) => {
    
                   <img
                     src={mr} 
-                    alt=" دكتور أحمد علي - دكتور في الفيزياء" 
+                    alt=" دكتور احمد السعيد - دكتور في الكيمياء" 
                     className="w-full h-full p-2 object-cover drop-shadow-2xl transform hover:scale-105 transition-transform duration-500 "
                   />
            
