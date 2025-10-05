@@ -143,7 +143,6 @@ const getAllExamResults = async (req, res, next) => {
                     _id: result.user?._id,
                     fullName: result.user?.fullName || 'Unknown User',
                     email: result.user?.email || 'No Email',
-                    username: result.user?.username,
                     stage: result.user?.stage?.name || 'Unknown Stage'
                 },
                 course: {
@@ -358,7 +357,7 @@ const getExamResultById = async (req, res, next) => {
         const examResult = await ExamResult.findById(id)
             .populate({
                 path: 'user',
-                select: 'fullName email username'
+                select: 'fullName email'
             })
             .populate({
                 path: 'course',
@@ -392,7 +391,6 @@ const getExamResultById = async (req, res, next) => {
                     id: examResult.user._id,
                     name: examResult.user.fullName,
                     email: examResult.user.email,
-                    username: examResult.user.username
                 },
                 course: {
                     id: examResult.course._id,
@@ -477,7 +475,6 @@ const exportExamResults = async (req, res, next) => {
             filteredResults = results.filter(result => 
                 result.user?.fullName?.toLowerCase().includes(searchLower) ||
                 result.user?.email?.toLowerCase().includes(searchLower) ||
-                result.user?.username?.toLowerCase().includes(searchLower) ||
                 result.course?.title?.toLowerCase().includes(searchLower) ||
                 result.lessonTitle?.toLowerCase().includes(searchLower)
             );
@@ -538,18 +535,90 @@ const exportExamResults = async (req, res, next) => {
 // Get exam results for a specific lesson
 const getExamResults = asyncHandler(async (req, res) => {
     const { courseId, lessonId } = req.params;
+    const { examType } = req.query;
     const userId = req.user._id || req.user.id;
 
     try {
-        const results = await ExamResult.find({
+        // Build filter object
+        const filter = {
             course: courseId,
             lessonId: lessonId,
             user: userId
-        }).sort({ completedAt: -1 });
+        };
+
+        // Add exam type filter if provided
+        if (examType) {
+            filter.examType = examType;
+        }
+
+        const results = await ExamResult.find(filter).sort({ completedAt: -1 });
+
+        // For each result, we need to get the original exam questions with correct answers
+        const resultsWithQuestions = await Promise.all(results.map(async (result) => {
+            try {
+                // Get the course to access the exam questions
+                const course = await Course.findById(courseId);
+                if (!course) {
+                    console.error('Course not found for result:', result._id);
+                    return result;
+                }
+
+                let lesson;
+                if (result.unitId) {
+                    const unit = course.units.id(result.unitId);
+                    if (unit) {
+                        lesson = unit.lessons.id(result.lessonId);
+                    }
+                } else {
+                    lesson = course.directLessons.id(result.lessonId);
+                }
+
+                if (!lesson) {
+                    console.error('Lesson not found for result:', result._id);
+                    return result;
+                }
+
+                // Find the exam that matches this result
+                let exam = null;
+                if (result.examType === 'training') {
+                    // For training exams, we need to find the training by matching the questions count
+                    // or by some other identifier. For now, we'll use the first training.
+                    exam = lesson.trainings[0]; // This might need to be improved based on your data structure
+                } else if (result.examType === 'final') {
+                    // For final exams, find the exam that matches the questions count
+                    exam = lesson.exams.find(e => e.questions.length === result.totalQuestions);
+                    if (!exam && lesson.exams.length > 0) {
+                        exam = lesson.exams[0]; // Fallback to first exam
+                    }
+                }
+
+                if (!exam || !exam.questions) {
+                    console.error('Exam not found for result:', result._id);
+                    return result;
+                }
+
+                // Add the questions with correct answers to the result
+                const resultObj = result.toObject();
+                resultObj.questions = exam.questions.map(q => ({
+                    _id: q._id,
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    explanation: q.explanation || '',
+                    image: q.image,
+                    numberOfOptions: q.numberOfOptions || 4
+                }));
+
+                return resultObj;
+            } catch (error) {
+                console.error('Error processing result:', result._id, error);
+                return result;
+            }
+        }));
 
         res.status(200).json({
             success: true,
-            data: results
+            data: resultsWithQuestions
         });
     } catch (error) {
         console.error('Error getting exam results:', error);
@@ -566,9 +635,72 @@ const getUserExamHistory = asyncHandler(async (req, res) => {
             .populate('course', 'title')
             .sort({ completedAt: -1 });
 
+        // For each result, we need to get the original exam questions with correct answers
+        const resultsWithQuestions = await Promise.all(results.map(async (result) => {
+            try {
+                // Get the course to access the exam questions
+                const course = await Course.findById(result.course._id || result.course);
+                if (!course) {
+                    console.error('Course not found for result:', result._id);
+                    return result;
+                }
+
+                let lesson;
+                if (result.unitId) {
+                    const unit = course.units.id(result.unitId);
+                    if (unit) {
+                        lesson = unit.lessons.id(result.lessonId);
+                    }
+                } else {
+                    lesson = course.directLessons.id(result.lessonId);
+                }
+
+                if (!lesson) {
+                    console.error('Lesson not found for result:', result._id);
+                    return result;
+                }
+
+                // Find the exam that matches this result
+                let exam = null;
+                if (result.examType === 'training') {
+                    // For training exams, we need to find the training by matching the questions count
+                    // or by some other identifier. For now, we'll use the first training.
+                    exam = lesson.trainings[0]; // This might need to be improved based on your data structure
+                } else if (result.examType === 'final') {
+                    // For final exams, find the exam that matches the questions count
+                    exam = lesson.exams.find(e => e.questions.length === result.totalQuestions);
+                    if (!exam && lesson.exams.length > 0) {
+                        exam = lesson.exams[0]; // Fallback to first exam
+                    }
+                }
+
+                if (!exam || !exam.questions) {
+                    console.error('Exam not found for result:', result._id);
+                    return result;
+                }
+
+                // Add the questions with correct answers to the result
+                const resultObj = result.toObject();
+                resultObj.questions = exam.questions.map(q => ({
+                    _id: q._id,
+                    question: q.question,
+                    options: q.options,
+                    correctAnswer: q.correctAnswer,
+                    explanation: q.explanation || '',
+                    image: q.image,
+                    numberOfOptions: q.numberOfOptions || 4
+                }));
+
+                return resultObj;
+            } catch (error) {
+                console.error('Error processing result:', result._id, error);
+                return result;
+            }
+        }));
+
         res.status(200).json({
             success: true,
-            data: results
+            data: resultsWithQuestions
         });
     } catch (error) {
         console.error('Error getting user exam history:', error);
@@ -643,7 +775,7 @@ const getExamStatistics = asyncHandler(async (req, res) => {
 const searchExamResults = asyncHandler(async (req, res) => {
     const {
         page = 1,
-        limit = 20,
+        limit = null, // Changed default to null to get all results
         search = '',
         examType = '',
         courseId = '',
@@ -677,18 +809,28 @@ const searchExamResults = asyncHandler(async (req, res) => {
         
         if (status) filter.passed = status === 'passed';
 
-        const skip = (parseInt(page) - 1) * parseInt(limit);
-        const pageLimit = parseInt(limit);
+        // Handle pagination - if no limit provided, get all results
+        const shouldPaginate = limit !== null && limit !== undefined;
+        const skip = shouldPaginate ? (parseInt(page) - 1) * parseInt(limit) : 0;
+        const pageLimit = shouldPaginate ? parseInt(limit) : null;
+
+        console.log('🔍 Search params:', { page, limit, shouldPaginate, skip, pageLimit });
 
         // Get completed exam results
         const totalCompleted = await ExamResult.countDocuments(filter);
-        const completedResults = await ExamResult.find(filter)
+        console.log('📊 Total completed exam results in database:', totalCompleted);
+        
+        let completedResultsQuery = ExamResult.find(filter)
             .populate('user', 'fullName email')
             .populate('course', 'title')
-            .sort({ completedAt: -1 })
-            .skip(skip)
-            .limit(pageLimit)
-            .lean();
+            .sort({ completedAt: -1 });
+            
+        if (shouldPaginate) {
+            completedResultsQuery = completedResultsQuery.skip(skip).limit(pageLimit);
+        }
+        
+        const completedResults = await completedResultsQuery.lean();
+        console.log('📊 Retrieved completed results:', completedResults.length);
 
         // 2. Get ALL exams with user progress from Course structure (including completed ones)
         let allExamsFromLessons = [];
@@ -741,14 +883,13 @@ const searchExamResults = asyncHandler(async (req, res) => {
                                 // If user has taken the exam, include the result data
                                 ...(hasUserResult && {
                                     score: exam.userResult.score || 0,
-                                    percentage: exam.userResult.percentage || 0,
-                                    correctAnswers: exam.userResult.score || 0,
+                                    percentage: exam.userResult.percentage || Math.round(((exam.userResult.correctAnswers || exam.userResult.score || 0) / (exam.userResult.totalQuestions || 1)) * 100),
+                                    correctAnswers: exam.userResult.correctAnswers || exam.userResult.score || 0,
                                     totalQuestions: exam.userResult.totalQuestions || 0,
                                     completedAt: exam.userResult.takenAt || new Date(),
                                     passed: (exam.userResult.percentage || 0) >= 50, // Assuming 50% is passing
                                     user: {
                                         fullName: 'طالب', // We don't have user details in lesson structure
-                                        username: 'طالب',
                                         email: 'طالب'
                                     }
                                 })
@@ -796,14 +937,13 @@ const searchExamResults = asyncHandler(async (req, res) => {
                                         // If user has taken the exam, include the result data
                                         ...(hasUserResult && {
                                             score: exam.userResult.score || 0,
-                                            percentage: exam.userResult.percentage || 0,
-                                            correctAnswers: exam.userResult.score || 0,
+                                            percentage: exam.userResult.percentage || Math.round(((exam.userResult.correctAnswers || exam.userResult.score || 0) / (exam.userResult.totalQuestions || 1)) * 100),
+                                            correctAnswers: exam.userResult.correctAnswers || exam.userResult.score || 0,
                                             totalQuestions: exam.userResult.totalQuestions || 0,
                                             completedAt: exam.userResult.takenAt || new Date(),
                                             passed: (exam.userResult.percentage || 0) >= 50, // Assuming 50% is passing
                                             user: {
                                                 fullName: 'طالب', // We don't have user details in lesson structure
-                                                username: 'طالب',
                                                 email: 'طالب'
                                             }
                                         })
@@ -822,7 +962,6 @@ const searchExamResults = asyncHandler(async (req, res) => {
             type: 'completed',
             user: {
                 fullName: result.user?.fullName,
-                username: result.user?.username,
                 email: result.user?.email
             },
             course: {
@@ -833,7 +972,7 @@ const searchExamResults = asyncHandler(async (req, res) => {
             },
             examType: result.examType,
             score: result.score,
-            percentage: result.score,
+            percentage: Math.round((result.correctAnswers / result.totalQuestions) * 100),
             correctAnswers: result.correctAnswers,
             totalQuestions: result.totalQuestions,
             timeTaken: result.timeTaken,
@@ -846,6 +985,12 @@ const searchExamResults = asyncHandler(async (req, res) => {
         // Combine results (completed from ExamResult collection first, then all from lessons)
         const allResults = [...transformedCompleted, ...allExamsFromLessons];
         const total = totalCompleted + allExamsFromLessons.length;
+        
+        console.log('📊 Final results summary:');
+        console.log('  - Transformed completed results:', transformedCompleted.length);
+        console.log('  - All exams from lessons:', allExamsFromLessons.length);
+        console.log('  - Total combined results:', allResults.length);
+        console.log('  - Total in database:', totalCompleted);
 
         res.status(200).json({
             success: true,
@@ -854,7 +999,7 @@ const searchExamResults = asyncHandler(async (req, res) => {
                 total,
                 page: parseInt(page),
                 limit: pageLimit,
-                totalPages: Math.ceil(total / pageLimit),
+                totalPages: shouldPaginate ? Math.ceil(total / pageLimit) : 1,
                 completedCount: totalCompleted,
                 availableCount: allExamsFromLessons.filter(exam => !exam.isCompleted).length,
                 lessonExamsCount: allExamsFromLessons.length

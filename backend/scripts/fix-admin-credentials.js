@@ -28,7 +28,6 @@ const fixAdminCredentials = async () => {
       console.log('No admin user found. Creating new one...');
       
       const newAdmin = new User({
-        username: 'adminn',
         fullName: 'System Administrator',
         email: 'adminn@api.com',
         password: '1234567',
@@ -50,7 +49,6 @@ const fixAdminCredentials = async () => {
     }
     
     console.log('\n📧 Email: adminn@api.com');
-    console.log('👤 Username: adminn');
     console.log('🔐 Password: 1234567');
     console.log('👑 Role: ADMIN');
     console.log('\n💡 You can now login with these credentials');

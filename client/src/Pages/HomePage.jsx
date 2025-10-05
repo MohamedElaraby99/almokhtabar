@@ -19,6 +19,7 @@ const NewsletterSection = lazy(() => import("../Components/NewsletterSection"));
 
 import { 
   FaEye, 
+  FaHeart, 
   FaCalendar, 
   FaUser, 
   FaArrowRight, 
@@ -41,20 +42,18 @@ import {
   FaArrowUp,
   FaMobile,
   FaDownload,
+  FaGooglePlay,
+  FaAndroid,
   FaPhone,
   FaWhatsapp,
   FaFacebook,
-  FaInstagram,
-  FaComments
+  FaYoutube,
+  FaComments,
+  FaTiktok
 } from "react-icons/fa";
 import { placeholderImages } from "../utils/placeholderImages";
 // Using a public URL for now - replace with your actual image URL
 const fikraCharacter = "/fikra_character-removebg-preview.png";
-import basicPlan from "../assets/basicPlan.png";
-import premiumPlan from "../assets/premiumPlan.png";
-import offerImage from "../assets/offer 1.jpg";
-
-
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -62,11 +61,9 @@ export default function HomePage() {
   const { featuredSubjects } = useSelector((state) => state.subject);
   const { courses, featuredCourses, featuredLoading } = useSelector((state) => state.course);
 
-  const { role, isLoggedIn, data } = useSelector((state) => state.auth);
-  const userLearningPath = data?.learningPath;
+  const { role } = useSelector((state) => state.auth);
   const [isVisible, setIsVisible] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [showOfferModal, setShowOfferModal] = useState(false);
 
   // Hero entrance animation state
   const [heroVisible, setHeroVisible] = useState(false);
@@ -100,11 +97,6 @@ export default function HomePage() {
       }, 300);
     }, 100);
 
-    // Show offer modal after a delay
-    const offerTimer = setTimeout(() => {
-      setShowOfferModal(true);
-    }, 2000);
-
     // Add scroll event listener
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -115,7 +107,6 @@ export default function HomePage() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       clearTimeout(timer);
-      clearTimeout(offerTimer);
     };
   }, [dispatch]);
 
@@ -136,14 +127,14 @@ export default function HomePage() {
   const handleAPKDownload = () => {
     // Create a download link for the APK file
     const link = document.createElement('a');
-    link.href = '/downloads/Almoktabar.apk'; // Update this path to your APK file location
-    link.download = 'Almoktabar.apk';
+    link.href = '/downloads/دكتور احمد علي.apk'; // Update this path to your APK file location
+    link.download = 'دكتور احمد علي.apk';
     link.target = '_blank';
     
     // Fallback for mobile browsers
     if (navigator.userAgent.toLowerCase().indexOf('android') > -1) {
       // For Android devices, open the download directly
-      window.open('/downloads/Almoktabar.apk', '_blank');
+      window.open('/downloads/دكتور احمد علي.apk', '_blank');
     } else {
       // For other devices, trigger download
       document.body.appendChild(link);
@@ -177,10 +168,10 @@ export default function HomePage() {
   };
 
   const stats = [
-    { icon: FaUsers, number: "10K+", label: "طالب مسجل", color: "text-[#5b2233]" },
-    { icon: FaGraduationCap, number: "100+", label: "مادة متاحة", color: "text-[#5b2233]" },
-    { icon: FaStar, number: "4.9", label: "متوسط التقييم", color: "text-[#5b2233]" },
-    { icon: FaAward, number: "50+", label: "مدرس مدرس", color: "text-[#5b2233]" }
+    { icon: FaUsers, number: "10K+", label: "طالب مسجل", color: "text-[#9b172a]" },
+    { icon: FaGraduationCap, number: "100+", label: "مادة متاحة", color: "text-[#9b172a]" },
+    { icon: FaStar, number: "4.9", label: "متوسط التقييم", color: "text-[#9b172a]" },
+    { icon: FaAward, number: "50+", label: "مدرس مدرس", color: "text-[#9b172a]" }
   ];
 
   const features = [
@@ -188,37 +179,37 @@ export default function HomePage() {
       icon: FaRocket,
       title: "تعلم بوتيرتك الخاصة",
       description: "جداول تعلم مرنة تناسب نمط حياتك والتزاماتك.",
-      color: "text-[#5b2233]",
-      bgColor: "bg-[#5b2233]/10 dark:bg-[#5b2233]/20"
+      color: "text-[#9b172a]",
+      bgColor: "bg-red-50 dark:bg-red-900/20"
     },
     {
       icon: FaLightbulb,
       title: "مواد بقيادة الخبراء",
       description: "تعلم من المحترفين في المجال مع سنوات من الخبرة العملية.",
-      color: "text-[#5b2233]",
-      bgColor: "bg-[#5b2233]/10 dark:bg-[#5b2233]/20"
+      color: "text-[#9b172a]",
+      bgColor: "bg-red-50 dark:bg-red-900/20"
     },
     {
       icon: FaShieldAlt,
       title: "التعلم المعتمد",
       description: "احصل على شهادات معترف بها من أفضل الشركات في العالم.",
-      color: "text-[#5b2233]",
-      bgColor: "bg-[#5b2233]/10 dark:bg-[#5b2233]/20"
+      color: "text-[#9b172a]",
+      bgColor: "bg-red-50 dark:bg-red-900/20"
     },
     {
       icon: FaGlobe,
       title: "المجتمع العالمي",
       description: "تواصل مع المتعلمين من جميع أنحاء العالم وشارك الخبرات.",
-      color: "text-[#5b2233]",
-      bgColor: "bg-[#5b2233]/10 dark:bg-[#5b2233]/20"
+      color: "text-[#9b172a]",
+      bgColor: "bg-red-50 dark:bg-red-900/20"
     }
   ];
 
   const categories = [
-    { icon: FaCode, name: "البرمجة", count: "150+ دورة", color: "bg-[#5b2233]" },
-    { icon: FaPalette, name: "التصميم", count: "120+ دورة", color: "bg-[#5b2233]" },
-    { icon: FaChartLine, name: "الأعمال", count: "200+ دورة", color: "bg-[#5b2233]" },
-    { icon: FaBookOpen, name: "التسويق", count: "180+ دورة", color: "bg-[#5b2233]" }
+    { icon: FaCode, name: "البرمجة", count: "150+ دورة", color: "bg-[#9b172a]" },
+    { icon: FaPalette, name: "التصميم", count: "120+ دورة", color: "bg-[#9b172a]" },
+    { icon: FaChartLine, name: "الأعمال", count: "200+ دورة", color: "bg-[#9b172a]" },
+    { icon: FaBookOpen, name: "التسويق", count: "180+ دورة", color: "bg-[#9b172a]" }
   ];
 
   return (
@@ -231,209 +222,6 @@ export default function HomePage() {
       }`}>
         <AnimatedHero onGetStarted={onGetStarted} />
       </div>
-
-
-        {/* Video Section */}
-        <section className={`py-20 bg-gradient-to-br from-[#5b2233]/5 via-[#5b2233]/5 to-[#5b2233]/5 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-700 ease-out ${
-        heroLoaded 
-          ? 'opacity-100 translate-y-0' 
-          : 'opacity-0 translate-y-8'
-      }`} 
-      dir="rtl"
-      style={{ transitionDelay: '1800ms' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-16 transition-all duration-700 ease-out ${
-            heroLoaded 
-              ? 'opacity-100 scale-100' 
-              : 'opacity-0 scale-95'
-          }`}
-          style={{ transitionDelay: '2000ms' }}>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              شاهد كيف تعمل المنصة
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              اكتشف منصة المختبر التعليمية من خلال هذا الفيديو التوضيحي
-            </p>
-          </div>
-
-          <div className={`relative max-w-4xl mx-auto transition-all duration-700 ease-out ${
-            heroLoaded 
-              ? 'opacity-100 translate-y-0 scale-100' 
-              : 'opacity-0 translate-y-8 scale-95'
-          }`}
-          style={{ transitionDelay: '2200ms' }}>
-            {/* Video Container with responsive design */}
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
-              <iframe 
-                src="https://player.vimeo.com/video/1117519691?title=0&amp;byline=0&amp;portrait=0&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479" 
-                className="absolute top-0 left-0 w-full h-full rounded-2xl shadow-2xl"
-                frameBorder="0" 
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share" 
-                referrerPolicy="strict-origin-when-cross-origin" 
-                title="WhatsApp Video 2025-09-10 at 13.05.34_bc1dc714"
-                loading="lazy"
-              />
-            </div>
-            
-            {/* Decorative elements */}
-            <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#5b2233] rounded-full opacity-20 animate-pulse"></div>
-            <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-[#5b2233] rounded-full opacity-30 animate-bounce"></div>
-          </div>
-        </div>
-      </section>
-
-
-       {/* Paths Section: Choose Your Plan */}
-       <section className={`py-20 bg-gray-50 dark:bg-gray-900 transition-all duration-700 ease-out ${
-        heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-      }`} dir="rtl" style={{ transitionDelay: '500ms' }}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className={`text-center mb-14 transition-all duration-700 ease-out ${
-            heroLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-          }`} style={{ transitionDelay: '650ms' }}>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">
-              اختَر مسارك
-            </h2>
-            <p className="mt-3 text-gray-600 dark:text-gray-300">
-              مسار تعليمي يناسب احتياجاتك، مع إمكانية الترقية في أي وقت
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Path 1: Standard Access */}
-            <div className={`relative rounded-2xl p-8 bg-white dark:bg-gray-800 border border-gray-200/70 dark:border-gray-700/60 shadow-lg transition-all duration-500 overflow-hidden group ${
-              heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            } hover:shadow-2xl hover:-translate-y-1 hover:rotate-[0.25deg]`} style={{ transitionDelay: '800ms' }}>
-              {/* Decorative glow blobs */}
-              <div className="pointer-events-none absolute -top-16 -left-16 w-40 h-40 rounded-full bg-[#5b2233]/10 blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
-              <div className="pointer-events-none absolute -bottom-24 -right-20 w-56 h-56 rounded-full bg-[#361927]/10 blur-3xl group-hover:scale-110 transition-transform duration-700 delay-150"></div>
-
-              {/* Shine on hover */}
-              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                <div className="absolute -inset-x-10 -top-24 h-40 rotate-12 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-              </div>
-
-              <div className="absolute -top-0 -right-1 px-2 py-1 rounded-full text-xs font-semibold bg-[#5b2233] text-white">
-                المسار الأساسي
-              </div>
-              <img
-                src={basicPlan}
-                alt="المختبر"
-                className="absolute -left-0 bottom-2 h-36 md:h-44 pointer-events-none select-none"
-                loading="lazy"
-              />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-right">
-                محتوى كامل للتعلّم الذاتي
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-right">
-                احصل على وصول إلى جميع الفيديوهات، نماذج الامتحانات، ملفات الـPDF، والتدريبات التفاعلية.
-              </p>
-              <ul className="space-y-2 mb-8 text-right">
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>فيديوهات دراسية مرتبة بحسب المنهج</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>امتحانات تفاعلية مع تصحيح فوري</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>ملفات PDF وملخصات</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>تدريبات وأسئلة متدرجة المستوى</span>
-                </li>
-              </ul>
-              {/* subtle gradient separator */}
-              <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/30 to-transparent mb-6"></div>
-              <div className="flex justify-start">
-                {isLoggedIn && userLearningPath === 'basic' ? (
-                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-700">
-                    أنت مشترك في هذا المسار
-                  </span>
-                ) : isLoggedIn && userLearningPath === 'premium' ? (
-                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-200 border border-gray-200 dark:border-gray-600">
-                    لديك المسار المميز (يشمل هذا)
-                  </span>
-                ) : (
-                  <a href="/plans/basic" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
-                    ابدأ هذا المسار
-                  </a>
-                )}
-              </div>
-            </div>
-
-            {/* Path 2: Premium with Private Sessions */}
-            <div className={`relative rounded-2xl p-8 bg-white dark:bg-gray-800 border border-[#5b2233]/40 shadow-xl transition-all duration-500 overflow-hidden group ${
-              heroLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-            } hover:shadow-2xl hover:-translate-y-1 hover:-rotate-[0.25deg]`} style={{ transitionDelay: '900ms' }}>
-              {/* Decorative glow blobs */}
-              <div className="pointer-events-none absolute -top-16 -right-12 w-48 h-48 rounded-full bg-yellow-400/10 blur-3xl group-hover:scale-110 transition-transform duration-700"></div>
-              <div className="pointer-events-none absolute -bottom-24 -left-16 w-56 h-56 rounded-full bg-[#5b2233]/10 blur-3xl group-hover:scale-110 transition-transform duration-700 delay-150"></div>
-
-              {/* #361927  bg on hover */}
-              <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-                <div className="absolute -inset-x-10 -top-24 h-40 -rotate-12 bg-gradient-to-r from-transparent via-[#361927]/20 to-transparent"></div>
-              </div>
-
-              <div className="absolute -top-0 -right-1 px-2 py-1 rounded-full text-xs font-semibold bg-yellow-500 text-white shadow-md flex items-center gap-1">
-                <FaStar className="w-3 h-3" />
-                <span>المُوصى به</span>
-              </div>
-              <img
-                src={premiumPlan}
-                alt="المختبر"
-                className="absolute -left-1 bottom-2 h-36 md:h-44 pointer-events-none select-none"
-                loading="lazy"
-              />
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3 text-right">
-                كل شيء + جلسات خاصة مع الدكتور
-              </h3>
-              <p className="text-gray-600 dark:text-gray-300 mb-6 text-right">
-                استمتع بجميع مزايا المحتوى، بالإضافة إلى جلسات أونلاين خاصة ومتابعة مباشرة مع الدكتور.
-              </p>
-              <ul className="space-y-2 mb-20 text-right">
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>كل ما في المسار الأساسي</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>جلسات خاصة فردية أونلاين</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>متابعة أسبوعية وتقييم للأداء</span>
-                </li>
-                <li className="flex items-center justify-end gap-2 text-gray-700 dark:text-gray-200">
-                  <FaCheckCircle className="text-[#5b2233]" />
-                  <span>دعم سريع وإجابات مباشرة على أسئلتك</span>
-                </li>
-              </ul>
-              {/* subtle gradient separator */}
-              <div className="h-px bg-gradient-to-l from-transparent via-[#5b2233]/40 to-transparent mb-6"></div>
-              <div className="flex justify-start gap-3">
-                {isLoggedIn && userLearningPath === 'premium' ? (
-                  <span className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300 border border-green-200 dark:border-green-700">
-                    أنت مشترك في المسار المميز
-                  </span>
-                ) : (
-                  <>
-                   <a href="/plans/premium" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl text-white font-semibold bg-gradient-to-r from-[#5b2233] to-[#7a2d43] hover:from-[#7a2d43] hover:to-[#5b2233] transition-all">
-                    {isLoggedIn && userLearningPath === 'basic' ? 'ترقية إلى المميز' : 'اختر المسار المميز'}
-                  </a>
-                  <a href="/contact" className="inline-flex items-center gap-2 px-5 py-3 rounded-xl font-semibold border border-white/40 dark:border-gray-600 text-[#5b2233] dark:text-white hover:bg-white/10 transition-all">
-                  اسأل عن الجلسات 
-                </a>
-                  </> 
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Featured Courses Section */}
       <section className={`py-20 bg-white dark:bg-gray-800 transition-all duration-700 ease-out ${
@@ -460,7 +248,7 @@ export default function HomePage() {
 
           {featuredLoading ? (
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#5b2233] mx-auto mb-4"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#9b172a] mx-auto mb-4"></div>
               <p className="text-gray-600 dark:text-gray-400">جاري تحميل المواد المميزة...</p>
             </div>
           ) : featuredCourses && featuredCourses.length > 0 ? (
@@ -507,7 +295,7 @@ export default function HomePage() {
                     ) : null}
                     
                     {/* Fallback gradient for missing/broken images */}
-                    <div className={`w-full h-full bg-gradient-to-br from-[#5b2233] via-[#5b2233] to-[#5b2233] ${course.image?.secure_url ? 'hidden' : 'flex'} items-center justify-center`}>
+                    <div className={`w-full h-full bg-gradient-to-br from-[#9b172a] via-[#dc2626] to-[#b91c1c] ${course.image?.secure_url ? 'hidden' : 'flex'} items-center justify-center`}>
                       <FaBookOpen className="text-8xl text-white opacity-40" />
                     </div>
                   </div>
@@ -588,7 +376,7 @@ export default function HomePage() {
                       </Link>
                       <Link
                         to="/courses"
-                        className="p-3.5 bg-[#5b2233]/90 backdrop-blur-md hover:bg-[#5b2233] text-white rounded-xl transition-all duration-300 flex items-center justify-center border border-[#5b2233]/50 hover:border-[#5b2233] hover:scale-105 shadow-lg"
+                        className="p-3.5 bg-[#9b172a]/90 backdrop-blur-md hover:bg-[#9b172a] text-white rounded-xl transition-all duration-300 flex items-center justify-center border border-[#9b172a]/50 hover:border-[#7d1324] hover:scale-105 shadow-lg"
                       >
                         <FaArrowRight className="w-4 h-4" />
                       </Link>
@@ -597,7 +385,7 @@ export default function HomePage() {
 
                   {/* Hover Effect Indicator */}
                   <div className="absolute top-4 left-4 opacity-0 group-hover:opacity-100 transition-all duration-500 z-20">
-                    <div className="w-3 h-3 bg-[#5b2233] rounded-full animate-pulse shadow-lg"></div>
+                    <div className="w-3 h-3 bg-[#9b172a] rounded-full animate-pulse shadow-lg"></div>
                   </div>
 
                   {/* Bottom gradient for better text readability */}
@@ -622,110 +410,13 @@ export default function HomePage() {
             <div className="text-center mt-12">
               <Link
                 to="/courses"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#5b2233] via-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:via-[#5b2233] hover:to-[#5b2233] text-white font-semibold rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-[#9b172a] via-[#9b172a] to-[#9b172a] hover:from-[#7d1324] hover:via-[#7d1324] hover:to-[#7d1324] text-white font-semibold rounded-xl text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
               >
                 <span>عرض جميع المواد  </span>
                 <FaArrowRight />
               </Link>
             </div>
           )}
-        </div>
-      </section>
-
-      {/* Mobile App Download Section */}
-      <section className="py-20 bg-gradient-to-br from-[#5b2233]/5 via-[#5b2233]/5 to-[#5b2233]/5 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
-      
-          <div className="items-center">
-          
-            {/* Phone Mockup Side */}
-            <div className="relative flex justify-center">
-              <div className="relative">
-                {/* Phone Frame */}
-                <div className="relative w-80 h-[600px] bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
-                  <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
-                    {/* Status Bar */}
-                    <div className="bg-gray-50 h-12 flex items-center justify-between px-6 text-sm">
-                      <span className="font-medium">9:41</span>
-                      <div className="flex space-x-1">
-                        <div className="w-4 h-2 bg-gray-900 rounded-sm"></div>
-                        <div className="w-1 h-2 bg-gray-900 rounded-sm"></div>
-                        <div className="w-6 h-2 bg-[#5b2233] rounded-sm"></div>
-                      </div>
-                    </div>
-                    
-                    {/* App Content Preview */}
-                    <div className="p-6 space-y-6">
-                      {/* App Header */}
-                      <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-xl flex items-center justify-center">
-                          <img src={logo} alt="logo" className="w-12 h-12" />
-                        </div>
-                        <div>
-                          <h3 className="font-bold text-lg text-gray-900">منصة المختبر</h3>
-                          <p className="text-sm text-gray-600">منصة التعلم الذكية</p>
-                        </div>
-                      </div>
-
-                      {/* Course Cards Preview */}
-                      <div className="space-y-4">
-                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-gray-900">الكيمياء</h4>
-                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">جديد</span>
-                          </div>
-                          <p className="text-sm text-gray-600 mb-3"> الكيمياء </p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-[#5b2233] font-medium">30% مكتمل</span>
-                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
-                          </div>
-                        </div>
-
-                        <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 rounded-xl p-4">
-                          <div className="flex justify-between items-start mb-2">
-                            <h4 className="font-semibold text-gray-900">الكيمياء </h4>
-                            <span className="text-xs bg-[#5b2233]/10 text-[#5b2233] px-2 py-1 rounded-full">شائع</span>
-                          </div>
-                          <p className="text-sm text-gray-600 mb-3">  الكيمياء </p>
-                          <div className="flex justify-between items-center">
-                            <span className="text-sm text-[#5b2233] font-medium">75% مكتمل</span>
-                            <button className="bg-[#5b2233] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Features Preview */}
-                      <div className="bg-gray-50 rounded-xl p-4">
-                        <h4 className="font-semibold text-gray-900 mb-3">مميزات  المنصة</h4>
-                        <div className="space-y-2">
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">دروس تفاعلية</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">اختبارات ذكية</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FaCheckCircle className="text-[#5b2233] w-4 h-4 ml-2" />
-                            <span className="text-sm text-gray-700">شهادات معتمدة</span>
-                          </div>
-                        </div>
-                   
-                    </div>
-                  </div>
-                </div>
-
-                {/* Floating Elements */}
-                <div className="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-bounce">
-                  <FaDownload className="text-white text-2xl" />
-                </div>
-                
-                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-[#5b2233] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg animate-pulse">
-                  <FaMobile className="text-white text-xl" />
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -738,8 +429,8 @@ export default function HomePage() {
       dir="rtl"
       style={{ transitionDelay: '400ms' }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* blue Strip */}
-          <div className="w-full h-2 bg-[#5b2233] mb-8"></div>
+          {/* Red Strip */}
+          <div className="w-full h-2 bg-[#9b172a] mb-8"></div>
           
           {/* Section Header */}
           <div className={`text-center mb-16 transition-all duration-700 ease-out ${
@@ -763,7 +454,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '800ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaChartLine className="text-white text-xl" />
                 </div>
               </div>
@@ -783,7 +474,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '900ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaAward className="text-white text-xl" />
                 </div>
               </div>
@@ -803,7 +494,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '1000ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaCheckCircle className="text-white text-xl" />
                 </div>
               </div>
@@ -823,7 +514,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '1100ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaClock className="text-white text-xl" />
                 </div>
               </div>
@@ -843,7 +534,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '1200ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaComments className="text-white text-xl" />
                 </div>
               </div>
@@ -863,7 +554,7 @@ export default function HomePage() {
             }`}
             style={{ transitionDelay: '1300ms' }}>
               <div className="absolute top-4 right-4">
-                <div className="w-12 h-12 bg-[#5b2233] rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-[#9b172a] rounded-lg flex items-center justify-center">
                   <FaGraduationCap className="text-white text-xl" />
                 </div>
               </div>
@@ -1015,6 +706,10 @@ export default function HomePage() {
                   <div className="p-6">
                     <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-3">
                       <span className="flex items-center gap-1">
+                        <FaUser />
+                        {blog.author}
+                      </span>
+                      <span className="flex items-center gap-1">
                         <FaCalendar />
                         {formatDate(blog.createdAt)}
                       </span>
@@ -1028,10 +723,21 @@ export default function HomePage() {
                       {blog.excerpt || blog.content.substring(0, 150)}...
                     </p>
                     
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+                        <span className="flex items-center gap-1">
+                          <FaEye />
+                          {blog.views || 0}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <FaHeart />
+                          {blog.likes || 0}
+                        </span>
+                      </div>
+                      
                       <Link
                         to={`/blog/${blog._id}`}
-                        className="text-[#5b2233] hover:text-[#5b2233] dark:text-[#5b2233] dark:hover:text-[#5b2233] font-medium flex items-center gap-1 group"
+                        className="text-[#9b172a] hover:text-[#7d1324] dark:text-[#9b172a] dark:hover:text-[#7d1324] font-medium flex items-center gap-1 group"
                       >
                         اقرأ المزيد
                         <FaArrowRight className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -1055,8 +761,247 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className={`py-20 bg-gradient-to-r from-[#9b172a] via-[#9b172a] to-[#9b172a] transition-all duration-700 ease-out ${
+        heroLoaded 
+          ? 'opacity-100 translate-y-0' 
+          : 'opacity-0 translate-y-8'
+      }`}
+      style={{ transitionDelay: '3600ms' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className={`transition-all duration-700 ease-out ${
+            heroLoaded 
+              ? 'opacity-100 scale-100' 
+              : 'opacity-0 scale-95'
+          }`}
+          style={{ transitionDelay: '3800ms' }}>
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                          هل أنت مستعد لبدء رحلة التعلم؟
+            </h2>
+            <p className="text-xl text-red-100 mb-8 max-w-3xl mx-auto">
+              انضم إلى آلاف المتعلمين الذين نجحوا بالفعل في تغيير حياتهم المهنية من خلال موادنا التدريبية التي يقدمها خبراؤنا.
+            </p>
+          </div>
+          <div className={`flex flex-col sm:flex-row gap-4 justify-center items-center transition-all duration-700 ease-out ${
+            heroLoaded 
+              ? 'opacity-100 translate-y-0 scale-100' 
+              : 'opacity-0 translate-y-8 scale-95'
+          }`}
+          style={{ transitionDelay: '4000ms' }}>
+            <Link to="/signup">
+              <button className="px-8 py-4 bg-gradient-to-r from-[#9b172a] via-[#9b172a] to-[#9b172a] hover:from-[#7d1324] hover:via-[#7d1324] hover:to-[#7d1324] text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                ابدأ مجاناً
+              </button>
+            </Link>
+            
+            <Link to="/qa">
+              <button className="px-8 py-4 bg-[#9b172a] hover:bg-[#7d1324] text-white font-semibold rounded-full text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center gap-2">
+                <FaQuestionCircle className="w-5 h-5" />
+                اطرح سؤالاً
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+
+      {/* Mobile App Download Section */}
+      <section className="py-20 bg-gradient-to-br from-green-50 via-[#9b172a]-50 to-[#9b172a]-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Content Side */}
+            <div className="space-y-8">
+              <div className="space-y-6">
+                <div className="inline-flex items-center space-x-2 bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 px-4 py-2 rounded-full text-sm font-medium">
+                  <FaMobile className="w-4 h-4 ml-2" />
+                  <span>تطبيق الجوال متاح الآن</span>
+                </div>
+                
+                <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+                  حمّل التطبيق
+                  <span className="block text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-[#9b172a]">
+                    وتعلم في أي مكان
+                  </span>
+                </h2>
+                
+                <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                  احصل على أفضل تجربة تعليمية مع تطبيقنا المتطور. تعلم في أي وقت ومن أي مكان مع واجهة سهلة الاستخدام ومحتوى تفاعلي.
+                </p>
+              </div>
+
+              {/* Features List */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center">
+                    <FaDownload className="w-4 h-4 text-green-600 dark:text-green-400" />
+                  </div>
+                  <span className="text-gray-700 dark:text-gray-300 mr-3">اتصال بالانترنت  </span>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#9b172a]-100 dark:bg-[#9b172a]-900/20 rounded-full flex items-center justify-center">
+                    <FaPlay className="w-4 h-4 text-[#9b172a] dark:text-[#9b172a]-400" />
+                  </div>
+                  <span className="text-gray-700 dark:text-gray-300 mr-3">فيديوهات عالية الجودة</span>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#9b172a]-100 dark:bg-[#9b172a]-900/20 rounded-full flex items-center justify-center">
+                    <FaBookOpen className="w-4 h-4 text-[#9b172a] dark:text-[#9b172a]-400" />
+                  </div>
+                  <span className="text-gray-700 dark:text-gray-300 mr-3">مكتبة شاملة</span>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="flex-shrink-0 w-8 h-8 bg-[#9b172a]-100 dark:bg-[#9b172a]-900/20 rounded-full flex items-center justify-center">
+                    <FaCheckCircle className="w-4 h-4 text-[#9b172a] dark:text-[#9b172a]-400" />
+                  </div>
+                  <span className="text-gray-700 dark:text-gray-300 mr-3">تتبع التقدم</span>
+                </div>
+              </div>
+
+              {/* Download Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 pt-6">
+                {/* Direct APK Download Button */}
+                <button
+                  onClick={handleAPKDownload}
+                  className="group relative overflow-hidden bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-700 to-green-800 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <FaAndroid className="w-6 h-6 relative z-10 ml-3" />
+                  <div className="text-right relative z-10">
+                    <div className="text-sm opacity-90">حمّل مباشرة</div>
+                    <div className="font-bold">APK ملف</div>
+                  </div>
+                  <FaDownload className="w-5 h-5 relative z-10 mr-3" />
+                </button>
+
+                {/* Google Play Store Button (Future) */}
+                                  <button
+                    onClick={handlePlayStoreRedirect}
+                    className="group relative overflow-hidden bg-gradient-to-r from-[#9b172a] to-[#9b172a] hover:from-[#7d1324] hover:to-[#7d1324] text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center space-x-3"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#7d1324] to-[#7d1324] opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <FaGooglePlay className="w-6 h-6 relative z-10 ml-3" />
+                    <div className="text-right relative z-10">
+                      <div className="text-sm opacity-90">قريباً على</div>
+                      <div className="font-bold">Google Play</div>
+                    </div>
+                  </button>
+              </div>
+
+              {/* Download Stats */}
+              <div className="flex items-center space-x-8 pt-6 text-sm text-gray-600 dark:text-gray-400">
+                <div className="flex items-center space-x-2">
+                  <FaStar className="w-4 h-4 text-[#9b172a] ml-1" />
+                  <span>4.8 تقييم</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FaDownload className="w-4 h-4 text-[#9b172a] ml-1" />
+                  <span>+10k تحميل</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <FaUsers className="w-4 h-4 text-[#9b172a] ml-1" />
+                  <span>مجاني 100%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Phone Mockup Side */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative">
+                {/* Phone Frame */}
+                <div className="relative w-80 h-[600px] bg-gray-900 rounded-[3rem] p-2 shadow-2xl">
+                  <div className="w-full h-full bg-white rounded-[2.5rem] overflow-hidden relative">
+                    {/* Status Bar */}
+                    <div className="bg-gray-50 h-12 flex items-center justify-between px-6 text-sm">
+                      <span className="font-medium">9:41</span>
+                      <div className="flex space-x-1">
+                        <div className="w-4 h-2 bg-gray-900 rounded-sm"></div>
+                        <div className="w-1 h-2 bg-gray-900 rounded-sm"></div>
+                        <div className="w-6 h-2 bg-green-500 rounded-sm"></div>
+                      </div>
+                    </div>
+                    
+                    {/* App Content Preview */}
+                    <div className="p-6 space-y-6">
+                      {/* App Header */}
+                      <div className="flex items-center space-x-4" dir="rtl">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[#9b172a] to-[#9b172a] rounded-xl flex items-center justify-center">
+                          <img src={logo} alt="logo" className="w-12 h-12" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-lg text-gray-900">تطبيق دكتور أحمد</h3>
+                          <p className="text-sm text-gray-600">منصة التعلم الذكية</p>
+                        </div>
+                      </div>
+
+                      {/* Course Cards Preview */}
+                      <div className="space-y-4" dir="rtl" >
+                        <div className="bg-gradient-to-r from-[#9b172a] to-[#9b172a] rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-gray-900">الفيزياء</h4>
+                            <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">جديد</span>
+                          </div>
+                          <p className="text-sm text-gray-900 mb-3"> الفيزياء </p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-[#9b172a] font-medium">30% مكتمل</span>
+                            <button className="bg-[#9b172a] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
+                          </div>
+                        </div>
+
+                        <div className="bg-gradient-to-r from-green-50 to-[#9b172a]-50 rounded-xl p-4">
+                          <div className="flex justify-between items-start mb-2">
+                            <h4 className="font-semibold text-gray-900">علوم متكاملة </h4>
+                            <span className="text-xs bg-[#9b172a]-100 text-[#9b172a]-800 px-2 py-1 rounded-full">شائع</span>
+                          </div>
+                          <p className="text-sm text-gray-600 mb-3">  علوم متكاملة </p>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-green-600 font-medium">75% مكتمل</span>
+                            <button className="bg-[#9b172a] text-white px-4 py-1 rounded-full text-xs">متابعة</button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Features Preview */}
+                      <div className="bg-gray-50 rounded-xl p-4">
+                        <h4 className="font-semibold text-gray-900 mb-3">مميزات التطبيق</h4>
+                        <div className="space-y-2">
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-green-500 w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">دروس تفاعلية</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-green-500 w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">اختبارات ذكية</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <FaCheckCircle className="text-green-500 w-4 h-4 ml-2" />
+                            <span className="text-sm text-gray-700">شهادات معتمدة</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating Elements */}
+                <div className="absolute -top-6 -right-6 w-20 h-20 bg-gradient-to-br from-[#9b172a] to-[#9b172a] rounded-full flex items-center justify-center shadow-lg animate-bounce">
+                  <FaDownload className="text-white text-2xl" />
+                </div>
+                
+                <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-gradient-to-br from-[#9b172a] to-[#9b172a] rounded-full flex items-center justify-center shadow-lg animate-pulse">
+                  <FaMobile className="text-white text-xl" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Static FAQ Section */}
-      <section className="py-16 px-4 lg:px-20 bg-gradient-to-br from-gray-50 to-[#5b2233]/5 dark:from-gray-900 dark:to-gray-800" dir="rtl">
+      <section className="py-16 px-4 lg:px-20 bg-gradient-to-br from-gray-50 to-[#9b172a]-50 dark:from-gray-900 dark:to-gray-800" dir="rtl">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-gray-800 dark:text-white mb-4 text-right">
@@ -1099,26 +1044,26 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Phone */}
               <div className="flex items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center mr-4">
-                  <FaPhone className="text-[#5b2233] dark:text-[#5b2233] text-xl" />
+                <div className="flex-shrink-0 w-12 h-12 bg-[#9b172a]-100 dark:bg-[#9b172a]-900/20 rounded-full flex items-center justify-center mr-4">
+                  <FaPhone className="text-[#9b172a] dark:text-[#9b172a]-400 text-xl" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">الهاتف</h3>
-                  <a href="tel:01023530513" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
-                    01023530513
+                  <a href="tel:01120920153" className="text-[#9b172a] dark:text-[#9b172a]-400 hover:underline">
+                    01120920153
                   </a>
                 </div>
               </div>
 
               {/* WhatsApp */}
               <div className="flex items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center mr-4">
-                  <FaWhatsapp className="text-[#5b2233] dark:text-[#5b2233] text-xl" />
+                <div className="flex-shrink-0 w-12 h-12 bg-green-100 dark:bg-green-900/20 rounded-full flex items-center justify-center mr-4">
+                  <FaWhatsapp className="text-green-600 dark:text-green-400 text-xl" />
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">واتساب</h3>
-                  <a href="https://wa.me/+201023530513" className="text-[#5b2233] dark:text-[#5b2233] hover:underline">
-                  +201023530513
+                  <a href="https://wa.me/+201120920153" className="text-green-600 dark:text-green-400 hover:underline">
+                  +201120920153
                   </a>
                 </div>
               </div>
@@ -1131,10 +1076,10 @@ export default function HomePage() {
               </h3>
               <div className="flex flex-wrap justify-center gap-6 max-w-md mx-auto">
                 <a
-                  href="https://www.facebook.com/share/1BJhG243hw/?mibextid=wwXIfr"
+                  href="https://www.facebook.com/profile.php?id=100075431541020&mibextid=ZbWKwL"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#5b2233] hover:scale-105"
+                  className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
                   title="Facebook"
                 >
                   <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2 group-hover:bg-opacity-80 transition-colors">
@@ -1145,22 +1090,35 @@ export default function HomePage() {
                   </span>
                 </a>
                 <a
-                  href="https://www.instagram.com/elsaied_0?igsh=bnpjMWl5d3lmOXA3&utm_source=qr"
+                  href="https://youtube.com/@dr.ahmedali84?si=duv4lzCvpgCWnmVV"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#5b2233] hover:scale-105"
-                  title="Instagram"
+                  className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
+                  title="YouTube"
                 >
                   <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2 group-hover:bg-opacity-80 transition-colors">
-                    <FaInstagram className="text-2xl" />
+                    <FaYoutube className="text-2xl" />
                   </div>
                   <span className="text-xs font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
-                    Instagram
+                    YouTube
+                  </span>
+                </a>
+                <a href="https://www.tiktok.com/@dr.ahmedali.physics?_r=1&_d=dg3efc6k3359b4&sec_uid=MS4wLjABAAAAf3HmNa9tmQXpzXufto73qWhFAuMb7QK1HKizPgYa984_EqTuq2HByBzEeQmp2JY3&share_author_id=6906572971282154501&sharer_language=ar&source=h5_m&u_code=dg3efalj7m1c2m&timestamp=1757077792&user_id=6906572971282154501&sec_user_id=MS4wLjABAAAAf3HmNa9tmQXpzXufto73qWhFAuMb7QK1HKizPgYa984_EqTuq2HByBzEeQmp2JY3&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7528408886655780624&share_link_id=3e1ac305-cc82-4b23-a0f5-c268be509b9c&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb4907&social_share_type=5&enable_checksum=1" 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
+                  title="TikTok"
+                  >
+                  <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-2 group-hover:bg-opacity-80 transition-colors">
+                    <FaTiktok className="text-2xl" />
+                  </div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">
+                    TikTok
                   </span>
                 </a>
                 <a
-                  href="https://wa.me/01023530513"
-                  target="_blank"
+                  href="https://wa.me/01120920153"
+                  target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-green-500 hover:scale-105"
                   title="WhatsApp"
@@ -1177,14 +1135,14 @@ export default function HomePage() {
 
             {/* Additional Info */}
             <div className="mt-12 text-center">
-              <div className="bg-gradient-to-r from-[#5b2233]/10 to-[#5b2233]/10 dark:from-[#5b2233]/20 dark:to-[#5b2233]/20 rounded-2xl p-8">
+              <div className="bg-gradient-to-r from-red-50 to-red-50 dark:from-red-900/20 dark:to-red-900/20 rounded-2xl p-8">
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
                   لماذا تختار منصتنا؟
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <FaUser className="text-2xl text-[#5b2233] dark:text-[#5b2233]" />
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaUser className="text-2xl text-[#9b172a] dark:text-[#9b172a]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">دعم متخصص</h4>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -1192,8 +1150,8 @@ export default function HomePage() {
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <FaGlobe className="text-2xl text-[#5b2233] dark:text-[#5b2233]" />
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaGlobe className="text-2xl text-[#9b172a] dark:text-[#9b172a]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">مجتمع عالمي</h4>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -1201,8 +1159,8 @@ export default function HomePage() {
                     </p>
                   </div>
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-[#5b2233]/10 dark:bg-[#5b2233]/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <FaComments className="text-2xl text-[#5b2233] dark:text-[#5b2233]" />
+                    <div className="w-16 h-16 bg-red-100 dark:bg-red-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <FaComments className="text-2xl text-[#9b172a] dark:text-[#9b172a]" />
                     </div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">استجابة سريعة</h4>
                     <p className="text-gray-600 dark:text-gray-300">
@@ -1229,14 +1187,14 @@ export default function HomePage() {
                 href="https://fikra.solutions/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-[#5b2233] hover:text-[#5b2233] dark:text-[#5b2233] dark:hover:text-[#5b2233]"
+                className="font-semibold text-[#9b172a] hover:text-[#9b172a] dark:text-[#9b172a] dark:hover:text-[#7d1324]"
               >
                 Fikra Software
               </a>
             </p>
           </div>
           <div className="flex items-center justify-center">
-            <a href="https://fikra.solutions/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
+              <a href="https://fikra.solutions/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center">
               <img
                 src={fikraLogo}
                 alt="Fikra Software Logo"
@@ -1251,7 +1209,7 @@ export default function HomePage() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-[#5b2233] to-[#5b2233] hover:from-[#5b2233] hover:to-[#5b2233] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group"
+          className="fixed bottom-8 right-8 z-50 p-4 bg-gradient-to-r from-[#9b172a] to-[#9b172a] hover:from-[#7d1324] hover:to-[#7d1324] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group"
           aria-label="Scroll to top"
         >
           <FaArrowUp className="w-5 h-5 group-hover:animate-bounce" />
@@ -1260,132 +1218,15 @@ export default function HomePage() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/+201023530513"
+        href="https://wa.me/+201120920153"
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed left-8 bottom-8 z-50 p-4 bg-[#5b2233] hover:bg-[#5b2233] text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group animate-bounce"
+        className="fixed left-8 bottom-8 z-50 p-4 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group animate-bounce"
         aria-label="Contact us on WhatsApp"
         title="تواصل معنا على واتساب"
       >
         <FaWhatsapp className="w-6 h-6" />
       </a>
-
-      {/* Offer Modal - Mobile Responsive */}
-      {showOfferModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-1 sm:p-2 md:p-4 bg-black/50 backdrop-blur-sm">
-          <div className="relative bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900 rounded-lg sm:rounded-xl md:rounded-2xl shadow-2xl max-w-4xl w-full max-h-[98vh] sm:max-h-[95vh] md:max-h-[90vh] overflow-hidden animate-in zoom-in-95 duration-300 border-2 border-[#8B1538]">
-            {/* Close Button */}
-            <button
-              onClick={() => setShowOfferModal(false)}
-              className="absolute top-1 left-1 sm:top-2 sm:left-2 md:top-4 md:left-4 z-10 p-1.5 sm:p-2 bg-white/90 dark:bg-gray-700/90 rounded-full shadow-lg hover:bg-white dark:hover:bg-gray-600 transition-colors"
-              aria-label="إغلاق العرض"
-            >
-              <svg className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-gray-600 dark:text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <div className="flex flex-col lg:flex-row h-full">
-              {/* Image Section - Mobile: Full image, Desktop: Half */}
-              <div className="lg:w-1/2 flex-shrink-0 p-3 sm:p-4 md:p-6 lg:p-0">
-                <img
-                  src={offerImage}
-                  alt="عرض خاص - منصة المختبر"
-                  className="w-full h-72 sm:h-80 md:h-96 lg:h-full object-cover rounded-lg sm:rounded-xl lg:rounded-none"
-                />
-              </div>
-
-              {/* Content Section */}
-              <div className="lg:w-1/2 p-3 sm:p-4 md:p-6 lg:p-8 flex flex-col justify-center overflow-y-auto min-h-0" dir="rtl">
-                <div className="text-center mb-3 sm:mb-4 md:mb-6">
-                  <div className="inline-flex items-center gap-2 mb-2 sm:mb-3 md:mb-4">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[#8B1538] rounded-full flex items-center justify-center">
-                      <span className="text-white text-lg sm:text-xl">🇶🇦</span>
-                    </div>
-                    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#8B1538] to-[#5b2233] bg-clip-text text-transparent">
-                      عرض خاص محدود! 🎉
-                    </h2>
-                  </div>
-                  <p className="text-sm sm:text-base md:text-lg text-gray-600 dark:text-gray-300 px-2">
-                    احصل على خصم مجاني عند إحضار أصدقائك
-                  </p>
-                </div>
-
-                {/* Offer Details */}
-                <div className="space-y-2 sm:space-y-3 md:space-y-4 mb-4 sm:mb-6 md:mb-8">
-                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-gradient-to-r from-[#8B1538]/10 to-[#8B1538]/20 dark:from-[#8B1538]/20 dark:to-[#8B1538]/30 rounded-lg sm:rounded-xl border-2 border-[#8B1538]/30 dark:border-[#8B1538]/50">
-                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#8B1538] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-sm sm:text-base md:text-lg">2</span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-900 dark:text-white">أحضر صديقين</h3>
-                      <p className="text-[#8B1538] dark:text-[#8B1538]/80 font-semibold text-xs sm:text-sm md:text-base">احصل على 50% خصم</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 sm:gap-3 md:gap-4 p-2 sm:p-3 md:p-4 bg-gradient-to-r from-[#8B1538]/10 to-[#8B1538]/20 dark:from-[#8B1538]/20 dark:to-[#8B1538]/30 rounded-lg sm:rounded-xl border-2 border-[#8B1538]/30 dark:border-[#8B1538]/50">
-                    <div className="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#8B1538] to-[#5b2233] rounded-full flex items-center justify-center shadow-lg">
-                      <span className="text-white font-bold text-sm sm:text-base md:text-lg">4</span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="font-bold text-xs sm:text-sm md:text-base text-gray-900 dark:text-white">أحضر 4 أصدقاء</h3>
-                      <p className="text-[#8B1538] dark:text-[#8B1538]/80 font-semibold text-xs sm:text-sm md:text-base">احصل على 100% مجاناً!</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col gap-2 sm:gap-3 md:gap-4">
-                  <button
-                    onClick={() => setShowOfferModal(false)}
-                    className="w-full bg-gradient-to-r from-[#8B1538] to-[#5b2233] hover:from-[#5b2233] hover:to-[#8B1538] text-white font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base md:text-base min-h-[44px] border-2 border-[#8B1538]/20"
-                  >
-                    ابدأ الآن
-                  </button>
-                  
-                  {/* Share Button */}
-                  <button
-                    onClick={() => {
-                      if (navigator.share) {
-                        navigator.share({
-                          title: 'منصة المختبر التعليمية',
-                          text: 'اكتشف منصة المختبر التعليمية المميزة!',
-                          url: 'https://almoktabar.online/'
-                        });
-                      } else {
-                        navigator.clipboard.writeText('https://almoktabar.online/');
-                        if (window.toast) {
-                          window.toast.success('تم نسخ الرابط!');
-                        } else {
-                          alert('تم نسخ الرابط!');
-                        }
-                      }
-                    }}
-                    className="w-full bg-white dark:bg-gray-700 hover:bg-[#8B1538]/5 dark:hover:bg-[#8B1538]/10 text-[#8B1538] dark:text-[#8B1538]/90 font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 border-2 border-[#8B1538] flex items-center justify-center gap-2 text-sm sm:text-base md:text-base min-h-[44px]"
-                  >
-                    <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-                    </svg>
-                    <span>شارك مع الأصدقاء</span>
-                  </button>
-                  
-                  <button
-                    onClick={() => setShowOfferModal(false)}
-                    className="w-full bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 font-bold py-3 sm:py-4 md:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl transition-all duration-300 text-sm sm:text-base md:text-base min-h-[44px]"
-                  >
-                    لاحقاً
-                  </button>
-                </div>
-
-                {/* Terms */}
-                <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center mt-2 sm:mt-3 md:mt-4 leading-relaxed px-2">
-                  العرض صالح لفترة محدودة. شروط وأحكام تنطبق.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </Layout>
   );
 }

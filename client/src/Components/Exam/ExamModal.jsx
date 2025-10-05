@@ -15,12 +15,14 @@ import {
   FaArrowLeft,
   FaArrowRight,
   FaEye,
-  FaEyeSlash
+  FaEyeSlash,
+  FaHistory
 } from 'react-icons/fa';
 import { takeTrainingExam, takeFinalExam, clearExamError, clearLastExamResult } from '../../Redux/Slices/ExamSlice';
 import { axiosInstance } from '../../Helpers/axiosInstance';
 import { generateImageUrl } from '../../utils/fileUtils';
 import { toast } from 'react-hot-toast';
+import ExamHistoryModal from './ExamHistoryModal';
 
 const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType = 'training' }) => {
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
   const [timeTaken, setTimeTaken] = useState(0);
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
+  const [historyModalOpen, setHistoryModalOpen] = useState(false);
   
   const timerRef = useRef(null);
   const startTimeRef = useRef(null);
@@ -141,6 +144,21 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
 
   const handleSubmitExam = () => {
     if (loading) return;
+
+    // Show confirmation dialog
+    const answeredQuestions = Object.keys(answers).length;
+    const totalQuestions = questions.length;
+    const unansweredQuestions = totalQuestions - answeredQuestions;
+    
+    let confirmMessage = 'هل أنت متأكد من إنهاء الامتحان؟';
+    if (unansweredQuestions > 0) {
+      confirmMessage += `\n\nلديك ${unansweredQuestions} أسئلة لم يتم الإجابة عليها.`;
+    }
+    confirmMessage += '\n\nبعد إنهاء الامتحان لن تتمكن من العودة لتعديل الإجابات.';
+
+    if (!window.confirm(confirmMessage)) {
+      return; // User cancelled
+    }
 
     const timeTakenMinutes = Math.round((Date.now() - startTimeRef.current) / 60000);
     setTimeTaken(timeTakenMinutes);
@@ -246,7 +264,7 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
               key={optionIndex}
               className={`flex items-center p-4 rounded-lg border-2 cursor-pointer transition-all duration-200 ${
                 answers[currentQuestionIndex] === optionIndex
-                  ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                  ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20'
                   : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
               }`}
             >
@@ -260,7 +278,7 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
               />
               <div className={`w-5 h-5 rounded-full border-2 mr-3 flex items-center justify-center ${
                 answers[currentQuestionIndex] === optionIndex
-                  ? 'border-blue-500 bg-blue-500'
+                  ? 'border-orange-500 bg-orange-500'
                   : 'border-gray-300 dark:border-gray-500'
               }`}>
                 {answers[currentQuestionIndex] === optionIndex && (
@@ -291,7 +309,7 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
             onClick={() => setCurrentQuestionIndex(index)}
             className={`w-10 h-10 rounded-lg text-sm font-medium transition-all duration-200 ${
               index === currentQuestionIndex
-                ? 'bg-blue-600 text-white'
+                ? 'bg-orange-600 text-white'
                 : getQuestionStatus(index) === 'answered'
                 ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-2 border-green-300'
                 : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
@@ -351,8 +369,8 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg text-center">
-            <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{percentage}%</div>
+          <div className="bg-orange-50 dark:bg-orange-900/20 p-4 rounded-lg text-center">
+            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{percentage}%</div>
             <div className="text-sm text-gray-600 dark:text-gray-300">النسبة المئوية</div>
           </div>
           
@@ -375,14 +393,21 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
           
           <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
             <span className="text-gray-700 dark:text-gray-300">الوقت المستغرق</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">{timeTaken} دقيقة</span>
+            <span className="font-semibold text-orange-600 dark:text-orange-400">{timeTaken} دقيقة</span>
           </div>
         </div>
 
-        <div className="mt-6">
+        <div className="mt-6 space-y-3">
+            <button
+              onClick={() => setHistoryModalOpen(true)}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <FaHistory />
+              مراجعة الأسئلة والإجابات
+            </button>
           <button
             onClick={onClose}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
+            className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 px-4 rounded-lg font-medium transition-colors"
           >
             إغلاق
           </button>
@@ -397,11 +422,11 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm">
       <div className="bg-gray-100 dark:bg-gray-900 rounded-2xl shadow-2xl w-full max-w-6xl max-h-[95vh] overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-blue-600 text-white p-6">
+        <div className="bg-gradient-to-r from-orange-600 to-orange-600 text-white p-6">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold">{exam.title}</h2>
-              <p className="text-blue-100 mt-1">{exam.description}</p>
+              <p className="text-orange-100 mt-1">{exam.description}</p>
             </div>
             <button
               onClick={handleClose}
@@ -448,7 +473,7 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
                 <button
                   onClick={handleStartExam}
                   disabled={loading}
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg font-medium text-lg transition-colors disabled:opacity-50"
+                  className="w-full bg-orange-600 hover:bg-orange-700 text-white py-3 px-6 rounded-lg font-medium text-lg transition-colors disabled:opacity-50"
                 >
                   {loading ? 'جاري التحميل...' : 'ابدأ الامتحان'}
                 </button>
@@ -530,6 +555,17 @@ const ExamModal = ({ isOpen, onClose, exam, courseId, lessonId, unitId, examType
           </div>
         </div>
       )}
+
+      {/* Exam History Modal */}
+      <ExamHistoryModal
+        isOpen={historyModalOpen}
+        onClose={() => setHistoryModalOpen(false)}
+        exam={exam}
+        courseId={courseId}
+        lessonId={lessonId}
+        examType={examType}
+        examResult={lastExamResult}
+      />
     </div>
   );
 };

@@ -8,7 +8,8 @@ const WatchButton = ({
   className = "",
   showIcon = true,
   variant = "primary", // primary, secondary, outline
-  showButton = true // New prop to control button visibility
+  showButton = true, // New prop to control button visibility
+  disabled = false
 }) => {
 
 
@@ -19,7 +20,7 @@ const WatchButton = ({
       case "primary":
         return `${baseStyles} bg-green-600 hover:bg-green-700 text-white`;
       case "secondary":
-        return `${baseStyles} bg-blue-600 hover:bg-blue-700 text-white`;
+        return `${baseStyles} bg-orange-600 hover:bg-orange-700 text-white`;
       case "outline":
         return `${baseStyles} border border-green-600 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/20`;
       default:
@@ -49,8 +50,12 @@ const WatchButton = ({
 
   return (
     <button
-      onClick={() => onWatch && onWatch(item, purchaseType)}
-      className={`${getButtonStyles()} ${className}`}
+      onClick={() => {
+        if (disabled) return;
+        onWatch && onWatch(item, purchaseType);
+      }}
+      disabled={disabled}
+      className={`${getButtonStyles()} ${disabled ? 'opacity-60 cursor-not-allowed' : ''} ${className}`}
     >
       {getIcon()}
       <span>{getText()}</span>

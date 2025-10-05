@@ -76,14 +76,14 @@ const CheckpointDetails = ({ checkpoints = [], currentTime = 0, reachedCheckpoin
         })}
       </div>
       
-      <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-700">
-        <div className="text-sm text-blue-800 dark:text-blue-200">
+      <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-700">
+        <div className="text-sm text-orange-800 dark:text-orange-200">
           <strong>Progress Summary:</strong>
         </div>
-        <div className="text-xs text-blue-600 dark:text-blue-300 mt-1">
+        <div className="text-xs text-orange-600 dark:text-orange-300 mt-1">
           • {checkpoints.filter(cp => cp.reached).length} of {checkpoints.length} checkpoints reached
         </div>
-        <div className="text-xs text-blue-600 dark:text-blue-300">
+        <div className="text-xs text-orange-600 dark:text-orange-300">
           • Current progress: {(() => {
             const maxTime = checkpoints[checkpoints.length - 1]?.time || 1;
             return maxTime > 0 ? Math.round((currentTime / maxTime) * 100) : 0;

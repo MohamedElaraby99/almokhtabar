@@ -227,7 +227,7 @@ const CourseModal = ({ course, onClose, isOpen }) => {
             <button
               type="submit"
               disabled={createLoading || updateLoading}
-              className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-6 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {createLoading || updateLoading ? 'جاري الحفظ...' : (course ? 'تحديث' : 'إنشاء')}
             </button>

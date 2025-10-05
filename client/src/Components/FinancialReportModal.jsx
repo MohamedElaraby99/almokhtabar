@@ -209,15 +209,15 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="summary-card bg-green-100 p-4 rounded-lg text-center">
             <h3 className="font-bold text-green-800">إجمالي الدخل</h3>
-            <p className="text-2xl font-bold text-green-900">{formatAmount(summary.totalIncome)} ريال قطري</p>
+            <p className="text-2xl font-bold text-green-900">{formatAmount(summary.totalIncome)} جنيه</p>
           </div>
           <div className="summary-card bg-red-100 p-4 rounded-lg text-center">
             <h3 className="font-bold text-red-800">إجمالي المصروفات</h3>
-            <p className="text-2xl font-bold text-red-900">{formatAmount(summary.totalExpenses)} ريال قطري</p>
+            <p className="text-2xl font-bold text-red-900">{formatAmount(summary.totalExpenses)} جنيه</p>
           </div>
-          <div className="summary-card bg-blue-100 p-4 rounded-lg text-center">
-            <h3 className="font-bold text-blue-800">صافي الربح</h3>
-            <p className="text-2xl font-bold text-blue-900">{formatAmount(summary.netProfit)} ريال قطري</p>
+          <div className="summary-card bg-orange-100 p-4 rounded-lg text-center">
+            <h3 className="font-bold text-orange-800">صافي الربح</h3>
+            <p className="text-2xl font-bold text-orange-900">{formatAmount(summary.netProfit)} جنيه</p>
           </div>
           <div className="summary-card bg-orange-100 p-4 rounded-lg text-center">
             <h3 className="font-bold text-orange-800">عدد المعاملات</h3>
@@ -244,7 +244,7 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
                     <td className="border border-gray-300 px-4 py-2 text-center">{index + 1}</td>
                     <td className="border border-gray-300 px-4 py-2">{safeText(student.studentName || student.username, 'طالب مجهول')}</td>
                     <td className="border border-gray-300 px-4 py-2 text-center">{formatInt(student.paymentCount)}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-center">{formatAmount(student.totalPaid)} ريال قطري</td>
+                    <td className="border border-gray-300 px-4 py-2 text-center">{formatAmount(student.totalPaid)} جنيه</td>
                   </tr>
                 ))}
               </tbody>
@@ -273,7 +273,7 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
                     {transaction.type === 'income' ? 'إيراد' : 'مصروف'}
                   </td>
                   <td className="border border-gray-300 px-2 py-2">{safeText(transaction.description)}</td>
-                  <td className="border border-gray-300 px-2 py-2 text-center">{formatAmount(transaction.amount)} ريال قطري</td>
+                  <td className="border border-gray-300 px-2 py-2 text-center">{formatAmount(transaction.amount)} جنيه</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">{formatGBDate(transaction.transactionDate)}</td>
                   <td className="border border-gray-300 px-2 py-2 text-center">{arabicStatus[transaction.status] || transaction.status}</td>
                   <td className="border border-gray-300 px-2 py-2">
@@ -329,7 +329,7 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
                 name="reportType"
                 value={reportData.reportType}
                 onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white"
               >
                 <option value="comprehensive">تقرير شامل (إيرادات ومصروفات)</option>
                 <option value="income">تقرير الإيرادات فقط</option>
@@ -350,7 +350,7 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
                   name="startDate"
                   value={reportData.startDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white"
                   required
                 />
               </div>
@@ -364,7 +364,7 @@ const FinancialReportModal = ({ isOpen, onClose }) => {
                   name="endDate"
                   value={reportData.endDate}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 dark:bg-gray-700 dark:text-white"
                   required
                 />
               </div>

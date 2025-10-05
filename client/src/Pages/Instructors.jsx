@@ -48,7 +48,7 @@ export default function Instructors() {
         <FaStar
           key={i}
           className={`w-4 h-4 ${
-            i <= rating ? 'text-blue-400' : 'text-gray-300'
+            i <= rating ? 'text-orange-400' : 'text-gray-300'
           }`}
         />
       );
@@ -64,10 +64,10 @@ export default function Instructors() {
   if (loading) {
     return (
       <Layout>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+        <div className="min-h-screen bg-gradient-to-br from-orange-50 via-indigo-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
           <div className="container mx-auto px-4 py-16">
             <div className="flex items-center justify-center">
-              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+              <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600"></div>
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@ export default function Instructors() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-indigo-50 to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900" dir="rtl">
         {/* Hero Section */}
         <section className="py-16">
           <div className="container mx-auto px-4">
@@ -101,7 +101,7 @@ export default function Instructors() {
                       placeholder="البحث في المدرسين..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pr-10 pl-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="w-full pr-10 pl-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     />
                   </div>
                 </div>
@@ -116,7 +116,7 @@ export default function Instructors() {
                   className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
                 >
                   {/* Instructor Header */}
-                  <div className="relative p-6 bg-gradient-to-r from-blue-500 to-blue-600">
+                  <div className="relative p-6 bg-gradient-to-r from-orange-500 to-orange-600">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
                         {instructor.profileImage?.secure_url ? (
@@ -136,7 +136,7 @@ export default function Instructors() {
                         </div>
                       </div>
                       {instructor.featured && (
-                        <span className="bg-blue-400 text-blue-900 px-2 py-1 rounded-full text-xs font-semibold">
+                        <span className="bg-orange-400 text-orange-900 px-2 py-1 rounded-full text-xs font-semibold">
                           مميز
                         </span>
                       )}
@@ -190,7 +190,7 @@ export default function Instructors() {
                               href={instructor.socialLinks.linkedin}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                              className="text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
                             >
                               <FaLinkedin size={16} />
                             </a>
@@ -200,7 +200,7 @@ export default function Instructors() {
                               href={instructor.socialLinks.twitter}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-400 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-200"
+                              className="text-orange-400 hover:text-orange-600 dark:text-orange-300 dark:hover:text-orange-200"
                             >
                               <FaTwitter size={16} />
                             </a>
@@ -210,7 +210,7 @@ export default function Instructors() {
                                href={instructor.socialLinks.facebook}
                                target="_blank"
                                rel="noopener noreferrer"
-                               className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                               className="text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-200"
                              >
                                <FaFacebook size={16} />
                              </a>
@@ -232,7 +232,7 @@ export default function Instructors() {
                     <div className="flex justify-center">
                       <button
                         onClick={() => handleViewDetails(instructor)}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                        className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
                       >
                         <FaEye />
                         عرض التفاصيل
@@ -373,7 +373,7 @@ export default function Instructors() {
                                    href={selectedInstructor.socialLinks.linkedin}
                                    target="_blank"
                                    rel="noopener noreferrer"
-                                   className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                                   className="text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
                                  >
                                    <FaLinkedin size={20} />
                                  </a>
@@ -383,7 +383,7 @@ export default function Instructors() {
                                    href={selectedInstructor.socialLinks.twitter}
                                    target="_blank"
                                    rel="noopener noreferrer"
-                                   className="text-blue-400 hover:text-blue-600 dark:text-blue-300 dark:hover:text-blue-200"
+                                   className="text-orange-400 hover:text-orange-600 dark:text-orange-300 dark:hover:text-orange-200"
                                  >
                                    <FaTwitter size={20} />
                                  </a>
@@ -393,7 +393,7 @@ export default function Instructors() {
                                     href={selectedInstructor.socialLinks.facebook}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                                    className="text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-200"
                                   >
                                     <FaFacebook size={20} />
                                   </a>

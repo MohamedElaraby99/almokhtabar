@@ -247,7 +247,7 @@ const GradeDashboard = () => {
               </div>
               <button
                 onClick={openCreateModal}
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2"
               >
                 <FaPlus />
                 Add Grade
@@ -259,8 +259,8 @@ const GradeDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
               <div className="flex items-center">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <FaGraduationCap className="text-blue-600 dark:text-blue-400 text-xl" />
+                <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                  <FaGraduationCap className="text-orange-600 dark:text-orange-400 text-xl" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Grades</p>
@@ -285,8 +285,8 @@ const GradeDashboard = () => {
 
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
               <div className="flex items-center">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <FaBook className="text-blue-600 dark:text-blue-400 text-xl" />
+                <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                  <FaBook className="text-orange-600 dark:text-orange-400 text-xl" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Total Subjects</p>
@@ -297,8 +297,8 @@ const GradeDashboard = () => {
 
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
               <div className="flex items-center">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <FaUsers className="text-blue-600 dark:text-blue-400 text-xl" />
+                <div className="p-3 bg-orange-100 dark:bg-orange-900 rounded-lg">
+                  <FaUsers className="text-orange-600 dark:text-orange-400 text-xl" />
                 </div>
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Linked Subjects</p>
@@ -321,7 +321,7 @@ const GradeDashboard = () => {
                     placeholder="Search grades..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   />
                 </div>
               </div>
@@ -329,7 +329,7 @@ const GradeDashboard = () => {
                 <select
                   value={filterActive}
                   onChange={(e) => setFilterActive(e.target.value)}
-                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                  className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                 >
                   <option value="all">All Grades</option>
                   <option value="active">Active Only</option>
@@ -343,7 +343,7 @@ const GradeDashboard = () => {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
             {loading ? (
               <div className="p-8 text-center">
-                <FaSpinner className="animate-spin text-4xl text-blue-500 mx-auto mb-4" />
+                <FaSpinner className="animate-spin text-4xl text-orange-500 mx-auto mb-4" />
                 <p className="text-gray-600 dark:text-gray-400">Loading grades...</p>
               </div>
             ) : filteredGrades.length === 0 ? (
@@ -384,7 +384,7 @@ const GradeDashboard = () => {
                       <tr key={grade._id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex items-center">
-                            <FaGraduationCap className="text-blue-500 mr-3" />
+                            <FaGraduationCap className="text-orange-500 mr-3" />
                             <div>
                               <div className="text-sm font-medium text-gray-900 dark:text-white">
                                 {grade.name}
@@ -402,13 +402,13 @@ const GradeDashboard = () => {
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex items-center">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
                               {grade.subjects?.length || 0} subjects
                             </span>
                             {grade.subjects && grade.subjects.length > 0 && (
                               <button
                                 onClick={() => openSubjectsModal(grade)}
-                                className="ml-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                                className="ml-2 text-orange-600 hover:text-orange-800 dark:text-orange-400 dark:hover:text-orange-300"
                               >
                                 <FaEye className="text-sm" />
                               </button>
@@ -428,7 +428,7 @@ const GradeDashboard = () => {
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => openEditModal(grade)}
-                              className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"
+                              className="text-orange-600 hover:text-orange-900 dark:text-orange-400 dark:hover:text-orange-300"
                             >
                               <FaEdit />
                             </button>
@@ -479,7 +479,7 @@ const GradeDashboard = () => {
                       name="name"
                       value={gradeForm.name}
                       onChange={handleFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                       placeholder="Enter grade name"
                       required
                     />
@@ -493,7 +493,7 @@ const GradeDashboard = () => {
                       value={gradeForm.description}
                       onChange={handleFormChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                       placeholder="Enter grade description"
                     />
                   </div>
@@ -508,7 +508,7 @@ const GradeDashboard = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
                   >
                     Create Grade
                   </button>
@@ -542,7 +542,7 @@ const GradeDashboard = () => {
                       name="name"
                       value={gradeForm.name}
                       onChange={handleFormChange}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                       placeholder="Enter grade name"
                       required
                     />
@@ -556,7 +556,7 @@ const GradeDashboard = () => {
                       value={gradeForm.description}
                       onChange={handleFormChange}
                       rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                       placeholder="Enter grade description"
                     />
                   </div>
@@ -566,7 +566,7 @@ const GradeDashboard = () => {
                         type="checkbox"
                         checked={gradeForm.isActive !== false}
                         onChange={(e) => setGradeForm(prev => ({ ...prev, isActive: e.target.checked }))}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                       />
                       <span className="ml-2 text-sm text-gray-700 dark:text-gray-300">Active</span>
                     </label>
@@ -582,7 +582,7 @@ const GradeDashboard = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                    className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
                   >
                     Update Grade
                   </button>
@@ -682,7 +682,7 @@ const GradeDashboard = () => {
                             type="checkbox"
                             checked={selectedSubjects.includes(subject._id)}
                             onChange={(e) => handleSubjectChange(subject._id, e.target.checked)}
-                            className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                            className="rounded border-gray-300 text-orange-600 focus:ring-orange-500"
                           />
                           <div className="ml-3">
                             <div className="text-sm font-medium text-gray-900 dark:text-white">
@@ -711,7 +711,7 @@ const GradeDashboard = () => {
                 <button
                   onClick={handleAddSubjects}
                   disabled={selectedSubjects.length === 0}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Add Selected Subjects
                 </button>

@@ -30,7 +30,6 @@ const createAdminUser = async () => {
     
     // Create admin user - don't hash password manually, let the model handle it
     const adminUser1 = {
-      username: 'adminn',
       fullName: 'System Administrator',
       email: 'adminn@api.com',
       password: '1234567', // Will be hashed by the pre-save middleware
@@ -40,7 +39,7 @@ const createAdminUser = async () => {
 
     const adminUser = new User(adminUser1);
 
-    const existingAdmin = await User.findOne({ username: adminUser1.username }).exec();
+    const existingAdmin = await User.findOne({ email: adminUser1.email }).exec();
     
     if (existingAdmin) {
       console.log('Admin user already exists:', existingAdmin.email , existingAdmin.username);
@@ -52,7 +51,6 @@ const createAdminUser = async () => {
     
     console.log('✅ Admin user created successfully!');
     console.log('📧 Email: adminn@api.com');
-    console.log('👤 Username: adminn');
     console.log('🔐 Password: 123456');
     console.log('👑 Role: ADMIN');
     console.log('\n💡 You can now login with these credentials');

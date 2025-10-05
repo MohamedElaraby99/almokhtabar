@@ -22,12 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-/uploads
-/uploads/avatars
-/uploads/videos
-/uploads/pdfs
-/uploads/images
-/uploads/documents
-/uploads/audio
-/uploads/other

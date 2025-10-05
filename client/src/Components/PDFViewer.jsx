@@ -232,7 +232,7 @@ const PDFViewer = ({
                     <p className="text-gray-300 text-xs sm:text-sm">Page {currentPage} of {totalPages}</p>
                   )}
                   {pageImages[0]?.isFallback && (
-                    <span className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded">
+                    <span className="text-xs bg-orange-500/20 text-orange-300 px-2 py-1 rounded">
                       Fallback Mode
                     </span>
                   )}
@@ -265,7 +265,7 @@ const PDFViewer = ({
               {/* Progress Bar */}
               <div className="w-full bg-white/20 rounded-full h-3 mb-4">
                 <div 
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-300"
                   style={{ width: `${conversionProgress}%` }}
                 ></div>
               </div>

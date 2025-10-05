@@ -57,13 +57,13 @@ export default function BlogList() {
                 placeholder="البحث في المدونات..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
               />
             </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-right"
+              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-right"
             >
               <option value="">جميع الفئات</option>
               {categories.map((cat) => (
@@ -75,7 +75,7 @@ export default function BlogList() {
           {/* Blog Grid */}
           {loading ? (
             <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
               <p className="mt-4 text-gray-600 dark:text-gray-300">جاري تحميل المدونات...</p>
             </div>
           ) : (
@@ -121,7 +121,7 @@ export default function BlogList() {
                         {blog.tags.slice(0, 3).map((tag, index) => (
                           <span
                             key={index}
-                            className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full"
+                            className="px-2 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs rounded-full"
                           >
                             {tag}
                           </span>
@@ -149,7 +149,7 @@ export default function BlogList() {
                     {/* Read More Button */}
                     <Link
                       to={`/blog/${blog._id}`}
-                      className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
+                      className="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg transition-colors duration-200"
                     >
                       اقرأ المزيد
                     </Link>

@@ -89,11 +89,11 @@ export default function CourseDashboard() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8" dir="rtl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <div className="mx-auto h-16 w-16 bg-gradient-to-r from-blue-600 to-blue-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
+            <div className="mx-auto h-16 w-16 bg-gradient-to-r from-orange-600 to-orange-600 rounded-full flex items-center justify-center mb-4 shadow-lg">
               <FaBook className="h-8 w-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
@@ -111,7 +111,7 @@ export default function CourseDashboard() {
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex items-center gap-4">
-                <FaFilter className="text-blue-500 text-xl" />
+                <FaFilter className="text-orange-500 text-xl" />
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                   تصفية وبحث
                 </h2>
@@ -120,7 +120,7 @@ export default function CourseDashboard() {
               {(role === 'ADMIN' || role === 'SUPER_ADMIN') && (
                 <button
                   onClick={handleCreateCourse}
-                  className="bg-gradient-to-r from-blue-600 to-blue-600 hover:from-blue-700 hover:to-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="bg-gradient-to-r from-orange-600 to-orange-600 hover:from-orange-700 hover:to-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105"
                 >
                   <FaPlus className="text-sm" />
                   إضافة دورة جديدة

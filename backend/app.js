@@ -24,13 +24,11 @@ import deviceManagementRoutes from './routes/deviceManagement.routes.js';
 import liveMeetingRoutes from './routes/liveMeeting.routes.js';
 import captchaRoutes from './routes/captcha.routes.js';
 import courseAccessRoutes from './routes/courseAccess.routes.js';
-import unitAccessRoutes from './routes/unitAccess.routes.js';
 import attendanceRoutes from './routes/attendance.routes.js';
 import groupRoutes from './routes/group.routes.js';
 import financialRoutes from './routes/financial.routes.js';
 import courseNotificationRoutes from './routes/courseNotification.routes.js';
 import achievementsRoutes from './routes/achievements.routes.js';
-import liveScheduleRoutes from './routes/liveSchedule.routes.js';
 
 import gradeRoutes from './routes/grade.routes.js';
 import offlineGradeRoutes from './routes/offlineGrade.routes.js';
@@ -46,8 +44,16 @@ import { toCairoISOString } from './utils/timezone.js';
 const app = express();
 
 // middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ 
+  limit: '50mb', // Increased from default ~1mb to 50mb
+  parameterLimit: 50000, // Increase parameter limit for large objects
+  type: 'application/json'
+})); 
+app.use(express.urlencoded({ 
+  extended: true, 
+  limit: '50mb', // Increased from default ~1mb to 50mb
+  parameterLimit: 50000 // Increase parameter limit for large objects
+})); 
 app.use(cookieParser());
 app.use(morgan('dev'));
 
@@ -303,13 +309,11 @@ app.use('/api/v1/device-management', deviceManagementRoutes);
 app.use('/api/v1/live-meetings', liveMeetingRoutes);
 app.use('/api/v1/captcha', captchaRoutes);
 app.use('/api/v1/course-access', courseAccessRoutes);
-app.use('/api/v1/unit-access', unitAccessRoutes);
 app.use('/api/v1/attendance', attendanceRoutes);
 app.use('/api/v1/groups', groupRoutes);
 app.use('/api/v1/financial', financialRoutes);
 app.use('/api/v1/notifications', courseNotificationRoutes);
 app.use('/api/v1/achievements', achievementsRoutes);
-app.use('/api/v1/live-schedules', liveScheduleRoutes);
 
 // Apply device authorization middleware to protected routes
 app.use('/api/v1/courses', checkDeviceAuthorization, logDeviceAccess);
@@ -330,6 +334,19 @@ app.use('/api/v1/achievements', achievementRoutes);
 app.use('/api/v1/instructors', instructorRoutes);
 app.use('/api/v1/stages', stageRoutes);
  
+
+// Handle payload too large errors specifically
+app.use((error, req, res, next) => {
+  if (error.type === 'entity.too.large') {
+    return res.status(413).json({
+      success: false,
+      message: 'Payload too large. Please reduce the size of your request.',
+      error: 'The request body exceeds the maximum allowed size of 50MB.',
+      code: 'PAYLOAD_TOO_LARGE'
+    });
+  }
+  next(error);
+});
 
 app.all('*', (req, res) => {
     res.status(404).send('OOPS!! 404 page not found');

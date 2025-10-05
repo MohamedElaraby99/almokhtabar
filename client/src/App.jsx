@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Routes, Route } from "react-router-dom";
 import useScrollToTop from "./Helpers/useScrollToTop";
 import DeviceProtection from "./Components/DeviceProtection";
-import LoadingScreen from "./Components/LoadingScreen";
 import HomePage from "./Pages/HomePage";
 import AboutUs from "./Pages/About";
 import NotFound from "./Pages/NotFound";
@@ -41,8 +40,6 @@ import InstructorDetail from "./Pages/InstructorDetail";
 import CourseContentManager from './Pages/Dashboard/CourseContentManager';
 import CoursesPage from './Pages/Courses/CoursesPage';
 import CourseDetail from './Pages/Courses/CourseDetail';
-import PremiumPlan from "./Pages/Plans/PremiumPlan";
-import BasicPlan from "./Pages/Plans/BasicPlan";
 
 import RequireAuth from "./Components/auth/RequireAuth";
 import RedirectIfAuthenticated from "./Components/auth/RedirectIfAuthenticated";
@@ -58,7 +55,6 @@ import ExamResultsDashboard from "./Pages/Dashboard/ExamResultsDashboard";
 import LiveMeetings from "./Pages/User/LiveMeetings";
 import ExamHistory from "./Pages/User/ExamHistory";
 import AdminCourseAccessCodes from "./Pages/Dashboard/AdminCourseAccessCodes";
-import AdminUnitAccessCodes from "./Pages/Dashboard/AdminUnitAccessCodes";
 import ExamSearchDashboard from "./Pages/Dashboard/ExamSearchDashboard";
 import EssayExamDashboard from "./Pages/Dashboard/EssayExamDashboard";
 import AttendanceDashboard from "./Pages/Dashboard/AttendanceDashboard";
@@ -74,23 +70,6 @@ import Achievements from "./Pages/Dashboard/Achievements";
 function App() {
   // Auto scroll to top on route change
   useScrollToTop();
-  
-  // Loading state
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    // Simulate app initialization time
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 3000); // 3 seconds loading time
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Show loading screen while app is initializing
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
 
   return (
     <DeviceProtection>
@@ -127,8 +106,6 @@ function App() {
         <Route path="/subjects" element={<SubjectList />} />
         <Route path="/courses" element={<CoursesPage />} />
         <Route path="/courses/:id" element={<CourseDetail />} />
-        <Route path="/plans/basic" element={<BasicPlan />} />
-        <Route path="/plans/premium" element={<PremiumPlan />} />
 
                   <Route element={<RequireAuth allowedRoles={["ADMIN", "SUPER_ADMIN"]} />}>
                     <Route path="/exam-history" element={<ExamHistory />} />
@@ -152,7 +129,6 @@ function App() {
                     <Route path="/admin/exam-search" element={<ExamSearchDashboard />} />
                     <Route path="/admin/essay-exams" element={<EssayExamDashboard />} />
                     <Route path="/admin/course-access-codes" element={<AdminCourseAccessCodes />} />
-                    <Route path="/admin/unit-access-codes" element={<AdminUnitAccessCodes />} />
                     <Route path="/admin/attendance" element={<AttendanceDashboard />} />
                     <Route path="/admin/center-management" element={<CenterManagementDashboard />} />
                     <Route path="/admin/center-management/overview" element={<Overview />} />

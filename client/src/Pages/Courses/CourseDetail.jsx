@@ -31,13 +31,12 @@ import {
   FaUnlock,
   FaWallet,
   FaTimes,
-  FaClipboardList,
-  FaExclamationTriangle
+  FaExclamationTriangle,
+  FaClipboardList
 } from 'react-icons/fa';
 import { generateImageUrl } from '../../utils/fileUtils';
 import { placeholderImages } from '../../utils/placeholderImages';
 import { checkCourseAccess, redeemCourseAccessCode } from '../../Redux/Slices/CourseAccessSlice';
-import { checkUnitAccess, redeemUnitAccessCode } from '../../Redux/Slices/UnitAccessSlice';
 import { axiosInstance } from '../../Helpers/axiosInstance';
 import RemainingDaysLabel from '../../Components/RemainingDaysLabel';
 
@@ -49,7 +48,6 @@ export default function CourseDetail() {
   const { walletBalance, purchaseStatus, loading: paymentLoading } = useSelector((state) => state.payment);
   const { data: user, isLoggedIn } = useSelector((state) => state.auth);
   const courseAccessState = useSelector((state) => state.courseAccess.byCourseId[id]);
-  const unitAccessState = useSelector((state) => state.unitAccess);
   const [accessAlertShown, setAccessAlertShown] = useState(false);
   const hidePrices = !!courseAccessState?.hasAccess && courseAccessState?.source === 'code';
   const hasAnyPurchase = (() => {
@@ -69,46 +67,6 @@ export default function CourseDetail() {
   const [showLessonModal, setShowLessonModal] = useState(false);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [redeemCode, setRedeemCode] = useState('');
-  const [unitRedeemCode, setUnitRedeemCode] = useState('');
-  const [selectedUnitForCode, setSelectedUnitForCode] = useState('');
-
-  // External payment/contact configuration
-  const basicSkrillLink = import.meta.env?.VITE_SKRILL_BASIC_LINK || 'https://skrill.me/rq/Ahmed/150/QAR?key=T2ptRPGDxrNtMSgLLQ3izHOXDm5';
-  const premiumSkrillLink = import.meta.env?.VITE_SKRILL_PREMIUM_LINK || 'https://skrill.me/rq/Ahmed/500/QAR?key=JxY1LTe2VuNFqUldcn6l8neFxXo';
-  const whatsappNumber = import.meta.env?.VITE_WHATSAPP_NUMBER || '+201023530513';
-
-  const getUserPathCategory = (u) => {
-    if (!u) return 'basic';
-    const candidates = [
-      u.learningPath,
-      u.educationPath,
-      u.educationalPath,
-      u.path,
-      u.category,
-      u.plan,
-      u.subscription?.plan,
-      u.subscriptionType,
-      u.track,
-      u.educationTrack,
-      u.pathName,
-    ].filter(Boolean);
-
-    const normalized = candidates
-      .map((v) => (typeof v === 'string' ? v : String(v)))
-      .map((v) => v.trim());
-
-    const isPremium = normalized.some(
-      (v) => v.includes('المسار المميز') || v.includes('مميز') || v.includes('premium')
-    );
-    const isBasic = normalized.some(
-      (v) => v.includes('المسار الأساسي') || v.includes('أساسي') || v.includes('basic')
-    );
-    if (isPremium) return 'premium';
-    if (isBasic) return 'basic';
-    return 'basic';
-  };
-
-  const selectedSkrillLink = getUserPathCategory(user) === 'premium' ? premiumSkrillLink : basicSkrillLink;
 
   useEffect(() => {
     if (id) {
@@ -122,18 +80,6 @@ export default function CourseDetail() {
       dispatch(checkCourseAccess(id));
     }
   }, [dispatch, id, user, isLoggedIn]);
-
-  // Check unit access for all units when course loads
-  useEffect(() => {
-    if (currentCourse && user && isLoggedIn && currentCourse.units) {
-      currentCourse.units.forEach(unit => {
-        dispatch(checkUnitAccess({
-          courseId: currentCourse._id,
-          unitId: unit._id
-        }));
-      });
-    }
-  }, [currentCourse, user, isLoggedIn, dispatch]);
 
   // Periodic check for access expiration (every minute)
   useEffect(() => {
@@ -257,7 +203,7 @@ export default function CourseDetail() {
 
 
 
-  const isItemPurchased = (purchaseType, itemId, unitId = null) => {
+  const isItemPurchased = (purchaseType, itemId) => {
     // Admin users have access to all content
     if (user?.role === 'ADMIN' || user?.role === 'SUPER_ADMIN') {
       return true;
@@ -278,32 +224,6 @@ export default function CourseDetail() {
     // If user has active course access via code, allow viewing
     if (courseAccessState?.hasAccess) {
       return true;
-    }
-
-    // Check unit access for lessons within units
-    if (unitId && unitAccessState.byUnitId) {
-      const unitAccessKey = `${currentCourse._id}-${unitId}`;
-      const unitAccess = unitAccessState.byUnitId[unitAccessKey];
-      console.log('Debug - Unit Access Check:', {
-        unitId,
-        unitAccessKey,
-        unitAccess,
-        allUnitAccess: unitAccessState.byUnitId
-      });
-      if (unitAccess && unitAccess.hasAccess) {
-        // Check if unit access has expired
-        if (unitAccess.accessEndAt) {
-          const now = new Date();
-          const endDate = new Date(unitAccess.accessEndAt);
-          if (endDate > now) {
-            console.log('Unit access granted - not expired');
-            return true;
-          }
-        } else {
-          console.log('Unit access granted - no expiration');
-          return true;
-        }
-      }
     }
     
     const key = `${currentCourse._id}-${purchaseType}-${itemId}`;
@@ -336,7 +256,7 @@ export default function CourseDetail() {
     }
   }, [user, currentCourse, courseAccessState, hasAnyPurchase, accessAlertShown, dispatch]);
 
-  const handlePurchaseClick = (item, purchaseType, unitId = null) => {
+  const handlePurchaseClick = (item, purchaseType) => {
     if (!user || !isLoggedIn) {
       setAlertMessage('يرجى تسجيل الدخول أولاً للوصول إلى هذا المحتوى');
       setShowErrorAlert(true);
@@ -370,13 +290,6 @@ export default function CourseDetail() {
         setShowErrorAlert(true);
         return;
       }
-    }
-
-    // If this is a lesson within a unit, show message to enter unit code
-    if (unitId && purchaseType === 'lesson') {
-      setAlertMessage('يرجى إدخال كود الوصول للوحدة أولاً في القسم المخصص لذلك');
-      setShowErrorAlert(true);
-      return;
     }
 
     setSelectedItem({ ...item, purchaseType });
@@ -443,74 +356,6 @@ export default function CourseDetail() {
     }
   };
 
-  const handleRedeemUnitCode = async (e) => {
-    e.preventDefault();
-    if (!unitRedeemCode.trim()) {
-      setAlertMessage('يرجى إدخال الكود أولاً');
-      setShowErrorAlert(true);
-      return;
-    }
-
-    if (!selectedUnitForCode) {
-      setAlertMessage('يرجى اختيار الوحدة أولاً');
-      setShowErrorAlert(true);
-      return;
-    }
-
-    // Basic code format validation
-    const codeFormat = /^[A-Z0-9]{8,12}$/;
-    if (!codeFormat.test(unitRedeemCode.trim().toUpperCase())) {
-      setAlertMessage('تنسيق الكود غير صحيح. يجب أن يتكون الكود من 8-12 حرف وأرقام باللغة الإنجليزية فقط');
-      setShowErrorAlert(true);
-      return;
-    }
-
-    try {
-      await dispatch(redeemUnitAccessCode({ 
-        code: unitRedeemCode.trim().toUpperCase(),
-        courseId: currentCourse._id,
-        unitId: selectedUnitForCode
-      })).unwrap();
-      
-      setUnitRedeemCode('');
-      setSelectedUnitForCode('');
-      setAlertMessage('🎉 تم تفعيل الوصول للشهر بنجاح! يمكنك الآن الوصول لمحتويات هذه الوحدة');
-      setShowSuccessAlert(true);
-      
-      // Refresh unit access status
-      dispatch(checkUnitAccess({
-        courseId: currentCourse._id,
-        unitId: selectedUnitForCode
-      }));
-    } catch (err) {
-      // Enhanced error messages based on backend responses
-      let errorMessage = 'تعذر تفعيل الكود';
-      
-      if (err?.message) {
-        const message = err.message.toLowerCase();
-        
-        if (message.includes('invalid or expired code')) {
-          errorMessage = '❌ الكود غير صحيح أو منتهي الصلاحية. تأكد من كتابة الكود بشكل صحيح';
-        } else if (message.includes('not valid for this unit')) {
-          errorMessage = '🚫 هذا الكود غير صالح لهذه الوحدة. تأكد من أنك تستخدم الكود الصحيح للشهر المطلوبة';
-        } else if (message.includes('expired for its access window')) {
-          errorMessage = '⏰ انتهت صلاحية هذا الكود. يرجى الحصول على كود جديد من المدرس';
-        } else if (message.includes('unit not found')) {
-          errorMessage = '📚 الوحدة المرتبطة بهذا الكود غير موجودة. يرجى التواصل مع الدعم الفني';
-        } else if (message.includes('code is required')) {
-          errorMessage = '📝 يرجى إدخال الكود';
-        } else if (message.includes('already used')) {
-          errorMessage = '🔒 تم استخدام هذا الكود من قبل. كل كود يمكن استخدامه مرة واحدة فقط';
-        } else {
-          errorMessage = `❌ ${err.message}`;
-        }
-      }
-      
-      setAlertMessage(errorMessage);
-      setShowErrorAlert(true);
-    }
-  };
-
   const handlePreviewClick = (item, purchaseType) => {
     // Check if code-based access has expired
     if (courseAccessState?.source === 'code' && courseAccessState?.accessEndAt) {
@@ -560,13 +405,13 @@ export default function CourseDetail() {
 
 
   const handleWatchClick = async (item, purchaseType, unitId = null) => {
-    // Check if code-based access has expired
-    if (courseAccessState?.source === 'code' && courseAccessState?.accessEndAt) {
+    // Block when access via code is not active anymore (expired or revoked)
+    if (courseAccessState?.source === 'code') {
+      const hasAccess = !!courseAccessState?.hasAccess;
+      const endAt = courseAccessState?.accessEndAt ? new Date(courseAccessState.accessEndAt) : null;
       const now = new Date();
-      const endDate = new Date(courseAccessState.accessEndAt);
-      const isExpired = endDate <= now;
-      
-      if (isExpired) {
+      const isExpiredByTime = endAt ? endAt <= now : false;
+      if (!hasAccess || isExpiredByTime) {
         setAlertMessage('انتهت صلاحية الوصول عبر الكود. يرجى إعادة تفعيل كود جديد أو شراء المحتوى.');
         setShowErrorAlert(true);
         return;
@@ -607,11 +452,12 @@ export default function CourseDetail() {
           onWatch={(item, purchaseType) => handleWatchClick(item, purchaseType, unitId)}
           variant="primary"
           showButton={showButton}
+          disabled={courseAccessState?.source === 'code' && !courseAccessState?.hasAccess && !isItemPurchased(purchaseType, item._id)}
         />
       );
     }
 
-    if (isItemPurchased(purchaseType, item._id, unitId)) {
+    if (isItemPurchased(purchaseType, item._id)) {
       return (
         <WatchButton
           item={item}
@@ -632,10 +478,18 @@ export default function CourseDetail() {
       <div className="flex items-center gap-2">
         <button 
           onClick={() => handlePreviewClick(item, purchaseType)}
-          className="text-blue-600 hover:text-blue-700 flex items-center gap-1"
+          className="text-orange-600 hover:text-orange-700 flex items-center gap-1"
         >
           <FaEye />
           <span>معاينة</span>
+        </button>
+        <button 
+          onClick={() => handlePurchaseClick(item, purchaseType)}
+          className="text-orange-600 hover:text-orange-700 flex items-center gap-1"
+          disabled={paymentLoading}
+        >
+          <FaLock />
+          <span>شراء</span>
         </button>
       </div>
     );
@@ -646,7 +500,7 @@ export default function CourseDetail() {
       <Layout>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600 mx-auto"></div>
             <p className="mt-4 text-gray-600 dark:text-gray-400">جاري تحميل تفاصيل الدرس...</p>
           </div>
         </div>
@@ -668,7 +522,7 @@ export default function CourseDetail() {
             </p>
             <Link
               to="/courses"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
             >
               <FaArrowLeft />
               <span>العودة للكورسات </span>
@@ -686,7 +540,7 @@ export default function CourseDetail() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
           <Link
             to="/courses"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 transition-colors text-sm sm:text-base"
+            className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 transition-colors text-sm sm:text-base"
           >
             <FaArrowLeft className="text-sm sm:text-base" />
             <span>العودة للكورسات</span>
@@ -712,7 +566,7 @@ export default function CourseDetail() {
                 </>
               ) : (
                 <>
-                  <div className="w-full h-full bg-gradient-to-br from-blue-500 to-blue-600"></div>
+                  <div className="w-full h-full bg-gradient-to-br from-orange-500 to-orange-600"></div>
                   <div className="absolute inset-0 bg-black bg-opacity-30"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <FaBookOpen className="text-6xl sm:text-8xl text-white opacity-80" />
@@ -721,7 +575,7 @@ export default function CourseDetail() {
               )}
               
               {/* Fallback gradient for broken images */}
-              <div className="hidden w-full h-full bg-gradient-to-br from-blue-500 to-blue-600">
+              <div className="hidden w-full h-full bg-gradient-to-br from-orange-500 to-orange-600">
                 <div className="absolute inset-0 bg-black bg-opacity-30"></div>
                 <div className="absolute inset-0 flex items-center justify-center">
                   <FaBookOpen className="text-8xl text-white opacity-80" />
@@ -751,13 +605,13 @@ export default function CourseDetail() {
                   {/* Course Stats */}
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
                     <div className="text-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-1">
+                      <div className="text-xl sm:text-2xl font-bold text-orange-600 mb-1">
                         {getTotalLessons(currentCourse)}
                       </div>
                       <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">درس</div>
                     </div>
                     <div className="text-center p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div className="text-xl sm:text-2xl font-bold text-blue-600 mb-1">
+                      <div className="text-xl sm:text-2xl font-bold text-orange-600 mb-1">
                         {currentCourse.units?.length || 0}
                       </div>
                       <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">وحدة</div>
@@ -765,8 +619,8 @@ export default function CourseDetail() {
                   </div>
 
                   {/* Instructor Info */}
-                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg mb-6">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                  <div className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg mb-6">
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
                       <FaUser className="text-white text-lg sm:text-xl" />
                     </div>
                     <div className="min-w-0 flex-1">
@@ -782,7 +636,17 @@ export default function CourseDetail() {
                 <div className="lg:col-span-1">
                   <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-6 lg:sticky lg:top-6">
                                                                {/* Wallet Balance */}
-      
+                      {user && isLoggedIn && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' && (
+                        <div className="text-center mb-4 sm:mb-6 p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                          <div className="flex items-center justify-center gap-2 mb-2">
+                            <FaWallet className="text-green-600 text-sm sm:text-base" />
+                            <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">رصيد المحفظة</span>
+                          </div>
+                          <div className="text-xl sm:text-2xl font-bold text-green-600">
+                            {walletBalance} جنيه
+                          </div>
+                        </div>
+                      )}
 
                                              {/* Remaining Days Label */}
                        {courseAccessState?.source === 'code' && courseAccessState?.accessEndAt && (
@@ -821,83 +685,104 @@ export default function CourseDetail() {
                              </p>
                            </div>
                          )}
-                       </div>
-                     )}
-
-                     {/* Unit Access Code Redemption */}
-                     {user && isLoggedIn && user.role !== 'ADMIN' && user.role !== 'SUPER_ADMIN' && currentCourse.units && currentCourse.units.length > 0 && (
-                       <div className="space-y-3 mt-6">
-                         <div className="border-t border-gray-200 dark:border-gray-600 pt-4">
-                           <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-3">
-                             أكواد الوصول للشهور
-                           </h4>
+                         
+                         <form onSubmit={handleRedeemCode} className="space-y-4">
+                           <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-300 text-right">
+                             {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess 
+                               ? 'اكتب الكود الجديد هنا' 
+                               : 'معاك كود للكورس؟'
+                             }
+                           </label>
                            
-                           <form onSubmit={handleRedeemUnitCode} className="space-y-4">
-                             <div className="space-y-3">
-                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right">
-                                 اختر الوحدة
-                               </label>
-                               <select
-                                 value={selectedUnitForCode}
-                                 onChange={(e) => setSelectedUnitForCode(e.target.value)}
-                                 className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-right"
-                                 required
-                               >
-                                 <option value="">اختر الوحدة...</option>
-                                 {currentCourse.units.map((unit) => (
-                                   <option key={unit._id} value={unit._id}>
-                                     {unit.title}
-                                   </option>
-                                 ))}
-                               </select>
-                             </div>
-                             
-                             <div className="space-y-3">
-                               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right">
-                                 كود الوصول للشهر
-                               </label>
-                               <input
-                                 type="text"
-                                 value={unitRedeemCode}
-                                 onChange={(e) => {
-                                   // Auto-format: uppercase and remove spaces/special chars
-                                   const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-                                   if (formatted.length <= 12) {
-                                     setUnitRedeemCode(formatted);
-                                   }
-                                 }}
-                                 onKeyDown={(e) => {
-                                   // Prevent space key
-                                   if (e.key === ' ') {
-                                     e.preventDefault();
-                                   }
-                                 }}
-                                 placeholder="زي كده: ABC123XYZ9"
-                                 className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
-                                 maxLength="12"
-                                 style={{ letterSpacing: '0.1em' }}
-                                 required
-                               />
-                             </div>
-                             
+                           {/* Desktop Layout */}
+                           <div className="hidden sm:flex flex-col sm:flex-row gap-3">
+                             <input
+                               type="text"
+                               value={redeemCode}
+                               onChange={(e) => {
+                                 // Auto-format: uppercase and remove spaces/special chars
+                                 const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+                                 if (formatted.length <= 12) {
+                                   setRedeemCode(formatted);
+                                 }
+                               }}
+                               onKeyDown={(e) => {
+                                 // Prevent space key
+                                 if (e.key === ' ') {
+                                   e.preventDefault();
+                                 }
+                               }}
+                               placeholder="زي كده: ABC123XYZ9"
+                               className="flex-1 min-w-0 px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
+                               maxLength="12"
+                               style={{ letterSpacing: '0.1em' }}
+                               required
+                             />
                              <button
                                type="submit"
-                               className="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                               className={`px-4 sm:px-6 py-3 text-white rounded-lg font-medium transition-all duration-200 flex-shrink-0 min-w-max ${
+                                 courseAccessState?.source === 'code' && !courseAccessState?.hasAccess
+                                   ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+                                   : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                               } focus:ring-2 focus:ring-opacity-50`}
                              >
-                               تفعيل كود الوحدة
+                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess ? 'فعّل تاني' : 'فعّل'}
                              </button>
-                             
-                             <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-3">
-                               <h5 className="text-xs font-medium text-blue-900 dark:text-blue-100 mb-1">معلومات مهمة:</h5>
-                               <ul className="text-xs text-blue-800 dark:text-blue-200 space-y-1">
-                                 <li>• الكود ده للشهر المختارة بس</li>
-                                 <li>• كل كود يتستعمل مرة واحدة بس</li>
-                                 <li>• الكود من 8-12 حرف وأرقام إنجليزي</li>
-                                 <li>• اتأكد إنك كاتب الكود صح</li>
-                               </ul>
-                             </div>
-                           </form>
-                         </div>
+                           </div>
+
+                           {/* Mobile Layout */}
+                           <div className="sm:hidden space-y-3">
+                             <input
+                               type="text"
+                               value={redeemCode}
+                               onChange={(e) => {
+                                 // Auto-format: uppercase and remove spaces/special chars
+                                 const formatted = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+                                 if (formatted.length <= 12) {
+                                   setRedeemCode(formatted);
+                                 }
+                               }}
+                               onKeyDown={(e) => {
+                                 // Prevent space key
+                                 if (e.key === ' ') {
+                                   e.preventDefault();
+                                 }
+                               }}
+                               placeholder="زي كده: ABC123XYZ9"
+                               className="w-full px-4 py-3 rounded-lg bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all duration-200 text-center font-mono text-lg tracking-wider"
+                               maxLength="12"
+                               style={{ letterSpacing: '0.1em' }}
+                               required
+                             />
+                             <button
+                               type="submit"
+                               className={`w-full px-4 py-3 text-white rounded-lg font-medium transition-all duration-200 ${
+                                 courseAccessState?.source === 'code' && !courseAccessState?.hasAccess
+                                   ? 'bg-red-600 hover:bg-red-700 focus:ring-red-500'
+                                   : 'bg-green-600 hover:bg-green-700 focus:ring-green-500'
+                               } focus:ring-2 focus:ring-opacity-50 text-base`}
+                             >
+                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess ? 'فعّل تاني' : 'فعّل'}
+                             </button>
+                           </div>
+
+                           <div className="space-y-2">
+                             <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-right leading-relaxed">
+                               {courseAccessState?.source === 'code' && !courseAccessState?.hasAccess && courseAccessState?.accessEndAt && (
+                                 <span className="text-red-500">خلاص الكود انتهى</span>
+                               )}
+                               </p>
+                                                            <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-lg p-3">
+                                 <h4 className="text-xs font-medium text-orange-900 dark:text-orange-100 mb-1">حاجات مهمة:</h4>
+                                 <ul className="text-xs text-orange-800 dark:text-orange-200 space-y-1">
+                                   <li>• الكود ده للكورس ده بس</li>
+                                   <li>• كل كود يتستعمل مرة واحدة بس</li>
+                                   <li>• الكود من 8-12 حرف وأرقام إنجليزي</li>
+                                   <li>• اتأكد إنك كاتب الكود صح</li>
+                                 </ul>
+                               </div>
+                           </div>
+                         </form>
                        </div>
                      )}
                   </div>
@@ -912,12 +797,12 @@ export default function CourseDetail() {
            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4 sm:mb-6">
              <div className={`border rounded-xl p-3 sm:p-4 ${
                courseAccessState?.hasAccess 
-                 ? 'bg-gradient-to-r from-blue-50 to-blue-50 dark:from-blue-900/20 dark:to-blue-900/20 border-blue-200 dark:border-blue-700'
-                 : 'bg-gradient-to-r from-red-50 to-blue-50 dark:from-red-900/20 dark:to-blue-900/20 border-red-200 dark:border-red-700'
+                 ? 'bg-gradient-to-r from-orange-50 to-orange-50 dark:from-orange-900/20 dark:to-orange-900/20 border-orange-200 dark:border-orange-700'
+                 : 'bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 border-red-200 dark:border-red-700'
              }`}>
                <div className="flex items-center justify-center gap-2 sm:gap-3">
                  {courseAccessState?.hasAccess ? (
-                   <FaClock className="text-blue-600 text-lg sm:text-xl flex-shrink-0" />
+                   <FaClock className="text-orange-600 text-lg sm:text-xl flex-shrink-0" />
                  ) : (
                    <FaExclamationTriangle className="text-red-600 text-lg sm:text-xl flex-shrink-0" />
                  )}
@@ -955,7 +840,7 @@ export default function CourseDetail() {
                         className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-lg gap-3 sm:gap-4"
                       >
                         <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                          <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                          <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
                             <FaPlay className="text-white text-sm" />
                           </div>
                           <div className="min-w-0 flex-1">
@@ -968,11 +853,6 @@ export default function CourseDetail() {
                           </div>
                         </div>
                         <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
-                          {!hidePrices && lesson.price > 0 && (
-                            <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                              {lesson.price} ريال قطري
-                            </span>
-                          )}
                           <div className="flex-shrink-0">
                             {renderPurchaseButton(lesson, 'lesson')}
                           </div>
@@ -987,7 +867,7 @@ export default function CourseDetail() {
               {currentCourse.units && currentCourse.units.length > 0 && (
                 <div>
                   <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4">
-                    الشهور التعليمية
+                    الوحدات التعليمية
                   </h3>
                   <div className="space-y-3 sm:space-y-4">
                     {currentCourse.units.map((unit, unitIndex) => (
@@ -1001,7 +881,7 @@ export default function CourseDetail() {
                           onClick={() => toggleUnit(unit._id || unitIndex)}
                         >
                           <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <div className="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
                               <FaBookOpen className="text-white text-sm" />
                             </div>
                             <div className="min-w-0 flex-1">
@@ -1016,7 +896,7 @@ export default function CourseDetail() {
                           <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
                             {unit.price > 0 && (
                               <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                                {unit.price} ريال قطري
+                                {unit.price} جنيه
                               </span>
                             )}
                             <div className="flex-shrink-0">
@@ -1039,7 +919,7 @@ export default function CourseDetail() {
                                   className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg gap-3 sm:gap-4"
                                 >
                                   <div className="flex items-start sm:items-center gap-3 min-w-0 flex-1">
-                                    <div className="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                    <div className="w-6 h-6 bg-orange-600 rounded-full flex items-center justify-center flex-shrink-0">
                                       <FaPlay className="text-white text-xs" />
                                     </div>
                                     <div className="min-w-0 flex-1">
@@ -1052,11 +932,6 @@ export default function CourseDetail() {
                                     </div>
                                   </div>
                                   <div className="flex items-center justify-between sm:justify-end gap-3 sm:gap-4 flex-shrink-0">
-                                    {!hidePrices && lesson.price > 0 && (
-                                      <span className="text-sm font-medium text-green-600 whitespace-nowrap">
-                                        {lesson.price} ريال قطري
-                                      </span>
-                                    )}
                                     <div className="flex-shrink-0">
                                       {renderPurchaseButton(lesson, 'lesson', true, unit._id)}
                                     </div>
@@ -1116,50 +991,15 @@ export default function CourseDetail() {
                   {selectedItem.description}
                 </p>
                 
-                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                   <span className="text-gray-600 dark:text-gray-300">السعر:</span>
-                  <span className="font-semibold text-green-600">{selectedItem.price} ريال قطري</span>
+                  <span className="font-semibold text-green-600">{selectedItem.price} جنيه</span>
                 </div>
-
-                <div className="space-y-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg text-right">
-                  <p className="text-sm text-blue-900 dark:text-blue-100 font-medium">خطوات الدفع والحصول على الكود:</p>
-                  <ol className="list-decimal pr-5 space-y-2 text-sm text-blue-800 dark:text-blue-200">
-                    <li>
-                      ادفع المبلغ عبر Skrill (داخل قطر) من خلال هذا الرابط:
-                      {selectedSkrillLink ? (
-                        <a
-                          href={selectedSkrillLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mx-1 text-blue-700 underline"
-                        >
-                          فتح رابط الدفع
-                        </a>
-                      ) : (
-                        <span className="mx-1">— يرجى طلب رابط الدفع من المدرس —</span>
-                      )}
-                    </li>
-                    <li>
-                      بعد إتمام الدفع تواصل معنا على واتساب لإرسال كود التفعيل.
-                      {whatsappNumber ? (
-                        <a
-                          href={`https://wa.me/${whatsappNumber.replace(/\D/g, '')}?text=${encodeURIComponent(`مرحبا، دفعت عبر Skrill للكورس: ${currentCourse?.title || ''} - ${selectedItem.purchaseType === 'lesson' ? 'درس' : 'وحدة'}: ${selectedItem?.title || ''}. الرجاء إرسال كود التفعيل.`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="mx-1 text-green-700 underline"
-                        >
-                          فتح واتساب
-                        </a>
-                      ) : (
-                        <span className="mx-1">— رقم واتساب غير مُحدد —</span>
-                      )}
-                    </li>
-                    <li>
-                      ادخل الكود في المكان المخصص داخل الصفحة لتفعيل الوصول فوراً.
-                    </li>
-                  </ol>
+                
+                <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mt-2">
+                  <span className="text-gray-600 dark:text-gray-300">رصيد المحفظة:</span>
+                  <span className="font-semibold text-orange-600">{walletBalance} جنيه</span>
                 </div>
-              
               </div>
               
               <div className="flex gap-3">
@@ -1169,9 +1009,20 @@ export default function CourseDetail() {
                 >
                   إلغاء
                 </button>
+                <button
+                  onClick={handlePurchaseConfirm}
+                  disabled={paymentLoading || walletBalance < selectedItem.price}
+                  className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {paymentLoading ? 'جاري الشراء...' : 'تأكيد الشراء'}
+                </button>
               </div>
               
-              {/* Wallet messaging not used for manual payments */}
+              {walletBalance < selectedItem.price && (
+                <p className="text-red-600 text-sm mt-2 text-center">
+                  رصيد المحفظة غير كافي
+                </p>
+              )}
             </div>
           </div>
                  )}
@@ -1202,7 +1053,7 @@ export default function CourseDetail() {
                   
                   <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg mb-4">
                     <span className="text-gray-600 dark:text-gray-300">السعر:</span>
-                    <span className="font-semibold text-green-600">{previewItem.price} ريال قطري</span>
+                    <span className="font-semibold text-green-600">{previewItem.price} جنيه</span>
                   </div>
 
                                      {/* Show remaining days if user has code-based access */}
@@ -1231,7 +1082,7 @@ export default function CourseDetail() {
                        {previewItem.videos.slice(0, 2).map((video, index) => (
                          <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                            <div className="flex items-center gap-2">
-                             <FaPlay className="text-blue-600" />
+                             <FaPlay className="text-orange-600" />
                              <span className="text-sm text-gray-700 dark:text-gray-300">{video.title}</span>
                            </div>
                          </div>
@@ -1275,7 +1126,7 @@ export default function CourseDetail() {
                        {previewItem.exams.slice(0, 2).map((exam, index) => (
                          <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
                            <div className="flex items-center gap-2">
-                             <FaGraduationCap className="text-blue-600" />
+                             <FaGraduationCap className="text-orange-600" />
                              <span className="text-sm text-gray-700 dark:text-gray-300">{exam.title}</span>
                            </div>
                          </div>
@@ -1312,30 +1163,30 @@ export default function CourseDetail() {
                  )}
 
                  {/* Show content summary instead of "Content will be added soon" */}
-                 <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4">
-                   <h6 className="font-medium text-blue-900 dark:text-blue-100 mb-3">ملخص المحتوى</h6>
+                 <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-700 rounded-lg p-4 mb-4">
+                   <h6 className="font-medium text-orange-900 dark:text-orange-100 mb-3">ملخص المحتوى</h6>
                    <div className="grid grid-cols-2 gap-3 text-sm">
                      <div className="flex items-center gap-2">
-                       <FaPlay className="text-blue-600" />
-                       <span className="text-blue-700 dark:text-blue-300">
+                       <FaPlay className="text-orange-600" />
+                       <span className="text-orange-700 dark:text-orange-300">
                          {previewItem.videosCount || 0} فيديو
                        </span>
                      </div>
                      <div className="flex items-center gap-2">
                        <FaBookOpen className="text-red-600" />
-                       <span className="text-blue-700 dark:text-blue-300">
+                       <span className="text-orange-700 dark:text-orange-300">
                          {previewItem.pdfsCount || 0} ملف PDF
                        </span>
                      </div>
                      <div className="flex items-center gap-2">
-                       <FaClipboardList className="text-blue-600" />
-                       <span className="text-blue-700 dark:text-blue-300">
+                       <FaClipboardList className="text-orange-600" />
+                       <span className="text-orange-700 dark:text-orange-300">
                          {previewItem.examsCount || 0} اختبار
                        </span>
                      </div>
                      <div className="flex items-center gap-2">
                        <FaStar className="text-green-600" />
-                       <span className="text-blue-700 dark:text-blue-300">
+                       <span className="text-orange-700 dark:text-orange-300">
                          {previewItem.trainingsCount || 0} تدريب
                        </span>
                      </div>
@@ -1357,7 +1208,7 @@ export default function CourseDetail() {
                         setSelectedItem({ ...previewItem, purchaseType: previewItem.purchaseType });
                         setShowPurchaseModal(true);
                       }}
-                      className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                      className="flex-1 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
                     >
                       شراء الدرس
                     </button>

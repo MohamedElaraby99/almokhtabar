@@ -150,14 +150,13 @@ const createQuickAdmin = async ({ clientUrl }) => {
     const existingAdmin = await User.findOne({ 
         $or: [
             { email: adminData.email.toLowerCase() },
-            { username: adminData.username.toLowerCase() }
+            { email: adminData.email.toLowerCase() }
         ]
     });
     
     if (existingAdmin) {
         console.log("⚠️ Admin account already exists!");
         console.log(`📧 Email: ${existingAdmin.email}`);
-        console.log(`👤 Username: ${existingAdmin.username}`);
         console.log(`🔑 Role: ${existingAdmin.role}`);
         return;
     }
@@ -165,14 +164,12 @@ const createQuickAdmin = async ({ clientUrl }) => {
     console.log("👤 Creating admin account...");
     const admin = new User({
         ...adminData,
-        username: adminData.username.toLowerCase(),
         email: adminData.email.toLowerCase(),
     });
     await admin.save();
     
     console.log("✅ Admin account created successfully!");
     console.log(`📧 Email: ${admin.email}`);
-    console.log(`👤 Username: ${admin.username}`);
     console.log(`🔑 Role: ${admin.role}`);
     console.log(`🔐 Password: ${adminData.password}`);
     console.log("\n💡 You can now login with these credentials");
@@ -226,7 +223,6 @@ const createCustomAdmin = async ({ clientUrl }) => {
     if (existingAdmin) {
         console.log("\n⚠️ Admin account already exists!");
         console.log(`📧 Email: ${existingAdmin.email}`);
-        console.log(`👤 Username: ${existingAdmin.username}`);
         console.log(`🔑 Role: ${existingAdmin.role}`);
         return;
     }
@@ -250,7 +246,6 @@ const createCustomAdmin = async ({ clientUrl }) => {
     
     console.log("✅ Admin account created successfully!");
     console.log(`📧 Email: ${admin.email}`);
-    console.log(`👤 Username: ${admin.username}`);
     console.log(`🔑 Role: ${admin.role}`);
     console.log(`🔐 Password: ${password}`);
     console.log("\n💡 You can now login with these credentials");

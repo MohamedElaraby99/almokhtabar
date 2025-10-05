@@ -116,6 +116,45 @@ const takeTrainingExam = asyncHandler(async (req, res) => {
     training.userAttempts.push(attempt);
     await course.save();
 
+    // Also save to ExamResult model for history tracking
+    // For training exams, update existing record or create new one
+    const examResultData = {
+        user: userId,
+        course: courseId,
+        lessonId: lessonId,
+        lessonTitle: lesson.title,
+        unitId: unitId || null,
+        unitTitle: unit ? unit.title : null,
+        examType: 'training',
+        score: correctAnswers,
+        totalQuestions: totalQuestions,
+        correctAnswers: correctAnswers,
+        wrongAnswers: totalQuestions - correctAnswers,
+        timeTaken: timeTaken,
+        timeLimit: training.timeLimit || 30,
+        passingScore: 50, // Default passing score
+        passed: percentage >= 50,
+        answers: detailedAnswers.map(answer => ({
+            questionIndex: answer.questionIndex,
+            selectedAnswer: answer.selectedAnswer,
+            correctAnswer: training.questions[answer.questionIndex].correctAnswer,
+            isCorrect: answer.isCorrect
+        })),
+        completedAt: endTime
+    };
+
+    // Use upsert to update existing record or create new one
+    await ExamResult.findOneAndUpdate(
+        {
+            user: userId,
+            course: courseId,
+            lessonId: lessonId,
+            examType: 'training'
+        },
+        examResultData,
+        { upsert: true, new: true }
+    );
+
     res.status(201).json({
         success: true,
         message: "Training completed successfully",
@@ -230,13 +269,14 @@ const takeFinalExam = asyncHandler(async (req, res) => {
         throw new AppError("Exam is closed", 400);
     }
 
-    // Check if user has already taken this exam
-    const existingAttempt = exam.userAttempts.find(attempt => 
-        attempt.userId.toString() === userId.toString()
-    );
-    if (existingAttempt) {
-        throw new AppError("You have already taken this exam", 400);
-    }
+    // Check if user has already taken this final exam
+    // For now, allow retaking final exams (remove this check if you want to allow retakes)
+    // const existingAttempt = exam.userAttempts.find(attempt => 
+    //     attempt.userId.toString() === userId.toString()
+    // );
+    // if (existingAttempt) {
+    //     throw new AppError("You have already taken this final exam", 400);
+    // }
 
     // Calculate results
     const questions = exam.questions;
@@ -293,6 +333,45 @@ const takeFinalExam = asyncHandler(async (req, res) => {
     exam.userAttempts.push(attempt);
     await course.save();
 
+    // Also save to ExamResult model for history tracking
+    // For final exams, update existing record or create new one (allow retakes)
+    const examResultData = {
+        user: userId,
+        course: courseId,
+        lessonId: lessonId,
+        lessonTitle: lesson.title,
+        unitId: unitId || null,
+        unitTitle: unit ? unit.title : null,
+        examType: 'final',
+        score: correctAnswers,
+        totalQuestions: totalQuestions,
+        correctAnswers: correctAnswers,
+        wrongAnswers: totalQuestions - correctAnswers,
+        timeTaken: timeTaken,
+        timeLimit: exam.timeLimit || 30,
+        passingScore: 50, // Default passing score
+        passed: percentage >= 50,
+        answers: detailedAnswers.map(answer => ({
+            questionIndex: answer.questionIndex,
+            selectedAnswer: answer.selectedAnswer,
+            correctAnswer: exam.questions[answer.questionIndex].correctAnswer,
+            isCorrect: answer.isCorrect
+        })),
+        completedAt: endTime
+    };
+
+    // Use upsert to update existing record or create new one
+    await ExamResult.findOneAndUpdate(
+        {
+            user: userId,
+            course: courseId,
+            lessonId: lessonId,
+            examType: 'final'
+        },
+        examResultData,
+        { upsert: true, new: true }
+    );
+
     res.status(201).json({
         success: true,
         message: "Exam completed successfully",
@@ -316,13 +395,22 @@ const takeFinalExam = asyncHandler(async (req, res) => {
 // Get exam results for a lesson
 const getExamResults = asyncHandler(async (req, res) => {
     const { courseId, lessonId } = req.params;
+    const { examType } = req.query;
     const userId = req.user._id || req.user.id;
 
-    const results = await ExamResult.find({
+    // Build filter object
+    const filter = {
         user: userId,
         course: courseId,
         lessonId
-    }).sort({ createdAt: -1 });
+    };
+
+    // Add exam type filter if provided
+    if (examType) {
+        filter.examType = examType;
+    }
+
+    const results = await ExamResult.find(filter).sort({ createdAt: -1 });
 
     res.status(200).json({
         success: true,

@@ -5,7 +5,6 @@ import Stage from '../models/stage.model.js';
 import Subject from '../models/subject.model.js';
 import AppError from '../utils/error.utils.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
-import sendEmail from '../utils/sendEmail.js';
 
 // @desc    Create a new live meeting
 // @route   POST /api/v1/live-meetings
@@ -17,7 +16,7 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     googleMeetLink,
     scheduledDate,
     duration,
-    instructor, // optional now
+    instructor,
     stage,
     subject,
     attendees,
@@ -26,8 +25,8 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     tags
   } = req.body;
 
-  // Validate required fields (stage/subject optional now)
-  if (!title || !description || !googleMeetLink || !scheduledDate || !duration) {
+  // Validate required fields
+  if (!title || !description || !googleMeetLink || !scheduledDate || !duration || !instructor || !stage || !subject) {
     return next(new AppError('جميع الحقول المطلوبة يجب ملؤها', 400));
   }
 
@@ -37,34 +36,22 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     return next(new AppError('تاريخ الاجتماع يجب أن يكون في المستقبل', 400));
   }
 
-  // Validate instructor exists (optional)
-  let instructorId = undefined;
-  if (instructor) {
-    const instructorExists = await Instructor.findById(instructor);
-    if (!instructorExists) {
-      return next(new AppError('المحاضر غير موجود', 404));
-    }
-    instructorId = instructor;
+  // Validate instructor exists
+  const instructorExists = await Instructor.findById(instructor);
+  if (!instructorExists) {
+    return next(new AppError('المحاضر غير موجود', 404));
   }
 
-  // Validate stage exists (optional)
-  let stageId = undefined;
-  if (stage) {
-    const stageExists = await Stage.findById(stage);
-    if (!stageExists) {
-      return next(new AppError('المرحلة غير موجودة', 404));
-    }
-    stageId = stage;
+  // Validate stage exists
+  const stageExists = await Stage.findById(stage);
+  if (!stageExists) {
+    return next(new AppError('المرحلة غير موجودة', 404));
   }
 
-  // Validate subject exists (optional)
-  let subjectId = undefined;
-  if (subject) {
-    const subjectExists = await Subject.findById(subject);
-    if (!subjectExists) {
-      return next(new AppError('المادة غير موجودة', 404));
-    }
-    subjectId = subject;
+  // Validate subject exists
+  const subjectExists = await Subject.findById(subject);
+  if (!subjectExists) {
+    return next(new AppError('المادة غير موجودة', 404));
   }
 
   // Validate attendees if provided
@@ -85,11 +72,11 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     googleMeetLink,
     scheduledDate: scheduledDateTime,
     duration,
-    ...(instructorId ? { instructor: instructorId } : {}),
-    ...(stageId ? { stage: stageId } : {}),
-    ...(subjectId ? { subject: subjectId } : {}),
+    instructor,
+    stage,
+    subject,
     attendees: validatedAttendees,
-    ...(maxAttendees ? { maxAttendees } : {}),
+    maxAttendees: maxAttendees || 100,
     isRecorded: isRecorded || false,
     tags: tags || [],
     createdBy: req.user._id || req.user.id
@@ -109,34 +96,6 @@ export const createLiveMeeting = asyncHandler(async (req, res, next) => {
     message: 'تم إنشاء الاجتماع المباشر بنجاح',
     liveMeeting
   });
-
-  // Schedule reminder emails at T-30, T-20, T-10, and T0 minutes
-  try {
-    const sendReminder = async (minutesBefore) => {
-      const when = new Date(scheduledDateTime.getTime() - minutesBefore * 60000);
-      const delay = when.getTime() - Date.now();
-      if (delay < 0) return; // too late to schedule
-      setTimeout(async () => {
-        try {
-          const meeting = await LiveMeeting.findById(liveMeeting._id).populate('attendees.user', 'email fullName');
-          if (!meeting) return;
-          const subject = `تذكير بالجلسة المباشرة: ${meeting.title}`;
-          const body = `لديك جلسة مباشرة بعد ${minutesBefore === 0 ? 'الآن' : minutesBefore + ' دقيقة'}\nرابط الجلسة: ${meeting.googleMeetLink}`;
-          const emails = (meeting.attendees || [])
-            .map(a => a.user?.email)
-            .filter(Boolean);
-          for (const email of emails) {
-            await sendEmail(email, subject, body);
-          }
-        } catch (e) {
-          console.error('Failed to send reminder:', e.message);
-        }
-      }, delay);
-    };
-    [30, 20, 10, 0].forEach(sendReminder);
-  } catch (e) {
-    console.error('Reminder scheduling error:', e.message);
-  }
 });
 
 // @desc    Get all live meetings (Admin)
@@ -590,7 +549,9 @@ export const addAttendees = asyncHandler(async (req, res, next) => {
   });
 
   // Check if adding attendees would exceed max limit
-  // Capacity is unlimited now; no maxAttendees enforcement
+  if (liveMeeting.attendees.length + validAttendees.length > liveMeeting.maxAttendees) {
+    return next(new AppError('عدد الحضور يتجاوز الحد الأقصى المسموح', 400));
+  }
 
   // Add attendees
   liveMeeting.attendees.push(...validAttendees);
@@ -700,166 +661,3 @@ export const getLiveMeetingStats = asyncHandler(async (req, res, next) => {
     }
   });
 });
-
-// Send email reminders for a specific meeting
-export const sendMeetingReminders = async (req, res) => {
-  try {
-    const { meetingId } = req.body;
-    
-    console.log('📧 sendMeetingReminders called with meetingId:', meetingId);
-
-    if (!meetingId) {
-      console.log('❌ No meetingId provided');
-      return res.status(400).json({
-        success: false,
-        message: 'معرف الجلسة مطلوب'
-      });
-    }
-
-    // Find the meeting with populated attendees
-    const meeting = await LiveMeeting.findById(meetingId)
-      .populate('attendees.user', 'fullName email phoneNumber')
-      .populate('instructor', 'name email')
-      .populate('stage', 'name')
-      .populate('subject', 'title');
-
-    console.log('📧 Found meeting:', meeting ? { id: meeting._id, title: meeting.title, attendeesCount: meeting.attendees?.length } : 'NOT FOUND');
-
-    if (!meeting) {
-      console.log('❌ Meeting not found');
-      return res.status(404).json({
-        success: false,
-        message: 'الجلسة غير موجودة'
-      });
-    }
-
-    if (meeting.status !== 'scheduled') {
-      return res.status(400).json({
-        success: false,
-        message: 'يمكن إرسال التذكيرات للجلسات المجدولة فقط'
-      });
-    }
-
-    // Check if meeting is in the future
-    const now = new Date();
-    const meetingDate = new Date(meeting.scheduledDate);
-    
-    if (meetingDate <= now) {
-      return res.status(400).json({
-        success: false,
-        message: 'لا يمكن إرسال تذكيرات للجلسات الماضية'
-      });
-    }
-
-    // Prepare email data
-    const meetingDateFormatted = meetingDate.toLocaleDateString('ar-EG', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      weekday: 'long'
-    });
-
-    const meetingTimeFormatted = meetingDate.toLocaleTimeString('ar-EG', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-
-    const durationHours = Math.floor(meeting.duration / 60);
-    const durationMinutes = meeting.duration % 60;
-    const durationText = durationHours > 0 
-      ? `${durationHours} ساعة${durationMinutes > 0 ? ` و ${durationMinutes} دقيقة` : ''}`
-      : `${durationMinutes} دقيقة`;
-
-    console.log('📧 Sending emails to attendees:', meeting.attendees.map(a => ({ name: a.user.fullName, email: a.user.email })));
-
-    // Send emails to all attendees
-    const emailPromises = meeting.attendees.map(async (attendee) => {
-      if (!attendee.user.email) {
-        console.log(`Skipping user ${attendee.user.fullName} - no email address`);
-        return { success: false, user: attendee.user.fullName, reason: 'لا يوجد بريد إلكتروني' };
-      }
-
-      console.log(`📧 Sending email to ${attendee.user.fullName} (${attendee.user.email})`);
-
-      try {
-        const emailSubject = `تذكير: جلسة مباشرة - ${meeting.title}`;
-        const emailHtml = `
-            <div dir="rtl" style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
-              <div style="background-color: #5b2233; color: white; padding: 20px; border-radius: 10px 10px 0 0; text-align: center;">
-                <h1 style="margin: 0; font-size: 24px;">تذكير بجلسة مباشرة</h1>
-                <p style="margin: 10px 0 0 0; font-size: 16px;">منصة المكتبة التعليمية</p>
-              </div>
-              
-              <div style="background-color: white; padding: 30px; border-radius: 0 0 10px 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-                <h2 style="color: #5b2233; margin-top: 0;">مرحباً ${attendee.user.fullName}</h2>
-                
-                <p style="font-size: 16px; line-height: 1.6; color: #333;">
-                  نود تذكيرك بجلسة مباشرة مجدولة لك:
-                </p>
-                
-                <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px; margin: 20px 0; border-right: 4px solid #5b2233;">
-                  <h3 style="color: #5b2233; margin-top: 0;">تفاصيل الجلسة</h3>
-                  <p style="margin: 8px 0;"><strong>العنوان:</strong> ${meeting.title}</p>
-                  <p style="margin: 8px 0;"><strong>الوصف:</strong> ${meeting.description}</p>
-                  <p style="margin: 8px 0;"><strong>التاريخ:</strong> ${meetingDateFormatted}</p>
-                  <p style="margin: 8px 0;"><strong>الوقت:</strong> ${meetingTimeFormatted}</p>
-                  <p style="margin: 8px 0;"><strong>المدة:</strong> ${durationText}</p>
-                  ${meeting.instructor ? `<p style="margin: 8px 0;"><strong>المدرب:</strong> ${meeting.instructor.name}</p>` : ''}
-                  ${meeting.stage ? `<p style="margin: 8px 0;"><strong>المرحلة:</strong> ${meeting.stage.name}</p>` : ''}
-                  ${meeting.subject ? `<p style="margin: 8px 0;"><strong>المادة:</strong> ${meeting.subject.title}</p>` : ''}
-                </div>
-                
-                <div style="text-align: center; margin: 30px 0;">
-                  <a href="${meeting.googleMeetLink}" 
-                     style="background-color: #5b2233; color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block; font-size: 16px;">
-                    انضم إلى الجلسة الآن
-                  </a>
-                </div>
-                
-                <div style="background-color: #e3f2fd; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                  <p style="margin: 0; font-size: 14px; color: #1976d2;">
-                    <strong>ملاحظة:</strong> يرجى الانضمام إلى الجلسة قبل 5 دقائق من الموعد المحدد للتأكد من جودة الاتصال.
-                  </p>
-                </div>
-                
-                <p style="font-size: 14px; color: #666; margin-top: 30px;">
-                  مع تحيات فريق المكتبة التعليمية<br>
-                  للاستفسارات، يرجى التواصل معنا عبر البريد الإلكتروني
-                </p>
-              </div>
-            </div>
-          `;
-
-        await sendEmail(attendee.user.email, emailSubject, 'Meeting reminder', emailHtml);
-        console.log(`✅ Email sent successfully to ${attendee.user.email}`);
-        return { success: true, user: attendee.user.fullName, email: attendee.user.email };
-      } catch (error) {
-        console.error(`❌ Failed to send email to ${attendee.user.email}:`, error);
-        return { success: false, user: attendee.user.fullName, email: attendee.user.email, reason: error.message };
-      }
-    });
-
-    const results = await Promise.all(emailPromises);
-    const successful = results.filter(r => r.success).length;
-    const failed = results.filter(r => !r.success).length;
-
-    res.json({
-      success: true,
-      message: `تم إرسال ${successful} تذكير بنجاح${failed > 0 ? `، فشل في إرسال ${failed} تذكير` : ''}`,
-      results: {
-        total: results.length,
-        successful,
-        failed,
-        details: results
-      }
-    });
-
-  } catch (error) {
-    console.error('Error in sendMeetingReminders:', error);
-    res.status(500).json({
-      success: false,
-      message: 'خطأ في إرسال التذكيرات',
-      error: error.message
-    });
-  }
-};

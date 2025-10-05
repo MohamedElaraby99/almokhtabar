@@ -241,18 +241,29 @@ const markNotificationAsRead = async (req, res) => {
 // Mark all notifications as read
 const markAllNotificationsAsRead = async (req, res) => {
   try {
-    const userId = req.user._id;
-    
+    // Use the same user identifier style as the getter for consistency
+    const userId = req.user.id || req.user._id;
+
     console.log(`🔔 Marking all notifications as read for user ${userId}`);
-    
-    // Get all current notifications for the user
-    const userStageId = req.user.stage?._id || req.user.stage;
-    
+
+    // Load fresh user to reliably access populated stage
+    const user = await User.findById(userId).select('stage');
+    if (!user?.stage) {
+      return res.status(200).json({
+        success: true,
+        message: 'No stage found for user; nothing to mark as read'
+      });
+    }
+
+    // Extract stage ID - handle both ObjectId and object with _id
+    const userStageId = user.stage._id || user.stage;
+
+    // Get all courses that match the user's stage (same scope as getter)
     const coursesWithUpdates = await Course.find({
       stage: userStageId
-    }).populate('lessons').populate('units.lessons');
+    });
     
-    // Generate notification IDs for all current notifications
+    // Generate notification IDs for all current notifications (mirror getter logic)
     const allNotificationIds = [];
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -301,15 +312,16 @@ const markAllNotificationsAsRead = async (req, res) => {
     }
     
     // Mark all notifications as read
-    const readPromises = allNotificationIds.map(notificationId => 
-      NotificationRead.findOneAndUpdate(
-        { userId, notificationId },
-        { userId, notificationId, readAt: new Date() },
-        { upsert: true, new: true }
-      )
-    );
-    
-    await Promise.all(readPromises);
+    if (allNotificationIds.length > 0) {
+      const ops = allNotificationIds.map(notificationId => ({
+        updateOne: {
+          filter: { userId, notificationId },
+          update: { $set: { userId, notificationId, readAt: new Date() } },
+          upsert: true
+        }
+      }));
+      await NotificationRead.bulkWrite(ops, { ordered: false });
+    }
     
     console.log(`✅ Marked ${allNotificationIds.length} notifications as read`);
     

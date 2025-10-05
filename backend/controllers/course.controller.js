@@ -154,9 +154,7 @@ export const getAllCourses = async (req, res, next) => {
       id: c._id,
       title: c.title,
       stage: c.stage?.name,
-      stageId: c.stage?._id,
-      unitsCount: c.units?.length || 0,
-      units: c.units?.map(u => ({ id: u._id, title: u.title })) || []
+      stageId: c.stage?._id
     })));
     
     console.log('🎯 Final query used for filtering:', JSON.stringify(query, null, 2));
@@ -175,11 +173,6 @@ export const getAllCourses = async (req, res, next) => {
     // Further filter sensitive data from nested structures
     const secureCourses = courses.map(course => {
       const courseObj = course.toObject();
-      
-      console.log(`🔍 Processing course "${courseObj.title}":`, {
-        originalUnits: courseObj.units?.length || 0,
-        unitsData: courseObj.units?.map(u => ({ id: u._id, title: u.title })) || []
-      });
       
       // Clean up units and lessons
       if (courseObj.units) {
@@ -222,9 +215,7 @@ export const getAllCourses = async (req, res, next) => {
       coursesReturned: secureCourses.map(c => ({ 
         id: c._id, 
         title: c.title, 
-        stage: c.stage?.name,
-        unitsCount: c.units?.length || 0,
-        units: c.units?.map(u => ({ id: u._id, title: u.title })) || []
+        stage: c.stage?.name 
       }))
     });
 
@@ -506,8 +497,9 @@ export const getLessonById = async (req, res, next) => {
           _id: q._id,
           question: q.question,
           options: q.options,
-          image: q.image
-          // Note: correctAnswer is intentionally excluded for security
+          image: q.image,
+          correctAnswer: userAttempt ? q.correctAnswer : undefined, // Include correct answer only if user has taken the exam
+          explanation: userAttempt ? (q.explanation || '') : undefined // Include explanation only if user has taken the exam
         })),
         userResult: userAttempt ? {
           score: userAttempt.score,
@@ -548,8 +540,9 @@ export const getLessonById = async (req, res, next) => {
           _id: q._id,
           question: q.question,
           options: q.options,
-          image: q.image
-          // Note: correctAnswer is intentionally excluded for security
+          image: q.image,
+          correctAnswer: userAttempts.length > 0 ? q.correctAnswer : undefined, // Include correct answer only if user has taken the training
+          explanation: userAttempts.length > 0 ? (q.explanation || '') : undefined // Include explanation only if user has taken the training
         })),
         userResults: userAttempts.map(attempt => ({
           score: attempt.score,
@@ -929,6 +922,11 @@ export const updateLessonContent = async (req, res, next) => {
   try {
     const { courseId, lessonId } = req.params;
     const { unitId, videos, pdfs, exams, trainings } = req.body;
+    
+    // Log payload size for debugging
+    const payloadSize = JSON.stringify(req.body).length;
+    console.log(`📊 Update lesson content payload size: ${(payloadSize / 1024 / 1024).toFixed(2)}MB`);
+    
     const course = await Course.findById(courseId);
     if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
     

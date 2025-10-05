@@ -48,7 +48,6 @@ const createAdminAccount = async () => {
         // Admin account details
         const adminData = {
             fullName: "Admin User",
-            username: "admin",
             email: "admin@api.com",
             password: "admin123456",
             role: "ADMIN",
@@ -59,14 +58,13 @@ const createAdminAccount = async () => {
         const existingAdmin = await User.findOne({ 
             $or: [
                 { email: adminData.email },
-                { username: adminData.username }
+                { email: adminData.email }
             ]
         });
         
         if (existingAdmin) {
             console.log("⚠️ Admin account already exists!");
             console.log(`📧 Email: ${existingAdmin.email}`);
-            console.log(`👤 Username: ${existingAdmin.username}`);
             console.log(`🔑 Role: ${existingAdmin.role}`);
             return;
         }
@@ -78,7 +76,6 @@ const createAdminAccount = async () => {
         
         console.log("✅ Admin account created successfully!");
         console.log(`📧 Email: ${admin.email}`);
-        console.log(`👤 Username: ${admin.username}`);
         console.log(`🔑 Role: ${admin.role}`);
         console.log(`🔐 Password: ${adminData.password}`);
         console.log("\n💡 You can now login with these credentials");

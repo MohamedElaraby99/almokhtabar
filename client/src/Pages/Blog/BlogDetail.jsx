@@ -34,7 +34,7 @@ export default function BlogDetail() {
     return (
       <Layout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
         </div>
       </Layout>
     );
@@ -50,7 +50,7 @@ export default function BlogDetail() {
             </h2>
             <Link
               to="/blogs"
-              className="text-blue-600 hover:text-blue-700 underline"
+              className="text-orange-600 hover:text-orange-700 underline"
             >
               العودة إلى المدونات
             </Link>
@@ -67,7 +67,7 @@ export default function BlogDetail() {
           {/* Back Button */}
           <Link
             to="/blogs"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8"
+            className="inline-flex items-center gap-2 text-orange-600 hover:text-orange-700 mb-8"
           >
             <FaArrowLeft />
             العودة إلى المدونات
@@ -106,7 +106,7 @@ export default function BlogDetail() {
               {currentBlog.tags && currentBlog.tags.map((tag, index) => (
                 <span
                   key={index}
-                  className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full"
+                  className="px-2 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs rounded-full"
                 >
                   {tag}
                 </span>

@@ -62,6 +62,18 @@ export const getUserExamHistory = createAsyncThunk(
   }
 );
 
+export const getExamHistoryDetails = createAsyncThunk(
+  'exam/getExamHistoryDetails',
+  async ({ courseId, lessonId, examType }, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.get(`/exams/results/${courseId}/${lessonId}?examType=${examType}`);
+      return response.data.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to get exam history details');
+    }
+  }
+);
+
 const initialState = {
   currentExam: null,
   examResults: [],
@@ -72,6 +84,7 @@ const initialState = {
     totalResults: 0,
     resultsPerPage: 10
   },
+  examHistoryDetails: [],
   loading: false,
   error: null,
   lastExamResult: null
@@ -154,6 +167,21 @@ const examSlice = createSlice({
         state.examHistoryPagination = action.payload.pagination;
       })
       .addCase(getUserExamHistory.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
+
+    // Get Exam History Details
+    builder
+      .addCase(getExamHistoryDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getExamHistoryDetails.fulfilled, (state, action) => {
+        state.loading = false;
+        state.examHistoryDetails = action.payload;
+      })
+      .addCase(getExamHistoryDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

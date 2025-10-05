@@ -11,7 +11,19 @@ const upload = multer({
       console.log('=== Multer Debug ===');
       console.log('File being processed:', file);
       console.log('Original filename:', file.originalname);
-      cb(null, file.originalname);
+      // Sanitize and timestamp the filename to avoid collisions and track upload time
+      const ext = path.extname(file.originalname);
+      const baseName = path.basename(file.originalname, ext);
+      const safeBase = baseName
+        .toLowerCase()
+        .replace(/\s+/g, '-')
+        .replace(/[^a-z0-9_-]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      // Use ISO-like timestamp without characters invalid for filenames
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const finalName = `${safeBase || 'file'}-${timestamp}${ext}`;
+      cb(null, finalName);
     },
   }),
   fileFilter: (req, file, cb) => {

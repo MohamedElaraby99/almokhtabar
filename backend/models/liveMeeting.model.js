@@ -44,17 +44,17 @@ const liveMeetingSchema = new Schema({
   instructor: {
     type: Schema.Types.ObjectId,
     ref: 'Instructor',
-    required: false
+    required: [true, 'Instructor is required']
   },
   stage: {
     type: Schema.Types.ObjectId,
     ref: 'Stage',
-    required: false
+    required: [true, 'Stage is required']
   },
   subject: {
     type: Schema.Types.ObjectId,
     ref: 'Subject',
-    required: false
+    required: [true, 'Subject is required']
   },
   attendees: [{
     user: {
@@ -72,7 +72,9 @@ const liveMeetingSchema = new Schema({
   }],
   maxAttendees: {
     type: Number,
-    required: false
+    default: 100,
+    min: [1, 'At least 1 attendee is required'],
+    max: [500, 'Maximum 500 attendees allowed']
   },
   status: {
     type: String,

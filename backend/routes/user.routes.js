@@ -17,22 +17,4 @@ router.post('/reset/:resetToken', resetPassword);
 router.post('/change-password', isLoggedIn, changePassword);
 router.post('/update/:id', isLoggedIn, upload.single("avatar"), updateUser);
 
-// Learning path utilities
-router.get('/paths', (_req, res) => {
-  res.status(200).json({
-    success: true,
-    data: [
-      { key: 'basic', name: 'Basic', description: 'Full content for self-learning' },
-      { key: 'premium', name: 'Premium', description: 'Everything + private sessions' }
-    ]
-  });
-});
-
-router.patch('/learning-path', isLoggedIn, async (req, res, next) => {
-  try {
-    req.body = { learningPath: req.body.learningPath };
-    return updateUser(req, res, next);
-  } catch (e) { next(e); }
-});
-
 export default router;

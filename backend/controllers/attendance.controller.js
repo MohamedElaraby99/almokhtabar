@@ -22,7 +22,7 @@ export const scanQRAttendance = asyncHandler(async (req, res, next) => {
   }
 
   // Validate QR data structure
-  const { userId, fullName, username, phoneNumber, email, role, timestamp, type } = qrData;
+  const { userId, fullName, phoneNumber, email, role, timestamp, type } = qrData;
   
   // Updated validation to accept minimal QR data (userId OR phoneNumber required, fullName optional)
   if ((!userId && !phoneNumber) || type !== 'attendance') {
@@ -61,9 +61,8 @@ export const scanQRAttendance = asyncHandler(async (req, res, next) => {
   const userIdMatches = !userId || user._id.toString() === userId;
   const phoneMatches = !phoneNumber || user.phoneNumber === phoneNumber;
   const nameMatches = !fullName || user.fullName === fullName; // Only check if fullName exists
-  const usernameMatches = !username || user.username === username; // Only check if username exists
   
-  if (!userIdMatches || !phoneMatches || !nameMatches || !usernameMatches) {
+  if (!userIdMatches || !phoneMatches || !nameMatches) {
     return next(new AppError('QR data does not match user data', 400));
   }
 
@@ -124,8 +123,8 @@ export const scanQRAttendance = asyncHandler(async (req, res, next) => {
 
   // Populate the attendance record
   await attendance.populate([
-    { path: 'user', select: 'fullName username phoneNumber email' },
-    { path: 'scannedBy', select: 'fullName username' },
+    { path: 'user', select: 'fullName phoneNumber email' },
+    { path: 'scannedBy', select: 'fullName' },
     { path: 'course', select: 'title' },
     { path: 'liveMeeting', select: 'title scheduledDate' }
   ]);
@@ -137,7 +136,6 @@ export const scanQRAttendance = asyncHandler(async (req, res, next) => {
       attendance,
       user: {
         fullName: user.fullName,
-        username: user.username,
         phoneNumber: user.phoneNumber,
         email: user.email
       }
@@ -157,7 +155,7 @@ export const takeAttendanceByPhone = asyncHandler(async (req, res, next) => {
     return next(new AppError('Phone number or user ID is required', 400));
   }
 
-  // Find the user by userId, username, phone number, or student ID
+  // Find the user by userId, phone number, or student ID
   let user = null;
   
   if (userId) {
@@ -166,13 +164,10 @@ export const takeAttendanceByPhone = asyncHandler(async (req, res, next) => {
       user = await User.findById(userId);
     }
     
-    // If not found by ObjectId, try username or studentId
+    // If not found by ObjectId, try studentId
     if (!user) {
       user = await User.findOne({ 
-        $or: [
-          { username: userId },
-          { studentId: userId }
-        ]
+        studentId: userId
       });
     }
   }
@@ -245,7 +240,6 @@ export const takeAttendanceByPhone = asyncHandler(async (req, res, next) => {
     qrData: {
       userId: user._id,
       fullName: user.fullName,
-      username: user.username,
       phoneNumber: user.phoneNumber,
       email: user.email,
       role: user.role,
@@ -260,8 +254,8 @@ export const takeAttendanceByPhone = asyncHandler(async (req, res, next) => {
 
   // Populate the attendance record
   await attendance.populate([
-    { path: 'user', select: 'fullName username phoneNumber email' },
-    { path: 'scannedBy', select: 'fullName username' },
+    { path: 'user', select: 'fullName phoneNumber email' },
+    { path: 'scannedBy', select: 'fullName' },
     { path: 'course', select: 'title' },
     { path: 'liveMeeting', select: 'title scheduledDate' }
   ]);
@@ -273,7 +267,6 @@ export const takeAttendanceByPhone = asyncHandler(async (req, res, next) => {
       attendance,
       user: {
         fullName: user.fullName,
-        username: user.username,
         phoneNumber: user.phoneNumber,
         email: user.email
       },
@@ -320,7 +313,7 @@ export const getUserAttendance = asyncHandler(async (req, res, next) => {
     limit: parseInt(limit),
     sort: { attendanceDate: -1 },
     populate: [
-      { path: 'scannedBy', select: 'fullName username' },
+      { path: 'scannedBy', select: 'fullName' },
       { path: 'course', select: 'title' },
       { path: 'liveMeeting', select: 'title scheduledDate' }
     ]
@@ -425,8 +418,8 @@ export const getAllAttendance = asyncHandler(async (req, res, next) => {
     limit: parseInt(limit),
     sort: { attendanceDate: -1 },
     populate: [
-      { path: 'user', select: 'fullName username phoneNumber email' },
-      { path: 'scannedBy', select: 'fullName username' },
+      { path: 'user', select: 'fullName phoneNumber email' },
+      { path: 'scannedBy', select: 'fullName' },
       { path: 'course', select: 'title' },
       { path: 'liveMeeting', select: 'title scheduledDate' }
     ]
@@ -469,8 +462,8 @@ export const updateAttendance = asyncHandler(async (req, res, next) => {
   await attendance.save();
 
   await attendance.populate([
-    { path: 'user', select: 'fullName username phoneNumber email' },
-    { path: 'scannedBy', select: 'fullName username' },
+    { path: 'user', select: 'fullName phoneNumber email' },
+    { path: 'scannedBy', select: 'fullName' },
     { path: 'course', select: 'title' },
     { path: 'liveMeeting', select: 'title scheduledDate' }
   ]);
@@ -661,8 +654,8 @@ export const getGroupAttendance = asyncHandler(async (req, res, next) => {
     limit: parseInt(limit),
     sort: { attendanceDate: -1 },
     populate: [
-      { path: 'user', select: 'fullName username phoneNumber email' },
-      { path: 'scannedBy', select: 'fullName username' },
+      { path: 'user', select: 'fullName phoneNumber email' },
+      { path: 'scannedBy', select: 'fullName' },
       { path: 'course', select: 'title' },
       { path: 'liveMeeting', select: 'title scheduledDate' }
     ]

@@ -143,7 +143,7 @@ export default function Overview() {
         {
           id: 3,
           type: 'payment',
-          message: 'تم استلام رسوم مجموعة الكيمياء',
+          message: 'تم استلام رسوم مجموعة الفيزياء',
           time: 'منذ ساعة',
           icon: FaBook
         },
@@ -175,7 +175,7 @@ export default function Overview() {
         {
           id: 3,
           type: 'revenue_summary',
-          message: `إجمالي الإيرادات في ${monthData.label}: 125,000 ريال قطري`,
+          message: `إجمالي الإيرادات في ${monthData.label}: 125,000 جنيه`,
           time: 'بيانات مؤرشفة',
           icon: FaChartLine
         },
@@ -197,7 +197,7 @@ export default function Overview() {
       title: 'إجمالي الطلاب',
       value: centerStats.totalStudents.toLocaleString(),
       icon: FaUsers,
-      color: 'bg-blue-500',
+      color: 'bg-orange-500',
       change: loading ? '...' : selectedMonthData?.isCurrent ? '+12%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'positive' : 'archived'
     },
@@ -305,10 +305,10 @@ export default function Overview() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <a
                 href="/admin/center-management/attendance"
-                className="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors"
+                className="flex items-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors"
               >
-                <FaQrcode className="text-blue-600 dark:text-blue-400 text-xl ml-3" />
-                <span className="text-blue-800 dark:text-blue-200 font-medium">إدارة الحضور</span>
+                <FaQrcode className="text-orange-600 dark:text-orange-400 text-xl ml-3" />
+                <span className="text-orange-800 dark:text-orange-200 font-medium">إدارة الحضور</span>
               </a>
               
               <a

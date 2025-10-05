@@ -13,7 +13,7 @@ import { getDeviceLimit } from '../config/device.config.js';
 
 const cookieOptions = {
     httpOnly: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    maxAge: 100 * 24 * 60 * 60 * 1000, // 100 days
     secure: true, 
     sameSite: 'none'
 }
@@ -33,7 +33,7 @@ const register = async (req, res, next) => {
             }
         }
 
-        const { fullName, email, password, phoneNumber, fatherPhoneNumber, governorate, stage, age, learningPath, adminCode, deviceInfo } = requestBody;
+        const { fullName, email, password, phoneNumber, fatherPhoneNumber, governorate, stage, age, adminCode, deviceInfo } = requestBody;
 
         // Determine user role based on admin code
         let userRole = 'USER';
@@ -47,21 +47,18 @@ const register = async (req, res, next) => {
         }
 
         // Role-specific field validation
-        // Global: email required for all
-        if (!email) {
-            return next(new AppError("Email is required", 400));
-        }
         if (userRole === 'USER') {
-            // For USER role: phone number is required
+            // For USER role: phone number is required, email is optional
             if (!phoneNumber) {
                 return next(new AppError("Phone number is required for regular users", 400));
             }
             if (!governorate || !stage || !age) {
                 return next(new AppError("Governorate, stage, and age are required for regular users", 400));
             }
-            // Optional path validation when provided
-            if (learningPath && !['basic','premium'].includes(learningPath)) {
-                return next(new AppError("Invalid learning path. Must be 'basic' or 'premium'", 400));
+        } else if (userRole === 'ADMIN') {
+            // For ADMIN role: email is required
+            if (!email) {
+                return next(new AppError("Email is required for admin users", 400));
             }
         }
 
@@ -95,12 +92,11 @@ const register = async (req, res, next) => {
         // Add role-specific fields
         if (userRole === 'USER') {
             userData.phoneNumber = phoneNumber;
-            userData.email = email; // now required globally
+            if (email) userData.email = email; // Optional email for USER
             if (fatherPhoneNumber) userData.fatherPhoneNumber = fatherPhoneNumber;
             userData.governorate = governorate;
             userData.stage = stage;
             userData.age = parseInt(age);
-            if (learningPath) userData.learningPath = learningPath;
         } else if (userRole === 'ADMIN') {
             userData.email = email;
         }
@@ -530,7 +526,7 @@ const changePassword = async (req, res, next) => {
 // update profile
 const updateUser = async (req, res, next) => {
     try {
-        const { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age, learningPath } = req.body;
+        const { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age } = req.body;
         const { id } = req.user;
 
         console.log('Update user data:', { fullName, phoneNumber, fatherPhoneNumber, governorate, stage, age });
@@ -560,7 +556,6 @@ const updateUser = async (req, res, next) => {
         if (age) {
             user.age = parseInt(age);
         }
-        // Learning path can be changed via dedicated upgrade flow; ignore direct updates here
 
         if (req.file) {
             try {

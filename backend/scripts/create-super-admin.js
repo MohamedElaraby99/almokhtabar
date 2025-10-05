@@ -22,14 +22,12 @@ const createSuperAdmin = async () => {
     const existingSuperAdmin = await User.findOne({ role: 'SUPER_ADMIN' });
     if (existingSuperAdmin) {
       console.log('⚠️ Super admin already exists:', existingSuperAdmin.email);
-      console.log('👤 Username:', existingSuperAdmin.username);
       console.log('👑 Role:', existingSuperAdmin.role);
       return;
     }
     
     // Create super admin user
     const superAdminData = {
-      username: 'superadmin',
       fullName: 'Super Administrator',
       email: 'superadmin@api.com',
       password: 'SuperAdmin123!',
@@ -50,7 +48,6 @@ const createSuperAdmin = async () => {
 
     console.log('✅ Super admin created successfully!');
     console.log('📧 Email:', superAdmin.email);
-    console.log('👤 Username:', superAdmin.username);
     console.log('🔐 Password:', superAdminData.password);
     console.log('👑 Role:', superAdmin.role);
     console.log('🔑 Permissions:', superAdmin.adminPermissions);

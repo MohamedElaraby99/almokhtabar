@@ -47,7 +47,7 @@ const user = users.find(u => u.studentId === userNumber);
 
 ### Three Attendance Methods Available:
 
-1. **🔵 QR Scanner** (Blue Button)
+1. **🔵 QR Scanner** (orange Button)
    - Icon: `FaQrcode`
    - Text: "فتح الماسح" / "إخفاء الماسح"
    - Method: Scan student QR codes
@@ -260,7 +260,7 @@ The system displays complete user information before allowing attendance submiss
 ## 🎨 UI/UX Improvements
 
 ### Visual Indicators:
-- **🔵 Blue**: QR Scanner (high-tech method)
+- **🔵 orange**: QR Scanner (high-tech method)
 - **🟢 Green**: Phone Attendance (phone-based method)
 - **🟣 Purple**: User Number (ID-based method)
 

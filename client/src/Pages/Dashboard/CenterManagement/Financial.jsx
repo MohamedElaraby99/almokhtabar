@@ -218,7 +218,7 @@ const Financial = () => {
   const financialStats = [
     {
       title: selectedMonthData?.isCurrent ? 'إجمالي الإيرادات' : `إيرادات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.totalIncome.toLocaleString()} ريال قطري`,
+      value: `${stats.totalIncome.toLocaleString()} جنيه`,
       change: selectedMonthData?.isCurrent ? '+12.5%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'positive' : 'archived',
       icon: FaMoneyBillWave,
@@ -226,7 +226,7 @@ const Financial = () => {
     },
     {
       title: selectedMonthData?.isCurrent ? 'المصروفات الشهرية' : `مصروفات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.totalExpenses.toLocaleString()} ريال قطري`,
+      value: `${stats.totalExpenses.toLocaleString()} جنيه`,
       change: selectedMonthData?.isCurrent ? '+8.2%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'negative' : 'archived',
       icon: FaReceipt,
@@ -234,15 +234,15 @@ const Financial = () => {
     },
     {
       title: selectedMonthData?.isCurrent ? 'الربح الصافي' : `ربح ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${stats.netProfit.toLocaleString()} ريال قطري`,
+      value: `${stats.netProfit.toLocaleString()} جنيه`,
       change: selectedMonthData?.isCurrent ? '+15.3%' : 'بيانات مؤرشفة',
       changeType: selectedMonthData?.isCurrent ? 'positive' : 'archived',
       icon: FaChartBar,
-      color: 'text-blue-600 dark:text-blue-400'
+      color: 'text-orange-600 dark:text-orange-400'
     },
     {
       title: selectedMonthData?.isCurrent ? 'المدفوعات المعلقة' : `مدفوعات ${selectedMonthData?.label || 'الشهر'}`,
-      value: `${pendingPaymentsData.totalPending.toLocaleString()} ريال قطري`,
+      value: `${pendingPaymentsData.totalPending.toLocaleString()} جنيه`,
       change: selectedMonthData?.isCurrent ? (
         pendingPaymentsData.totalExpected > 0 ? 
         `${Math.round(((pendingPaymentsData.totalExpected - pendingPaymentsData.totalPending) / pendingPaymentsData.totalExpected) * 100)}% مدفوع` : 
@@ -259,14 +259,14 @@ const Financial = () => {
     // Refresh the financial data to show the new transaction and update pending payments
     fetchFinancialData();
     fetchPendingPayments();
-    showSuccessToast(`تم إضافة إيراد جديد: ${incomeData.amount} ريال قطري من ${incomeData.userName}`);
+    showSuccessToast(`تم إضافة إيراد جديد: ${incomeData.amount} جنيه من ${incomeData.userName}`);
   };
 
   const handleAddExpense = (expenseData) => {
     console.log('New expense added:', expenseData);
     // Refresh the financial data to show the new transaction
     fetchFinancialData();
-    showSuccessToast(`تم إضافة مصروف جديد: ${expenseData.amount} ريال قطري - ${expenseData.category}`);
+    showSuccessToast(`تم إضافة مصروف جديد: ${expenseData.amount} جنيه - ${expenseData.category}`);
   };
 
   // Search and filter handlers
@@ -365,7 +365,7 @@ const Financial = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
             <div className="flex items-center mb-4">
-              <FaPiggyBank className="text-2xl text-blue-600 dark:text-blue-400 mr-3" />
+              <FaPiggyBank className="text-2xl text-orange-600 dark:text-orange-400 mr-3" />
               <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                 إضافة إيراد
               </h3>
@@ -375,7 +375,7 @@ const Financial = () => {
             </p>
             <button 
               onClick={() => setIsAddIncomeModalOpen(true)}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition-colors"
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 px-4 rounded-lg transition-colors"
             >
               إضافة إيراد
             </button>
@@ -440,7 +440,7 @@ const Financial = () => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   placeholder="البحث في المعاملات..."
-                  className="w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  className="w-full px-4 py-2 pr-10 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
                 <svg className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -448,7 +448,7 @@ const Financial = () => {
               </div>
               <button
                 type="submit"
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition-colors"
               >
                 بحث
               </button>
@@ -462,7 +462,7 @@ const Financial = () => {
                   onClick={() => handleTypeFilter('')}
                   className={`px-3 py-1 rounded-full text-sm transition-colors ${
                     transactionType === '' 
-                      ? 'bg-blue-600 text-white' 
+                      ? 'bg-orange-600 text-white' 
                       : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                   }`}
                 >
@@ -549,7 +549,7 @@ const Financial = () => {
                  {loading ? (
                    <tr>
                      <td colSpan="6" className="py-8 text-center">
-                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
                        <p className="text-gray-500 dark:text-gray-400">جاري تحميل المعاملات...</p>
                      </td>
                    </tr>
@@ -600,7 +600,7 @@ const Financial = () => {
                          {transaction.description || 'لا يوجد وصف'}
                        </td>
                        <td className="py-3 px-4 text-gray-900 dark:text-white font-medium">
-                         {transaction.amount.toLocaleString()} ريال قطري
+                         {transaction.amount.toLocaleString()} جنيه
                        </td>
                        <td className="py-3 px-4 text-gray-600 dark:text-gray-400">
                          {new Date(transaction.transactionDate).toLocaleDateString('en-GB')}
@@ -661,7 +661,7 @@ const Financial = () => {
                         onClick={() => handlePageChange(pageNum)}
                         className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                           currentPage === pageNum
-                            ? 'bg-blue-600 text-white'
+                            ? 'bg-orange-600 text-white'
                             : 'text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-600'
                         }`}
                       >

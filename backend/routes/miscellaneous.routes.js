@@ -25,7 +25,7 @@ router.post('/upload/pdf', upload.single('pdf'), (req, res) => {
   const destPath = path.join(uploadsDir, req.file.filename);
   fs.renameSync(req.file.path, destPath);
   const fileUrl = `/uploads/pdfs/${req.file.filename}`;
-  return res.status(200).json({ success: true, url: fileUrl, fileName: req.file.filename });
+  return res.status(200).json({ success: true, url: fileUrl, fileName: req.file.filename, uploadedAt: new Date().toISOString() });
 });
 
 // Image upload endpoint
@@ -41,7 +41,7 @@ router.post('/upload/image', upload.single('image'), (req, res) => {
   const destPath = path.join(uploadsDir, req.file.filename);
   fs.renameSync(req.file.path, destPath);
   const fileUrl = `/uploads/images/${req.file.filename}`;
-  return res.status(200).json({ success: true, url: fileUrl, fileName: req.file.filename });
+  return res.status(200).json({ success: true, url: fileUrl, fileName: req.file.filename, uploadedAt: new Date().toISOString() });
 });
 
 // Generic file upload endpoint (supports pdf, doc, docx, images)
@@ -75,7 +75,8 @@ router.post('/upload/file', upload.single('file'), (req, res) => {
       fileName: req.file.originalname || req.file.filename,
       storedName: req.file.filename,
       mimeType: req.file.mimetype,
-      subfolder
+      subfolder,
+      uploadedAt: new Date().toISOString()
     });
   } catch (e) {
     return res.status(500).json({ success: false, message: 'Failed to save file', error: e.message });

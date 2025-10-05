@@ -81,7 +81,6 @@ const getAllUsers = async (req, res, next) => {
                     email: user.email,
                     phoneNumber: user.phoneNumber,
                     role: user.role,
-                    learningPath: user.learningPath,
                     adminPermissions: user.adminPermissions || [],
                     isActive: user.isActive !== false, // Default to true if not set
                     governorate: user.governorate,
@@ -276,7 +275,6 @@ const getUserDetails = async (req, res, next) => {
                     governorate: user.governorate,
                     stage: user.stage,
                     age: user.age,
-                    learningPath: user.learningPath,
                     role: user.role,
                     code: user.code,
                     isActive: user.isActive !== false,
@@ -501,24 +499,13 @@ const updateUser = async (req, res, next) => {
 
         // Remove sensitive fields that shouldn't be updated
         delete updateData.password;
-        // Allow email updates for admins (with validation)
+        delete updateData.email; // Email updates should be handled separately for security
         delete updateData.forgotPasswordToken;
         delete updateData.forgotPasswordExpiry;
 
         const user = await userModel.findById(userId);
         if (!user) {
             return next(new AppError("User not found", 404));
-        }
-
-        // Check if email is being updated and validate uniqueness
-        if (updateData.email && updateData.email !== user.email) {
-            const existingUser = await userModel.findOne({ 
-                email: updateData.email,
-                _id: { $ne: userId }
-            });
-            if (existingUser) {
-                return next(new AppError("Email already exists", 400));
-            }
         }
 
         // Update user fields
@@ -531,9 +518,6 @@ const updateUser = async (req, res, next) => {
         // Ensure required fields are not empty
         if (!user.fullName || user.fullName.trim() === '') {
             return next(new AppError("Full name is required", 400));
-        }
-        if (!user.email || user.email.trim() === '') {
-            return next(new AppError("Email is required", 400));
         }
 
         await user.save();
@@ -557,7 +541,6 @@ const updateUser = async (req, res, next) => {
                     age: user.age,
                     role: user.role,
                     code: user.code,
-                    learningPath: user.learningPath,
                     isActive: user.isActive !== false,
                     createdAt: user.createdAt
                 }
