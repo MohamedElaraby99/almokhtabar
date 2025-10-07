@@ -262,7 +262,7 @@ export default function Wallet() {
                                     <ul className="space-y-2 text-orange-800 dark:text-orange-200">
                                         <li className="flex items-start">
                                             <span className="text-orange-600 dark:text-orange-400 ml-2">•</span>
-                                            تواصل معنا على واتساب: <strong>01555559887</strong> للحصول على كود شحن
+                                            تواصل معنا على واتساب: <strong>01023530513</strong> للحصول على كود شحن
                                         </li>
                                         <li className="flex items-start">
                                             <span className="text-orange-600 dark:text-orange-400 ml-2">•</span>

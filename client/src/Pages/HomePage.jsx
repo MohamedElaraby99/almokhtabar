@@ -1076,7 +1076,7 @@ export default function HomePage() {
               </h3>
               <div className="flex flex-wrap justify-center gap-6 max-w-md mx-auto">
                 <a
-                  href="https://www.facebook.com/profile.php?id=100075431541020&mibextid=ZbWKwL"
+                  href="https://www.facebook.com/share/17V4PbmERB/?mibextid=wwXIfr"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
@@ -1090,7 +1090,7 @@ export default function HomePage() {
                   </span>
                 </a>
                 <a
-                  href="https://youtube.com/@dr.ahmedali84?si=duv4lzCvpgCWnmVV"
+                  href="https://www.youtube.com/@%D9%85%D9%86%D8%B5%D8%A9%D8%A7%D9%84%D9%85%D8%AE%D8%AA%D8%A8%D8%B1%D9%84%D9%84%D9%83%D9%8A%D9%85%D9%8A%D8%A7%D8%A1%D8%A7%D9%84%D9%85%D9%86%D9%87%D8%AC%D8%A7%D9%84%D9%82%D8%B7%D8%B1"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
@@ -1103,7 +1103,7 @@ export default function HomePage() {
                     YouTube
                   </span>
                 </a>
-                <a href="https://www.tiktok.com/@dr.ahmedali.physics?_r=1&_d=dg3efc6k3359b4&sec_uid=MS4wLjABAAAAf3HmNa9tmQXpzXufto73qWhFAuMb7QK1HKizPgYa984_EqTuq2HByBzEeQmp2JY3&share_author_id=6906572971282154501&sharer_language=ar&source=h5_m&u_code=dg3efalj7m1c2m&timestamp=1757077792&user_id=6906572971282154501&sec_user_id=MS4wLjABAAAAf3HmNa9tmQXpzXufto73qWhFAuMb7QK1HKizPgYa984_EqTuq2HByBzEeQmp2JY3&item_author_type=1&utm_source=copy&utm_campaign=client_share&utm_medium=android&share_iid=7528408886655780624&share_link_id=3e1ac305-cc82-4b23-a0f5-c268be509b9c&share_app_id=1233&ugbiz_name=ACCOUNT&ug_btm=b8727%2Cb4907&social_share_type=5&enable_checksum=1" 
+                <a href="https://www.tiktok.com/@mr_ahmedelsaeed25?_t=ZS-90Iblile4ZE&_r=1" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-[#9b172a] hover:scale-105"
