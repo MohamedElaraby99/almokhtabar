@@ -1049,8 +1049,8 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">الهاتف</h3>
-                  <a href="tel:01120920153" className="text-[#9b172a] dark:text-[#9b172a]-400 hover:underline">
-                    01120920153
+                  <a href="tel:01023530513" className="text-[#9b172a] dark:text-[#9b172a]-400 hover:underline">
+                    01023530513
                   </a>
                 </div>
               </div>
@@ -1062,8 +1062,8 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">واتساب</h3>
-                  <a href="https://wa.me/+201120920153" className="text-green-600 dark:text-green-400 hover:underline">
-                  +201120920153
+                  <a href="https://wa.me/+201023530513" className="text-green-600 dark:text-green-400 hover:underline">
+                  +201023530513
                   </a>
                 </div>
               </div>
@@ -1117,7 +1117,7 @@ export default function HomePage() {
                   </span>
                 </a>
                 <a
-                  href="https://wa.me/01120920153"
+                  href="https://wa.me/01023530513"
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center p-4 bg-gray-50 dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:text-green-500 hover:scale-105"
@@ -1218,7 +1218,7 @@ export default function HomePage() {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/+201120920153"
+        href="https://wa.me/+201023530513"
         target="_blank"
         rel="noopener noreferrer"
         className="fixed left-8 bottom-8 z-50 p-4 bg-green-500 hover:bg-green-600 text-white rounded-full shadow-lg hover:shadow-xl transform hover:scale-110 transition-all duration-300 group animate-bounce"
